@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        tools:layout="@layout/fragment_home"
+        android:name="com.hgh.flo_clone.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        tools:layout="@layout/fragment_audio"
+        android:id="@+id/audioFragment"
+        android:name="com.hgh.flo_clone.AudioFragment"
+        android:label="AudioFragment" />
+    <fragment
+        tools:layout="@layout/fragment_locker"
+        android:id="@+id/lockerFragment"
+        android:name="com.hgh.flo_clone.LockerFragment"
+        android:label="LockerFragment" />
+    <fragment
+        tools:layout="@layout/fragment_search"
+        android:id="@+id/searchFragment"
+        android:name="com.hgh.flo_clone.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        tools:layout="@layout/fragment_looking"
+        android:id="@+id/lookingFragment"
+        android:name="com.hgh.flo_clone.LookingFragment"
+        android:label="LookingFragment" />
+</navigation>

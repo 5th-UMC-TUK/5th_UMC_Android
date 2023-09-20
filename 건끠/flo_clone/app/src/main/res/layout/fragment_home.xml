@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recommendLayout"
+                android:layout_width="0dp"
+                android:layout_height="400dp"
+                android:background="#673AB7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/homeSettingBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/baseline_settings_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/homeNotificationBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/baseline_notifications_none_24"
+                    app:layout_constraintEnd_toStartOf="@id/homeSettingBtn"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/homeRecordBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/baseline_mic_none_24"
+                    app:layout_constraintEnd_toStartOf="@id/homeNotificationBtn"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/homeBoxBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/baseline_box_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/recommendTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="일하는 중 귀로 떠나는 \n해외여행"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@id/recommendPlayBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/homeBoxBtn" />
+
+                <ImageView
+                    android:id="@+id/recommendPlayBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="18dp"
+                    android:src="@drawable/baseline_play_circle_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/homeSettingBtn"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/recommendNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="총 17곡"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@id/musicSumNail1"
+                    app:layout_constraintStart_toStartOf="@id/musicSumNail1" />
+
+                <TextView
+                    android:id="@+id/recommendDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="2023.07.27"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@id/musicSumNail1"
+                    app:layout_constraintStart_toEndOf="@id/recommendNum" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/musicSumNail1"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:src="@drawable/appicon_image"
+                    app:layout_constraintBottom_toTopOf="@id/musicSumNail2"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/musicTitle1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Hana"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/musicSumNail1"
+                    app:layout_constraintTop_toTopOf="@id/musicSumNail1" />
+
+                <TextView
+                    android:id="@+id/musicSinger1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="ORANGE RANGE"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/musicSumNail1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/musicSumNail1" />
+
+
+                <ImageView
+                    android:id="@+id/musicSumNail2"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="36dp"
+                    android:src="@drawable/appicon_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/musicTitle2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Tokyo Flash"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/musicSumNail2"
+                    app:layout_constraintTop_toTopOf="@id/musicSumNail2" />
+
+                <TextView
+                    android:id="@+id/musicSinger2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Vaundy"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/musicSumNail2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/musicSumNail2" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/newMusicText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="28dp"
+                android:text="오늘 발매 음악 〉"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recommendLayout" />
+
+            <TextView
+                android:id="@+id/newAllText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="종합"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/newMusicText"
+                app:layout_constraintEnd_toStartOf="@id/newNativeText"
+                app:layout_constraintTop_toTopOf="@id/newMusicText" />
+
+            <TextView
+                android:id="@+id/newNativeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="국내"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/newMusicText"
+                app:layout_constraintEnd_toStartOf="@id/newPopText"
+                app:layout_constraintTop_toTopOf="@id/newMusicText" />
+
+            <TextView
+                android:id="@+id/newPopText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="해외"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/newMusicText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/newMusicText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/musicRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/newMusicText"
+                tools:listitem="@layout/item_music_small" />
+
+            <ImageView
+                android:id="@+id/banner"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="28dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/banner_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/musicRecyclerView" />
+
+            <TextView
+                android:id="@+id/hotMusicText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="28dp"
+                android:text="요즘 핫한 노래"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/banner" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/musicRecyclerView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hotMusicText"
+                tools:listitem="@layout/item_music_small" />
+
+            <TextView
+                android:id="@+id/musicVideoText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="28dp"
+                android:text="뮤직 비디오"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/musicRecyclerView2" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/musicVideoRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/musicVideoText"
+                tools:listitem="@layout/item_music_video" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bannerBig"
+                android:layout_width="0dp"
+                android:layout_height="350dp"
+                android:layout_margin="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/musicVideoRecyclerView"
+                app:strokeColor="#00000000">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/banner" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bannerMid"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bannerBig"
+                app:strokeColor="#00000000">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/banner_mid" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
+                app:layout_constraintHorizontal_chainStyle="packed"
+                android:layout_marginTop="36dp"
+                android:id="@+id/facebookBtn"
+                android:layout_width="32dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_height="32dp"
+                android:src="@drawable/baseline_facebook_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/instagramBtn"
+                app:layout_constraintTop_toBottomOf="@id/bannerMid"
+                app:tint="@color/dark_gray" />
+
+            <ImageView
+                android:layout_marginTop="36dp"
+                android:id="@+id/instagramBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginHorizontal="12dp"
+                app:layout_constraintEnd_toStartOf="@id/youtubeBtn"
+                android:src="@drawable/baseline_instagram_24"
+                app:layout_constraintStart_toEndOf="@id/facebookBtn"
+                app:layout_constraintTop_toBottomOf="@id/bannerMid"
+                app:tint="@color/dark_gray" />
+
+            <ImageView
+                android:layout_marginTop="36dp"
+                android:id="@+id/youtubeBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginHorizontal="12dp"
+                app:layout_constraintEnd_toStartOf="@id/twiterBtn"
+                android:src="@drawable/baseline_youtube_24"
+                app:layout_constraintStart_toEndOf="@id/instagramBtn"
+                app:layout_constraintTop_toBottomOf="@id/bannerMid"
+                app:tint="@color/dark_gray" />
+
+            <ImageView
+                android:layout_marginTop="36dp"
+                android:id="@+id/twiterBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginHorizontal="12dp"
+                app:layout_constraintStart_toEndOf="@id/youtubeBtn"
+                android:src="@drawable/baseline_twiiter_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toBottomOf="@id/bannerMid"
+                app:tint="@color/dark_gray" />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="100dp"
+                app:layout_constraintTop_toBottomOf="@id/youtubeBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/companyNameText"
+                android:text="(주)드림어스컴퍼니 사업자 정보 〉"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
