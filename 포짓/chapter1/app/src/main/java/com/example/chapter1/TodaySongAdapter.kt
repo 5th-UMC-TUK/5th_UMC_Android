@@ -1,0 +1,53 @@
+package com.example.chapter1
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.chapter1.databinding.TitleListBinding
+import com.example.chapter1.databinding.TodaysongListBinding
+
+class TodaySongAdapter:  ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCallBack) {
+
+    companion object {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<TodaySongModel>() {
+            override fun areItemsTheSame(oldItem: TodaySongModel, newItem: TodaySongModel): Boolean {
+
+                return oldItem.songName == newItem.songName && oldItem.songSinger == newItem.songSinger
+            }
+
+            override fun areContentsTheSame(oldItem: TodaySongModel, newItem: TodaySongModel): Boolean {
+                return oldItem == newItem
+            }
+
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val binding = TodaysongListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolderShared(binding)
+    }
+
+    inner class ViewHolderShared(private val binding: TodaysongListBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: TodaySongModel){
+            binding.todaySongImg.setImageResource(item.songImgResId)
+            binding.songName.text = item.songName
+            binding.singerName.text = item.songSinger
+        }
+
+
+    }
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        when (holder) {
+            is ViewHolderShared -> {
+                holder.bind(item)
+            }
+        }
+    }
+}

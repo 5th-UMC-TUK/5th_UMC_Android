@@ -3,6 +3,7 @@ package com.example.chapter1
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter1.databinding.TitleListBinding
@@ -30,7 +31,12 @@ class TitleAdapter : ListAdapter<TitleModel, RecyclerView.ViewHolder>(DiffCallBa
 
     inner class ViewHolderShared(private val binding: TitleListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TitleModel){
-
+            binding.titleFrame.setBackgroundResource(item.titleImgResId)
+            binding.albumInfo.text = item.albumInfo
+            binding.titleText.text = item.titleText
+            val adapter = SongAdapter()
+            binding.albumList.adapter = adapter
+            adapter.submitList(item.songs)
         }
 
 
