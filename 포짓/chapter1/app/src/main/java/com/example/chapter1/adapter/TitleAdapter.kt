@@ -1,11 +1,11 @@
-package com.example.chapter1
+package com.example.chapter1.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chapter1.model.TitleModel
 import com.example.chapter1.databinding.TitleListBinding
 
 class TitleAdapter : ListAdapter<TitleModel, RecyclerView.ViewHolder>(DiffCallBack) {

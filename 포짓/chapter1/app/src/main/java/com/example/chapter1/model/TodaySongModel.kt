@@ -1,4 +1,4 @@
-package com.example.chapter1
+package com.example.chapter1.model
 
 data class TodaySongModel (
     val songName: String,

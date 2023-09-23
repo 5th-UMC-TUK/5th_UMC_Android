@@ -1,14 +1,14 @@
-package com.example.chapter1
+package com.example.chapter1.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chapter1.model.TodaySongModel
 import com.example.chapter1.databinding.TodaysongListBinding
-import com.example.chapter1.databinding.VideoListBinding
 
-class VideoAdapter:  ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCallBack) {
+class TodaySongAdapter:  ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCallBack) {
 
     companion object {
         private val DiffCallBack = object : DiffUtil.ItemCallback<TodaySongModel>() {
@@ -25,14 +25,14 @@ class VideoAdapter:  ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCa
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding = VideoListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = TodaysongListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolderShared(binding)
     }
 
-    inner class ViewHolderShared(private val binding: VideoListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderShared(private val binding: TodaysongListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: TodaySongModel){
-            binding.videoImg.setImageResource(item.songImgResId)
-            binding.videoName.text = item.songName
+            binding.todaySongImg.setImageResource(item.songImgResId)
+            binding.songName.text = item.songName
             binding.singerName.text = item.songSinger
         }
 

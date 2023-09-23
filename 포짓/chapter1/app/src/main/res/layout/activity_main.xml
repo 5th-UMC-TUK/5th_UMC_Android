@@ -6,253 +6,27 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_marginTop="10dp"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:textSize="25sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="150dp"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/title_viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </androidx.viewpager2.widget.ViewPager2>
-
-            <me.relex.circleindicator.CircleIndicator3
-                android:id="@+id/title_indicator"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="5dp"
-                app:ci_drawable="@drawable/selected"
-                app:ci_drawable_unselected="@drawable/unselected"
-                app:layout_constraintTop_toBottomOf="@+id/title_viewpager" />
-
-            <androidx.appcompat.widget.Toolbar
-                android:layout_marginTop="10dp"
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
-                android:textSize="25sp"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/today_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="50dp"
-                android:text="오늘 발매 음악"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_viewpager" />
-
-            <ImageButton
-                android:id="@+id/today_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/next"
-                app:layout_constraintBottom_toBottomOf="@+id/today_text"
-                app:layout_constraintStart_toEndOf="@+id/today_text"
-                app:layout_constraintTop_toTopOf="@+id/today_text" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                app:layout_constraintBottom_toBottomOf="@id/today_btn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/today_btn">
-
-                <TextView
-                    android:id="@+id/today_song_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="종합"
-                    android:textColor="@color/flo_blue"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/today_song_inner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:text="국내"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@id/today_song_total"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/today_song_outer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:text="해외"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@id/today_song_inner"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/today_song_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/today_text"
-                tools:listitem="@layout/todaysong_list" />
-
-
-            <ImageView
-                android:layout_marginTop="50dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                app:layout_constraintTop_toBottomOf="@id/today_song_rv"
-                android:src="@drawable/img_home_viewpager_exp"
-                android:id="@+id/ad_img1"/>
-
-            <TextView
-                android:id="@+id/everyday_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="20dp"
-                android:text="매일 들어도 좋은 팟케스트"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ad_img1" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/everyday_song_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/everyday_text"
-                tools:listitem="@layout/todaysong_list" />
-
-            <TextView
-                android:id="@+id/video_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:text="비디오 콜렉션"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/everyday_song_rv" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/video_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/video_text"
-                tools:listitem="@layout/todaysong_list" />
-
-            <ImageView
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/discovery_banner_aos"
-                app:layout_constraintTop_toBottomOf="@id/video_rv"
-                android:id="@+id/flo_choose_ad"/>
-
-            <ImageView
-                android:layout_marginTop="50dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                app:layout_constraintTop_toBottomOf="@id/flo_choose_ad"
-                android:src="@drawable/img_home_viewpager_exp2"
-                android:id="@+id/ad_img2"/>
-
-            <LinearLayout
-                android:id="@+id/icon_frame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/ad_img2">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/facebook" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/instagram" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/youtube" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/twitter" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/company_text"
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/icon_frame"
-                android:textSize="12sp"
-                android:text="(주)드림어스컴퍼니 사업자 정보"/>
-
-            <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/next"
-                android:background="@color/white"
-                app:layout_constraintStart_toEndOf="@id/company_text"
-                app:layout_constraintTop_toTopOf="@id/company_text"
-                app:layout_constraintBottom_toBottomOf="@id/company_text"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_navigation"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="75dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -338,6 +112,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/main_bottom" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

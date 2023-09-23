@@ -1,12 +1,12 @@
-package com.example.chapter1
+package com.example.chapter1.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chapter1.model.SongModel
 import com.example.chapter1.databinding.SongListBinding
-import com.example.chapter1.databinding.TodaysongListBinding
 
 class SongAdapter: ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCallBack) {
 
