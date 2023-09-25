@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.chapter1.R
+import com.example.chapter1.adapter.OnItemClickListener
 import com.example.chapter1.adapter.TitleAdapter
 import com.example.chapter1.adapter.TodaySongAdapter
 import com.example.chapter1.adapter.VideoAdapter
@@ -68,15 +69,37 @@ class MainFragment : Fragment() {
 //        adAdapter.submitList(adImages)
 
         val todaySongArray = listOf(
-            TodaySongModel("사이렌", "marsjay (마스제이)", R.drawable.siren),
-            TodaySongModel("Got Me Started", "Troye Sivan", R.drawable.got_me_started),
-            TodaySongModel("소품집 Vol.1", "장동원", R.drawable.vol1),
-            TodaySongModel("The Wave", "다크비 (DKB)", R.drawable.the_wave)
+            TodaySongModel("사이렌", "marsjay (마스제이)", R.drawable.siren, "album 정보"),
+            TodaySongModel("Got Me Started", "Troye Sivan", R.drawable.got_me_started, "album 정보"),
+            TodaySongModel("소품집 Vol.1", "장동원", R.drawable.vol1, "album 정보"),
+            TodaySongModel("The Wave", "다크비 (DKB)", R.drawable.the_wave, "album 정보")
         )
 
         val todaySongAdapter = TodaySongAdapter()
         binding.todaySongRv.adapter = todaySongAdapter
         todaySongAdapter.submitList(todaySongArray)
+        todaySongAdapter.setOnItemClickListener(object: OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                val albumFragment = AlbumFragment()
+                val bundle = Bundle()
+                val data = todaySongAdapter.getItem(position)
+                bundle.putString("song", data.songName)
+                bundle.putString("singer", data.songSinger)
+                bundle.putString("detail", data.songDetail)
+                bundle.putInt("resId", data.songImgResId)
+                albumFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
+
+                parentFragmentManager.beginTransaction()
+                    .add(R.id.fragment_frame, albumFragment)
+                    .hide(this@MainFragment)
+                    .show(albumFragment)
+                    .addToBackStack(null) // 필요에 따라 back stack에 추가할 수 있습니다.
+                    .commit()
+
+
+            }
+
+        })
 
         binding.todaySongTotal.setOnClickListener{
             binding.todaySongTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.flo_blue))
@@ -95,20 +118,20 @@ class MainFragment : Fragment() {
         }
 
         val everydaySongArray = listOf(
-            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp),
-            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp),
-            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp),
-            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp)
+            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp, "album 정보"),
+            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp, "album 정보"),
+            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp, "album 정보"),
+            TodaySongModel("제목", "가수", R.drawable.img_potcast_exp, "album 정보")
         )
         val everydaySongAdapter = TodaySongAdapter()
         binding.everydaySongRv.adapter = everydaySongAdapter
         everydaySongAdapter.submitList(everydaySongArray)
 
         val videoArray = listOf(
-            TodaySongModel("제목", "가수", R.drawable.img_video_exp),
-            TodaySongModel("제목", "가수", R.drawable.img_video_exp),
-            TodaySongModel("제목", "가수", R.drawable.img_video_exp),
-            TodaySongModel("제목", "가수", R.drawable.img_video_exp)
+            TodaySongModel("제목", "가수", R.drawable.img_video_exp, "album 정보"),
+            TodaySongModel("제목", "가수", R.drawable.img_video_exp, "album 정보"),
+            TodaySongModel("제목", "가수", R.drawable.img_video_exp, "album 정보"),
+            TodaySongModel("제목", "가수", R.drawable.img_video_exp, "album 정보")
         )
         val videoAdapter = VideoAdapter()
         binding.videoRv.adapter = videoAdapter
