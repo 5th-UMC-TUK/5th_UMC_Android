@@ -6,26 +6,29 @@
         android:id="@+id/bottom_main"
         android:icon="@drawable/home"
         android:title="홈"
-        app:showAsAction="ifRoom">
-    </item>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/bottom_lookaround"
         android:icon="@drawable/dvd"
         android:title="둘러보기"
-        app:showAsAction="ifRoom">
-    </item>
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/bottom_audio"
+            android:icon="@drawable/sound_waves"
+        android:title="오디오"
+        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/bottom_search"
         android:icon="@drawable/search"
         android:title="검색"
-        app:showAsAction="ifRoom">
-    </item>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/bottom_locker"
         android:icon="@drawable/user"
         android:title="보관함"
-        app:showAsAction="ifRoom">
-    </item>
+        app:showAsAction="ifRoom"/>
 
 
 </menu>
