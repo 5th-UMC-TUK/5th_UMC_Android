@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.chapter1.R
 import com.example.chapter1.databinding.FragmentAlbumBinding
 
@@ -36,6 +37,8 @@ class AlbumFragment : Fragment() {
         songDetail?.let {
             binding.albumDetail.text = it
         }
+
+        Toast.makeText(requireContext(), "album 제목: $songName  가수: $singerName  세부내용: $songDetail", Toast.LENGTH_SHORT).show()
 
         resId?.let {
             binding.albumImg.setImageResource(it)

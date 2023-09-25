@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                     singerName?.let{ singerN->
                         binding.playSongSinger.text = singerN
                     }
+                    Toast.makeText(applicationContext, "제목: $songName, 가수: $singerName", Toast.LENGTH_SHORT).show()
                 }
             }
         }
