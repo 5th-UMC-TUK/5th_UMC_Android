@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/bottom_main">
+
+    <fragment
+        android:id="@+id/bottom_main"
+        android:name="com.example.chapter1.view.MainFragment"
+        android:label="MainFragment" />
+</navigation>
