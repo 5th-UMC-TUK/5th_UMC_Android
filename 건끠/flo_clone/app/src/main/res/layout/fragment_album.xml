@@ -1,0 +1,195 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:expandedTitleTextAppearance="@style/expandedBarBrandTitleStyle"
+            app:expandedTitleTextColor="@color/transparency"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="parallax">
+
+                <View
+                    android:id="@+id/appbarSizeView"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/albumTitleT"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="24dp"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="1st EP[New Jeans]"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/appbarSizeView" />
+
+                <TextView
+                    android:id="@+id/albumSingerT"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="6dp"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="New Jeans"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/albumTitleT" />
+
+                <TextView
+                    android:id="@+id/albumOutlineT"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="2022.07.22 | 정규 | 팝"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/albumSingerT" />
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/albumSumNailCard"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="16dp"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/albumOutlineT"
+                    app:strokeColor="@color/transparency">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/albumSumNail"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:src="@drawable/appicon_image"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/playMusic"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_margin="2dp"
+                            android:src="@drawable/baseline_play_arrow_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:tint="@color/white" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginVertical="12dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/img_album_lp"
+                    app:layout_constraintBottom_toBottomOf="@id/albumSumNailCard"
+                    app:layout_constraintStart_toEndOf="@id/albumSumNailCard"
+                    app:layout_constraintTop_toTopOf="@id/albumSumNailCard" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:backgroundTint="#00FFFFFF"
+                android:elevation="1dp"
+                android:paddingEnd="16dp"
+                android:theme="@style/toolbar"
+                app:layout_collapseMode="pin"
+                app:menu="@menu/album_tool_menu"
+                app:title="ddddd"
+                app:titleMarginStart="12dp"
+                app:titleTextColor="@color/gray">
+
+                <ImageView
+                    android:id="@+id/albumBackBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/baseline_arrow_back_ios_new_24"
+                    app:tint="@color/gray" />
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/layout_tab"
+                style="@style/TabTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicatorColor="@color/primery"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="2dp"
+                app:tabSelectedTextColor="@color/primery"
+                app:tabTextColor="@color/gray" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_tab" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
