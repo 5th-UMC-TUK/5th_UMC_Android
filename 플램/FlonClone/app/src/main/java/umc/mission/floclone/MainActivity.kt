@@ -2,9 +2,6 @@ package umc.mission.floclone
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils.replace
-import android.view.View
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import umc.mission.floclone.databinding.ActivityMainBinding
 
