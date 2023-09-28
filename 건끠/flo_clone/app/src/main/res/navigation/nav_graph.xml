@@ -8,7 +8,11 @@
         android:id="@+id/homeFragment"
         tools:layout="@layout/fragment_home"
         android:name="com.hgh.flo_clone.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+    </fragment>
     <fragment
         tools:layout="@layout/fragment_audio"
         android:id="@+id/audioFragment"
@@ -29,4 +33,18 @@
         android:id="@+id/lookingFragment"
         android:name="com.hgh.flo_clone.LookingFragment"
         android:label="LookingFragment" />
+    <fragment
+        tools:layout="@layout/fragment_album"
+        android:id="@+id/albumFragment"
+        android:name="com.hgh.flo_clone.album.AlbumFragment"
+        android:label="AlbumFragment" >
+
+        <argument
+            android:name="arg_album"
+            app:argType="com.hgh.flo_clone.data.AlbumModel"/>
+
+        <action
+            android:id="@+id/action_albumFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

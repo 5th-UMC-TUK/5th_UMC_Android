@@ -1,5 +1,6 @@
 package com.example.chapter1.view
 
+import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
@@ -25,6 +29,23 @@ import com.example.chapter1.model.TodaySongModel
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainFrag: MainFragment
+    private val activityResultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == 0) {
+                val songIntent = it.data
+                songIntent?.let { sIntent ->
+                    val songName = sIntent.getStringExtra("song")
+                    songName?.let { sName ->
+                        binding.playSongTitle.text = sName
+                    }
+                    val singerName = songIntent.getStringExtra("singer")
+                    singerName?.let{ singerN->
+                        binding.playSongSinger.text = singerN
+                    }
+                    Toast.makeText(applicationContext, "제목: $songName, 가수: $singerName", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,9 +68,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
-        val controller = navHostFragment.navController
-        binding.mainNav.setupWithNavController(controller)
+        supportFragmentManager.beginTransaction()
+            .add(binding.fragmentFrame.id, mainFrag, "main")
+            .show(mainFrag)
+            .commit()
+
+//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+//        val controller = navHostFragment.navController
+//        binding.mainNav.setupWithNavController(controller)
+
+        binding.imgGoPlaylist.setOnClickListener {
+            val intent = Intent(this@MainActivity, SongActivity::class.java)
+            activityResultLauncher.launch(intent)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

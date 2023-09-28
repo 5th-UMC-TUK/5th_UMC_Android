@@ -217,6 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:text="종합"
+                android:textColor="@color/primery"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/newMusicText"
                 app:layout_constraintEnd_toStartOf="@id/newNativeText"
@@ -228,6 +229,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:text="국내"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/newMusicText"
                 app:layout_constraintEnd_toStartOf="@id/newPopText"
@@ -235,6 +237,7 @@
 
             <TextView
                 android:id="@+id/newPopText"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
