@@ -1,9 +1,10 @@
-package umc.mission.floclone
+package umc.mission.floclone.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import umc.mission.floclone.NewMusicDaily
 import umc.mission.floclone.databinding.ItemHomeVideoCollectionBinding
 import umc.mission.floclone.databinding.ItemNewMusicDailyBinding
 
@@ -19,7 +20,7 @@ class NewMusicDailyAdapter(
             binding.apply {
                 tvRecyclerviewNewMusicDailyTitle.text = newMusicDaily.title
                 tvRecyclerviewNewMusicDailySinger.text = newMusicDaily.singer
-                ivRecyclerviewNewMusicDailyImg.setImageDrawable(newMusicDaily.musicImage)
+                ivRecyclerviewNewMusicDailyImg.setImageResource(newMusicDaily.musicImageResId)
             }
         }
     }
@@ -30,7 +31,7 @@ class NewMusicDailyAdapter(
             binding.apply {
                 tvRecyclerviewVideoCollectionTitle.text = newMusicDaily.title
                 tvRecyclerviewVideoCollectionSinger.text = newMusicDaily.singer
-                ivRecyclerviewVideoCollectionImg.setImageDrawable(newMusicDaily.musicImage)
+                ivRecyclerviewVideoCollectionImg.setImageResource(newMusicDaily.musicImageResId)
             }
         }
     }

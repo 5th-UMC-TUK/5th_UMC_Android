@@ -171,40 +171,34 @@
             app:layout_constraintStart_toEndOf="@id/home_new_music_daily_title_tv"
             app:layout_constraintTop_toTopOf="@id/home_new_music_daily_title_tv" />
 
-        <CheckedTextView
+        <TextView
             android:id="@+id/home_new_music_daily_synthesis_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:checked="true"
-            android:clickable="true"
             android:text="종합"
-            android:textColor="@drawable/btm_color_selector"
             android:textSize="15sp"
+            android:textColor="@color/category_selected"
             app:layout_constraintBaseline_toBaselineOf="@id/home_new_music_daily_foreign_tv"
             app:layout_constraintEnd_toStartOf="@id/home_new_music_daily_domestic_tv" />
 
-        <CheckedTextView
+        <TextView
             android:id="@+id/home_new_music_daily_domestic_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:clickable="true"
             android:text="국내"
-            android:textColor="@drawable/btm_color_selector"
             android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@id/home_new_music_daily_foreign_tv"
             app:layout_constraintEnd_toStartOf="@id/home_new_music_daily_foreign_tv" />
 
-        <CheckedTextView
+        <TextView
             android:id="@+id/home_new_music_daily_foreign_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
-            android:clickable="true"
             android:text="해외"
-            android:textColor="@drawable/btm_color_selector"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_pannel_background_iv" />
