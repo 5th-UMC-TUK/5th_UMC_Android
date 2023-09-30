@@ -28,6 +28,8 @@ class IncludesongFragment: Fragment() {
         includeSongAdapter.setList(
             (requireParentFragment() as AlbumFragment).args.argAlbum.musicList
         )
+        binding.includeSwitch.setOnClickListener {
+        }
     }
 
 }

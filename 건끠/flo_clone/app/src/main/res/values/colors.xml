@@ -8,4 +8,8 @@
     <color name="light_gray">#EFEFEF</color>
     <color name="primery">#3148CA</color>
     <color name="transparency">#00000000</color>
+    <color name="banner1">#673AB7</color>
+    <color name="banner2">#8BC34A</color>
+    <color name="banner3">#00BCD4</color>
+    <color name="banner4">#FF9800</color>
 </resources>

@@ -17,187 +17,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/recommendLayout"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/homaBannerViewPager"
                 android:layout_width="0dp"
                 android:layout_height="400dp"
-                android:background="#673AB7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                <ImageView
-                    android:id="@+id/homeSettingBtn"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_margin="12dp"
-                    android:src="@drawable/baseline_settings_24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <ImageView
-                    android:id="@+id/homeNotificationBtn"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_margin="12dp"
-                    android:src="@drawable/baseline_notifications_none_24"
-                    app:layout_constraintEnd_toStartOf="@id/homeSettingBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <ImageView
-                    android:id="@+id/homeRecordBtn"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_margin="12dp"
-                    android:src="@drawable/baseline_mic_none_24"
-                    app:layout_constraintEnd_toStartOf="@id/homeNotificationBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <ImageView
-                    android:id="@+id/homeBoxBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="12dp"
-                    android:src="@drawable/baseline_box_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:id="@+id/recommendTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="12dp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="일하는 중 귀로 떠나는 \n해외여행"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    app:layout_constraintEnd_toStartOf="@id/recommendPlayBtn"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/homeBoxBtn" />
-
-                <ImageView
-                    android:id="@+id/recommendPlayBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="18dp"
-                    android:src="@drawable/baseline_play_circle_24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/homeSettingBtn"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:id="@+id/recommendNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:text="총 17곡"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toTopOf="@id/musicSumNail1"
-                    app:layout_constraintStart_toStartOf="@id/musicSumNail1" />
-
-                <TextView
-                    android:id="@+id/recommendDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="2023.07.27"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toTopOf="@id/musicSumNail1"
-                    app:layout_constraintStart_toEndOf="@id/recommendNum" />
-
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/musicSumNail1"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginBottom="12dp"
-                    android:src="@drawable/appicon_image"
-                    app:layout_constraintBottom_toTopOf="@id/musicSumNail2"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/musicTitle1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Hana"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/musicSumNail1"
-                    app:layout_constraintTop_toTopOf="@id/musicSumNail1" />
-
-                <TextView
-                    android:id="@+id/musicSinger1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="ORANGE RANGE"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@id/musicSumNail1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/musicSumNail1" />
-
-
-                <ImageView
-                    android:id="@+id/musicSumNail2"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginBottom="36dp"
-                    android:src="@drawable/appicon_image"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/musicTitle2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Tokyo Flash"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/musicSumNail2"
-                    app:layout_constraintTop_toTopOf="@id/musicSumNail2" />
-
-                <TextView
-                    android:id="@+id/musicSinger2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Vaundy"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@id/musicSumNail2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/musicSumNail2" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <me.relex.circleindicator.CircleIndicator3
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/homaBannerViewPager"
+                android:id="@+id/indicator"
+                android:layout_width="0dp"
+                app:ci_drawable="@drawable/indicator_shape"
+                android:layout_margin="10dp"
+                android:layout_height="20dp"/>
 
             <TextView
                 android:id="@+id/newMusicText"
@@ -209,7 +45,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recommendLayout" />
+                app:layout_constraintTop_toBottomOf="@id/indicator" />
 
             <TextView
                 android:id="@+id/newAllText"

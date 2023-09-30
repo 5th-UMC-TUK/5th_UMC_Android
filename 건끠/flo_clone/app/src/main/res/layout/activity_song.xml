@@ -56,13 +56,13 @@
         android:layout_marginTop="36dp"
         android:ellipsize="end"
         android:maxLines="1"
-        tools:text="title"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songMoreBtn" />
+        app:layout_constraintTop_toBottomOf="@id/songMoreBtn"
+        tools:text="title" />
 
     <TextView
         android:id="@+id/songSingerText"
@@ -72,13 +72,13 @@
         android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:maxLines="1"
-        tools:text=" singer 〉"
         android:textColor="@color/gray"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songTitleText" />
+        app:layout_constraintTop_toBottomOf="@id/songTitleText"
+        tools:text=" singer 〉" />
 
 
     <com.google.android.material.card.MaterialCardView
@@ -92,11 +92,11 @@
         app:strokeColor="@color/transparency">
 
         <ImageView
-            android:scaleType="fitXY"
             android:id="@+id/songSumNail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/appicon_image"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/appicon_image" />
 
 
     </com.google.android.material.card.MaterialCardView>
@@ -132,32 +132,31 @@
         app:layout_constraintTop_toBottomOf="@id/songLyricsText1" />
 
     <ImageView
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:layout_marginEnd="40dp"
         android:id="@+id/songFavoriteBtn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/baseline_favorite_border_24"
+        app:layout_constraintEnd_toStartOf="@id/songNotFavoriteBtn"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/songLyricsText2"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toStartOf="@id/songNotFavoriteBtn"
-        android:layout_width="24dp"
-        android:src="@drawable/baseline_favorite_border_24"
-        android:layout_height="24dp"
         app:tint="@color/gray" />
 
     <ImageView
         android:id="@+id/songNotFavoriteBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songLyricsText2"
-        android:layout_marginTop="24dp"
         android:layout_width="24dp"
-        app:layout_constraintStart_toEndOf="@id/songFavoriteBtn"
-        android:src="@drawable/baseline_not_interested_24"
         android:layout_height="24dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/baseline_not_interested_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/songFavoriteBtn"
+        app:layout_constraintTop_toBottomOf="@id/songLyricsText2"
         app:tint="@color/gray" />
 
 
     <SeekBar
-        app:layout_constraintTop_toBottomOf="@id/songFavoriteBtn"
         android:id="@+id/playerSeekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -172,6 +171,7 @@
         app:layout_constraintBottom_toTopOf="@id/songPlayBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/songFavoriteBtn"
         tools:progress="40" />
 
     <TextView
@@ -179,25 +179,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:text="0:00"
         android:textColor="@color/primery"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/playerSeekBar"
-        app:layout_constraintTop_toBottomOf="@id/playerSeekBar"
-        android:text="0:00" />
+        app:layout_constraintTop_toBottomOf="@id/playerSeekBar" />
 
     <TextView
         android:id="@+id/totalTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:text="3:20"
         android:textColor="@color/gray"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/playerSeekBar"
-        app:layout_constraintTop_toBottomOf="@id/playerSeekBar"
-        android:text="3:20" />
-    
+        app:layout_constraintTop_toBottomOf="@id/playerSeekBar" />
+
     <ImageView
         android:id="@+id/songPreviousBtn"
         android:layout_width="40dp"
@@ -251,9 +251,9 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="80dp"
         android:src="@drawable/baseline_shuffle_24"
-        app:layout_constraintBottom_toTopOf="@id/songInstagramBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/gray" />
+        app:layout_constraintTop_toTopOf="@id/songRepeatBtn"
+       />
 
 
     <ImageView
