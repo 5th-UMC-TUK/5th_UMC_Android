@@ -3,13 +3,15 @@ package com.hgh.flo_clone.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.hgh.flo_clone.data.AlbumModel
 import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.ItemMusicSmallBinding
 
-class MusicRVAdapter() :
+class MusicRVAdapter(val MusicClickListener : (AlbumModel)->Unit, ) :
     RecyclerView.Adapter<MusicRVAdapter.MusicItemHolder>() {
 
     private var musicList: List<MusicModel> = listOf()
+    lateinit var album: AlbumModel
 
     inner class MusicItemHolder(
         private val binding: ItemMusicSmallBinding
@@ -17,6 +19,10 @@ class MusicRVAdapter() :
         fun bind(data: MusicModel) {
             binding.itemMusicTitle.text = data.title
             binding.itemMusicSinger.text = data.singer
+
+            binding.itemMusicSumNail.setOnClickListener{
+                MusicClickListener(album)
+            }
         }
     }
 
@@ -35,8 +41,9 @@ class MusicRVAdapter() :
         holder.bind(musicList[position])
     }
 
-    fun setList(list: List<MusicModel>) {
+    fun setList(list: List<MusicModel>, albumList: AlbumModel) {
         musicList = list
+        album = albumList
         notifyDataSetChanged()
     }
 }

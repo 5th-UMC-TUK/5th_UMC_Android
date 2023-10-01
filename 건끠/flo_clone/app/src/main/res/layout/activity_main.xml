@@ -43,7 +43,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingVertical="4dp"
-                android:text="TITLE"
+                android:text="Hana"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold" />
@@ -56,7 +56,7 @@
                 android:layout_marginBottom="10dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="singer"
+                android:text="ORANGE RANGE"
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
         </LinearLayout>

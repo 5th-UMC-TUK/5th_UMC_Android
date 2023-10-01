@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
+import com.hgh.flo_clone.album.TabAdapter
 import com.hgh.flo_clone.databinding.FragmentHomeBinding
 import com.hgh.flo_clone.databinding.FragmentLookingBinding
+import com.hgh.flo_clone.locker.TabLockerAdapter
 
 class LookingFragment : Fragment() {
 
