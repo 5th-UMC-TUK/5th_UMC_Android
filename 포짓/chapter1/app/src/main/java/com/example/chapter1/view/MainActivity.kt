@@ -9,10 +9,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.findFragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -29,6 +31,7 @@ import com.example.chapter1.model.TodaySongModel
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainFrag: MainFragment
+    private lateinit var lockFrag: LockFragment
     private val activityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == 0) {
@@ -51,12 +54,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mainFrag = MainFragment()
-        binding
+        lockFrag = LockFragment()
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.btn_main_ticket)
+        this.onBackPressedDispatcher.addCallback(this, callback)
 
         binding.imgPlalistStart.setOnClickListener {
             val imageButtonDrawable = binding.imgPlalistStart.drawable as? BitmapDrawable
@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction()
             .add(binding.fragmentFrame.id, mainFrag, "main")
+            .add(binding.fragmentFrame.id, lockFrag, "lock")
+            .hide(lockFrag)
             .show(mainFrag)
             .commit()
 
@@ -81,27 +83,78 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, SongActivity::class.java)
             activityResultLauncher.launch(intent)
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-
+        binding.mainNav.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.bottom_main -> {
+                    supportFragmentManager.beginTransaction()
+                        .show(mainFrag)
+                        .hide(lockFrag)
+                        .commit()
+                }
+                R.id.bottom_locker -> {
+                    supportFragmentManager.beginTransaction()
+                        .hide(mainFrag)
+                        .show(lockFrag)
+                        .commit()
+                }
             }
-            R.id.main_mic -> {
-
-            }
-            R.id.main_notice -> {
-
-            }
-            R.id.main_settings -> {
-
-            }
+            true
         }
-        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onStart() {
+        super.onStart()
+//        setSupportActionBar(binding.toolbar)
+//        supportActionBar?.setDisplayShowTitleEnabled(false)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.setHomeAsUpIndicator(R.drawable.btn_main_ticket)
+    }
+
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.main_menu, menu)
+//        return true
+//    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            android.R.id.home -> {
+//
+//            }
+//            R.id.main_mic -> {
+//
+//            }
+//            R.id.main_notice -> {
+//
+//            }
+//            R.id.main_settings -> {
+//
+    
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val currentFragment = supportFragmentManager.findFragmentByTag("main")
+
+            if (currentFragment != null) {
+                binding.mainNav.selectedItemId = R.id.bottom_main
+                supportFragmentManager.beginTransaction()
+                    .show(mainFrag)
+                    .hide(lockFrag)
+                    .commit()
+                return
+            } else {
+                binding.mainNav.selectedItemId = R.id.bottom_main
+                supportFragmentManager.beginTransaction()
+                    .show(mainFrag)
+                    .hide(lockFrag)
+                    .commit()
+
+                return
+            }
+
+        }
     }
 }

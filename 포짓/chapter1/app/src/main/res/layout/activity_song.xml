@@ -189,7 +189,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center_vertical"
-        app:layout_constraintBottom_toTopOf="@+id/song_related_iv"
+        app:layout_constraintBottom_toTopOf="@+id/song_related"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/song_progressbar">
@@ -222,19 +222,22 @@
         android:id="@+id/song_repeat"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="30dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/nugu_btn_repeat_inactive"
         app:layout_constraintBottom_toBottomOf="@+id/play_frame"
         app:layout_constraintEnd_toStartOf="@+id/play_frame"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/play_frame" />
 
     <ImageView
         android:id="@+id/song_random"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="30dp"
+
+        android:scaleType="fitCenter"
         android:src="@drawable/nugu_btn_random_inactive"
         app:layout_constraintBottom_toBottomOf="@+id/play_frame"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/play_frame"
         app:layout_constraintTop_toTopOf="@+id/play_frame" />
 
