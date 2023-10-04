@@ -19,6 +19,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
+    <SeekBar
+        android:id="@+id/miniPlayerSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:progressDrawable="@drawable/player_seek_background"
+        android:thumb="@drawable/player_seek_thumb"
+        app:layout_constraintBottom_toTopOf="@id/nowPlayListLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:progress="40" />
+
     <LinearLayout
         android:id="@+id/nowPlayListLayout"
         android:layout_width="0dp"

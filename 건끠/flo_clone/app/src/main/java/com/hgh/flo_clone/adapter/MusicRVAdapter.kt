@@ -1,5 +1,6 @@
 package com.hgh.flo_clone.adapter
 
+import android.content.DialogInterface.OnClickListener
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,8 +8,10 @@ import com.hgh.flo_clone.data.AlbumModel
 import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.ItemMusicSmallBinding
 
-class MusicRVAdapter(val MusicClickListener : (AlbumModel)->Unit, ) :
-    RecyclerView.Adapter<MusicRVAdapter.MusicItemHolder>() {
+class MusicRVAdapter(
+    val MusicClickListener : (AlbumModel)->Unit,
+    val playClickListener: (MusicModel)->Unit,
+) : RecyclerView.Adapter<MusicRVAdapter.MusicItemHolder>() {
 
     private var musicList: List<MusicModel> = listOf()
     lateinit var album: AlbumModel
@@ -22,6 +25,9 @@ class MusicRVAdapter(val MusicClickListener : (AlbumModel)->Unit, ) :
 
             binding.itemMusicSumNail.setOnClickListener{
                 MusicClickListener(album)
+            }
+            binding.playMusic.setOnClickListener {
+                playClickListener(data)
             }
         }
     }
