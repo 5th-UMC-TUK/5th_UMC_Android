@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:id="@+id/nestedScrollView"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="150dp"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,7 +29,6 @@
             app:ci_drawable="@drawable/selected"
             app:ci_drawable_unselected="@drawable/unselected"
             app:layout_constraintTop_toBottomOf="@+id/title_viewpager" />
-
 
 
         <TextView
@@ -109,14 +108,12 @@
             tools:listitem="@layout/todaysong_list" />
 
 
-        <ImageView
-            android:layout_marginTop="50dp"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/ad_viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            app:layout_constraintTop_toBottomOf="@id/today_song_rv"
-            android:src="@drawable/img_home_viewpager_exp"
-            android:id="@+id/ad_img1"/>
+            android:layout_marginTop="50dp"
+            app:layout_constraintTop_toBottomOf="@id/today_song_rv" />
 
         <TextView
             android:id="@+id/everyday_text"
@@ -128,7 +125,7 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ad_img1" />
+            app:layout_constraintTop_toBottomOf="@+id/ad_viewpager" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/everyday_song_rv"
@@ -163,22 +160,22 @@
             tools:listitem="@layout/todaysong_list" />
 
         <ImageView
-            android:layout_marginTop="20dp"
+            android:id="@+id/flo_choose_ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:adjustViewBounds="true"
             android:src="@drawable/discovery_banner_aos"
-            app:layout_constraintTop_toBottomOf="@id/video_rv"
-            android:id="@+id/flo_choose_ad"/>
+            app:layout_constraintTop_toBottomOf="@id/video_rv" />
 
         <ImageView
-            android:layout_marginTop="50dp"
+            android:id="@+id/ad_img2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:adjustViewBounds="true"
-            app:layout_constraintTop_toBottomOf="@id/flo_choose_ad"
             android:src="@drawable/img_home_viewpager_exp2"
-            android:id="@+id/ad_img2"/>
+            app:layout_constraintTop_toBottomOf="@id/flo_choose_ad" />
 
         <LinearLayout
             android:id="@+id/icon_frame"
@@ -216,24 +213,24 @@
 
         <TextView
             android:id="@+id/company_text"
-            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/icon_frame"
+            android:layout_marginTop="10dp"
+            android:text="(주)드림어스컴퍼니 사업자 정보"
             android:textSize="12sp"
-            android:text="(주)드림어스컴퍼니 사업자 정보"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/icon_frame" />
 
         <ImageButton
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:background="@color/white"
             android:scaleType="fitCenter"
             android:src="@drawable/next"
-            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/company_text"
             app:layout_constraintStart_toEndOf="@id/company_text"
-            app:layout_constraintTop_toTopOf="@id/company_text"
-            app:layout_constraintBottom_toBottomOf="@id/company_text"/>
+            app:layout_constraintTop_toTopOf="@id/company_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/album_menu_like"
+        android:icon="@drawable/ic_my_like_off"
+        android:title="홈"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/album_menu_more"
+        android:icon="@drawable/btn_player_more"
+        android:title="둘러보기"
+        app:showAsAction="ifRoom"/>
+</menu>
