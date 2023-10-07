@@ -8,6 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="click_color">#ff002080</color>
+    <color name="unclick_color">#ff959595</color>
+
     <color name="colorPrimary">#9cbee2</color>
     <color name="colorPrimaryDark">#062342</color>
     <color name="colorAccent">#6bb2ff</color>
