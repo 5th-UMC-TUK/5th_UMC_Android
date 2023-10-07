@@ -1,6 +1,8 @@
 package com.hgh.flo_clone
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.hgh.flo_clone.adapter.HomeBannerRVAdapter
@@ -17,20 +20,59 @@ import com.hgh.flo_clone.data.AlbumModel
 import com.hgh.flo_clone.data.HomeBannerModel
 import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.FragmentHomeBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    lateinit var binding: FragmentHomeBinding
-    private val musicAdapter by lazy {
-        MusicRVAdapter { album ->
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAlbumFragment( argAlbum = album))
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        CoroutineScope(Dispatchers.Main).launch {
+            while (bannerLoop) {
+                if (binding.homaBannerViewPager.currentItem == 3) {
+                    delay(3000)
+                    binding.homaBannerViewPager.currentItem = 0
+                    continue
+
+                }
+                delay(3000)
+                binding.homaBannerViewPager.setCurrentItem(
+                    binding.homaBannerViewPager.currentItem,
+                    true
+                )
+                binding.homaBannerViewPager.currentItem += 1
+            }
         }
     }
 
-    val handler= Handler(Looper.getMainLooper()){
-        setPage()
-        true
+    lateinit var binding: FragmentHomeBinding
+    private val musicAdapter by lazy {
+        MusicRVAdapter(
+            //Alum Fragmetn 전환
+            MusicClickListener = { album ->
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToAlbumFragment(
+                        argAlbum = album
+                    )
+                )
+            },
+            //miniPlayer 에 정보 전달
+            playClickListener = { music ->
+                (requireActivity() as MainActivity).binding.nowPlayTitle.text = music.title
+                (requireActivity() as MainActivity).binding.nowPlaySinger.text = music.singer
+            }
+        )
     }
+
+    var bannerLoop = true
+
+//    val handler = Handler(Looper.getMainLooper()) {
+//        setPage()
+//        true
+//    }
+//    lateinit var thread: Thread
 
     private val videoAdapter by lazy { VideoRVAdapter() }
     lateinit var bannerAdapter: HomeBannerRVAdapter
@@ -39,8 +81,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentHomeBinding.inflate(inflater, container, false)
-        .also { binding = it }.root
+    )= FragmentHomeBinding.inflate(inflater, container, false)
+            .also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,55 +93,81 @@ class HomeFragment : Fragment() {
         dummyData()
 
 
+        //Banner 자동 전환 (Banner 는 fragment 재사용)
         bannerAdapter = HomeBannerRVAdapter(
             this, dummyBanner()
         )
-
         binding.homaBannerViewPager.adapter = bannerAdapter
         binding.indicator.setViewPager(binding.homaBannerViewPager)
-        binding.indicator.createIndicators(4,0)
-        val thread = Thread(PagerRunnable())
-        thread.start()
+        binding.indicator.createIndicators(4, 0)
+        binding.facebookBtn.setOnClickListener {
+            serviceStart(it)
+        }
+        binding.twiterBtn.setOnClickListener {
+            serviceStop(it)
+        }
 
+//        thread = Thread(PagerRunnable())
+//        if (thread.state !=Thread.State.RUNNABLE) {
+//            thread.start()
+//        }
 
     }
+//
+//    inner class PagerRunnable : Runnable {
+//        override fun run() {
+//            while (true) {
+//                try {
+//                    Thread.sleep(3000)
+//                    handler.sendEmptyMessage(0)
+//                } catch (e: InterruptedException) {
+//                    Log.d("interupt", "interupt발생")
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun setPage() {
+//        if (binding.homaBannerViewPager.currentItem == 3) {
+//            binding.homaBannerViewPager.currentItem = 0
+//            return
+//        }
+//        binding.homaBannerViewPager.setCurrentItem(binding.homaBannerViewPager.currentItem, true)
+//        binding.homaBannerViewPager.currentItem += 1
+//    }
 
-    inner class PagerRunnable:Runnable{
-        override fun run() {
-            while(true){
-                try {
-                    Thread.sleep(3000)
-                    handler.sendEmptyMessage(0)
-                } catch (e : InterruptedException){
-                    Log.d("interupt", "interupt발생")
-                }
-            }
-        }
+    fun serviceStart(view: View){
+        val intent = Intent(context,PlayerService::class.java)
+        ContextCompat.startForegroundService(requireContext(), intent)
     }
 
-    private fun setPage(){
-        if(binding.homaBannerViewPager.currentItem == 3){
-            binding.homaBannerViewPager.currentItem = 0
-            return
-        }
-        binding.homaBannerViewPager.setCurrentItem(binding.homaBannerViewPager.currentItem, true)
-        binding.homaBannerViewPager.currentItem+=1
+    fun serviceStop(view: View){
+        val intent = Intent(context,PlayerService::class.java)
+        requireContext().stopService(intent)
     }
 
     @SuppressLint("ResourceType")
     fun dummyBanner(): List<HomeBannerFragment> {
-        val homeBannerModel1 = HomeBannerModel(title = "저녁엔 감성을 꾹꾹 눌러 담은 플리",
+        val homeBannerModel1 = HomeBannerModel(
+            title = "저녁엔 감성을 꾹꾹 눌러 담은 플리",
             songTitle1 = "주저하는 연인들을 위해", songSinger1 = "잔나비",
-        songTitle2 = "Bambi", songSinger2 = "백현", color = R.color.banner2)
-        val homeBannerModel2 = HomeBannerModel(title = "일하는 중 귀로 떠나는 \n해외여행",
+            songTitle2 = "Bambi", songSinger2 = "백현", color = R.color.banner2
+        )
+        val homeBannerModel2 = HomeBannerModel(
+            title = "일하는 중 귀로 떠나는 \n해외여행",
             songTitle1 = "Hana", songSinger1 = "ORANGE RANGE",
-            songTitle2 = "Tokyo Flash", songSinger2 = "Vaundy", color = R.color.banner1)
-        val homeBannerModel3 = HomeBannerModel(title = "가을 톤을 고스란히 담은 감성 \n인디",
+            songTitle2 = "Tokyo Flash", songSinger2 = "Vaundy", color = R.color.banner1
+        )
+        val homeBannerModel3 = HomeBannerModel(
+            title = "가을 톤을 고스란히 담은 감성 \n인디",
             songTitle1 = "가을의 시작", songSinger1 = "주은하",
-            songTitle2 = "너의 평범한 날", songSinger2 = "한율", color = R.color.banner3)
-        val homeBannerModel4 = HomeBannerModel(title = "샤워할 땐 라떼 아이돌로 빙의",
+            songTitle2 = "너의 평범한 날", songSinger2 = "한율", color = R.color.banner3
+        )
+        val homeBannerModel4 = HomeBannerModel(
+            title = "샤워할 땐 라떼 아이돌로 빙의",
             songTitle1 = "yayaya", songSinger1 = "티아라",
-            songTitle2 = "So Hot", songSinger2 = "원더걸스", color = R.color.banner4)
+            songTitle2 = "So Hot", songSinger2 = "원더걸스", color = R.color.banner4
+        )
 
         return listOf(
             HomeBannerFragment.newInstance(homeBannerModel1),
@@ -127,11 +195,11 @@ class HomeFragment : Fragment() {
                 MusicModel("Attention", "NewJens", isTitle = true),
                 MusicModel("Hype boy", "NewJens", isTitle = true),
                 MusicModel("Cookie", "NewJens", isTitle = true),
-                MusicModel("Hurt","NewJens")
+                MusicModel("Hurt", "NewJens")
             )
         )
 
-        musicAdapter.setList(musicDummy,albumDummy)
+        musicAdapter.setList(musicDummy, albumDummy)
         videoAdapter.setList(musicDummy)
     }
 }

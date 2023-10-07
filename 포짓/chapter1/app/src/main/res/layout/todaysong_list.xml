@@ -9,7 +9,7 @@
         android:id="@+id/today_song_img"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:background="@drawable/round_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

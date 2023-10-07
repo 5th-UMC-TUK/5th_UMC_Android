@@ -2,49 +2,20 @@ package com.example.chapter1.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.chapter1.databinding.AdListBinding
+import com.example.chapter1.view.AdFragment
 
-class AdAdapter: ListAdapter<Int, RecyclerView.ViewHolder>(DiffCallBack) {
+class AdAdapter(private val list: List<Int>, fragment: Fragment): FragmentStateAdapter(fragment) {
+    override fun getItemCount() = list.size
 
-    companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<Int>() {
-            override fun areItemsTheSame(oldItem: Int, newItem: Int): Boolean {
-
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: Int, newItem: Int): Boolean {
-                return oldItem == newItem
-            }
-
-        }
+    override fun createFragment(position: Int): Fragment {
+        return AdFragment(list[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding = AdListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolderShared(binding)
-    }
-
-    inner class ViewHolderShared(private val binding: AdListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Int){
-            binding.adImg.setImageResource(item)
-        }
-
-
-    }
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        when (holder) {
-            is ViewHolderShared -> {
-                holder.bind(item)
-            }
-        }
-    }
 }

@@ -1,8 +1,9 @@
 package com.example.chapter1.view
 
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.chapter1.R
+import com.example.chapter1.adapter.AdAdapter
 import com.example.chapter1.adapter.OnItemClickListener
 import com.example.chapter1.adapter.TitleAdapter
 import com.example.chapter1.adapter.TodaySongAdapter
@@ -20,11 +22,21 @@ import com.example.chapter1.databinding.FragmentMainBinding
 import com.example.chapter1.model.SongModel
 import com.example.chapter1.model.TitleModel
 import com.example.chapter1.model.TodaySongModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-
+    private val titleHandler = Handler(Looper.getMainLooper()) {
+        setTitlePage()
+        true
+    }
+    private val adHandler = Handler(Looper.getMainLooper()) {
+        setAdPage()
+        true
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,13 +68,27 @@ class MainFragment : Fragment() {
                 listOf(SongModel("잠이 안온다", "젠(Zen)", R.drawable.img_album_exp)))
         )
 
-        val titleAdapter = TitleAdapter()
+        val titleAdapter = TitleAdapter(titleList, this@MainFragment)
         binding.titleViewpager.adapter = titleAdapter
         binding.titleViewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        titleAdapter.submitList(titleList)
-
+        binding.titleViewpager.overScrollMode = View.OVER_SCROLL_NEVER
         binding.titleIndicator.setViewPager(binding.titleViewpager)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                Thread.sleep(5000)
+                titleHandler.sendEmptyMessage(0)
+            }
+        }
+        binding.adViewpager.adapter = AdAdapter(listOf(R.drawable.img_home_viewpager_exp, R.drawable.img_home_viewpager_exp2), this@MainFragment)
+        binding.adViewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+        CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                Thread.sleep(7000)
+                adHandler.sendEmptyMessage(0)
+            }
+        }
 //        val adImages = listOf(R.drawable.img_home_viewpager_exp, R.drawable.img_home_viewpager_exp2)
 //        val adAdapter = AdAdapter()
 //        binding.adViewpager.adapter = adAdapter
@@ -139,6 +165,11 @@ class MainFragment : Fragment() {
 
 
     }
+    private fun setTitlePage() {
+        binding.titleViewpager.setCurrentItem((binding.titleViewpager.currentItem + 1) % binding.titleViewpager.adapter!!.itemCount, true)
+    }
 
-
+    private fun setAdPage() {
+        binding.adViewpager.setCurrentItem((binding.adViewpager.currentItem + 1) % binding.adViewpager.adapter!!.itemCount, true)
+    }
 }
