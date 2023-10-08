@@ -10,26 +10,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FLOCloneApp"
+        android:theme="@style/Theme.Timer"
         tools:targetApi="31">
         <activity
-            android:name=".ui.SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SplashActivity">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity>
-        <activity
-            android:name=".ui.SongActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="true">
-
         </activity>
     </application>
 

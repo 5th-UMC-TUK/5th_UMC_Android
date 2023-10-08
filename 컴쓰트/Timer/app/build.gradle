@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.comst.flocloneapp'
+    namespace 'com.comst.timer'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.comst.flocloneapp"
+        applicationId "com.comst.timer"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -33,9 +33,6 @@ android {
     buildFeatures{
         viewBinding = true
     }
-    buildFeatures{
-        dataBinding = true
-    }
 }
 
 dependencies {
@@ -47,17 +44,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    // Jetpack Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
-
-    // 인디케이터
-    implementation("me.relex:circleindicator:2.1.6")
-
-    // Splash Api
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
-    implementation 'androidx.activity:activity-ktx:1.7.2'
-    implementation 'androidx.fragment:fragment-ktx:1.6.1'
 }

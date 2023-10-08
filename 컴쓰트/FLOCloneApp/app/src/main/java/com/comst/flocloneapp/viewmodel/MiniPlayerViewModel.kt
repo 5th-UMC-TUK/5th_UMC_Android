@@ -1,12 +1,16 @@
 package com.comst.flocloneapp.viewmodel
 
-import android.widget.Toast
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.comst.flocloneapp.model.AlbumIncludeMusic
+import kotlinx.coroutines.Job
 
-class MainViewModel : ViewModel() {
+class MiniPlayerViewModel(application: Application) : AndroidViewModel(application) {
+
+    var job : Job? = null
 
 
     private val _musicPlayTitle = MutableLiveData<String>("재생목록이 비었습니다.")
