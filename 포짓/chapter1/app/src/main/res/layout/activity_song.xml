@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.SongActivity">
+    tools:context=".view.SongActivity"
+    android:paddingTop="24dp">
 
     <ImageButton
         android:id="@+id/song_setting"
@@ -165,6 +166,7 @@
         app:layout_constraintTop_toBottomOf="@id/like_frame" />
 
     <TextView
+        android:id="@+id/current_play_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
@@ -174,6 +176,7 @@
         app:layout_constraintTop_toBottomOf="@id/song_progressbar"/>
 
     <TextView
+        android:id="@+id/full_play_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
