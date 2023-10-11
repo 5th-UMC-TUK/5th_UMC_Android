@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ch07_mission</string>
+    <string name="min">%02d :</string>
+    <string name="sec">%02d</string>
+</resources>
