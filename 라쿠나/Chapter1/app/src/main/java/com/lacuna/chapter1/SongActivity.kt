@@ -1,6 +1,8 @@
 package com.lacuna.chapter1
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +11,8 @@ import com.lacuna.chapter1.databinding.ActivitySongBinding
 class SongActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySongBinding
-
+    var isRepeat: Boolean = false
+    var isShuffle: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySongBinding.inflate(layoutInflater)
@@ -38,6 +41,12 @@ class SongActivity : AppCompatActivity() {
         binding.songPauseIv.setOnClickListener {
             setPlayerStatus(true)
         }
+        binding.songRepeatIv.setOnClickListener {
+            setRepeatStatus()
+        }
+        binding.songShuppleIv.setOnClickListener {
+            setShuppleStatus()
+        }
     }
 
     override fun onBackPressed() {
@@ -56,6 +65,27 @@ class SongActivity : AppCompatActivity() {
         else {
             binding.songMiniplayerIv.visibility = View.GONE
             binding.songPauseIv.visibility = View.VISIBLE
+        }
+    }
+
+    fun setRepeatStatus() {
+        isRepeat = !isRepeat
+        if (isRepeat) {
+            binding.songRepeatIv.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#ff002080"))
+        } else {
+            binding.songRepeatIv.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#ff959595"))
+        }
+    }
+    fun setShuppleStatus() {
+        isRepeat = !isRepeat
+        if (isRepeat) {
+            binding.songShuppleIv.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#ff002080"))
+        } else {
+            binding.songShuppleIv.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#ff959595"))
         }
     }
 }
