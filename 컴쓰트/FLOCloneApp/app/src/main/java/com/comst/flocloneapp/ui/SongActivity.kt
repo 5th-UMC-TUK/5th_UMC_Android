@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.comst.flocloneapp.R
 import com.comst.flocloneapp.databinding.ActivitySongBinding
 import com.comst.flocloneapp.model.AlbumIncludeMusic
+import com.comst.flocloneapp.util.MusicPlayServiceUtil
 import com.comst.flocloneapp.viewmodel.MiniPlayerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 class SongActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySongBinding
-    private lateinit var miniPlayerViewModel : MiniPlayerViewModel
+    private val miniPlayerViewModel : MiniPlayerViewModel by viewModels()
 
     var repeat = false
     var shuffle = false
@@ -36,8 +37,6 @@ class SongActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_song)
-        miniPlayerViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
-            .get(MiniPlayerViewModel::class.java)
 
         val musicTitle = intent.getStringExtra("musicTitle")
         val musicSinger = intent.getStringExtra("musicSinger")
@@ -70,6 +69,7 @@ class SongActivity : AppCompatActivity() {
 
             songMiniplayerIv.setOnClickListener {
                 miniPlayerViewModel.musicPlay.value = !miniPlayerViewModel.musicPlay.value!!
+                miniPlayerViewModel.musicPlayOrPause()
             }
 
             songProgressSb.setOnSeekBarChangeListener(object  : SeekBar.OnSeekBarChangeListener{
@@ -134,17 +134,10 @@ class SongActivity : AppCompatActivity() {
     private fun goMainActivity(){
         val intent = Intent(this@SongActivity, MainActivity::class.java)
 
-        val musicTitle = miniPlayerViewModel.musicPlayTitle.value
-        val musicSinger = miniPlayerViewModel.musicPlayArtist.value
-        val musicTime = miniPlayerViewModel.musicTime.value
-        val musicPlay = miniPlayerViewModel.musicPlay.value
-
-        intent.putExtra("musicTitle", musicTitle)
-        intent.putExtra("musicSinger", musicSinger)
-        intent.putExtra("musicTime", musicTime)
-        intent.putExtra("musicPlay", musicPlay)
-
-        Log.d("보내는 값", "Sending data: title=$musicTitle, singer=$musicSinger, time=$musicTime, play=$musicPlay")
+        intent.putExtra("musicTitle", miniPlayerViewModel.musicPlayTitle.value)
+        intent.putExtra("musicSinger", miniPlayerViewModel.musicPlayArtist.value)
+        intent.putExtra("musicTime", miniPlayerViewModel.musicTime.value)
+        intent.putExtra("musicPlay", miniPlayerViewModel.musicPlay.value)
 
         setResult(100, intent)
         finish()
@@ -156,27 +149,26 @@ class SongActivity : AppCompatActivity() {
             if (it == 60){
                 miniPlayerViewModel.job?.cancel()
                 miniPlayerViewModel.musicPlay.value = false
+                MusicPlayServiceUtil.stopService(this@SongActivity)
             }
             updateTimerText(miniPlayerViewModel.musicTime.value!!)
+            binding.songProgressSb.progress = it
         }
 
 
         miniPlayerViewModel.musicPlay.observe(this){
+            miniPlayerViewModel.musicPlayOrPause()
             if (it){
                 binding.songMiniplayerIv.setImageDrawable(AppCompatResources.getDrawable(this@SongActivity,
                     R.drawable.btn_miniplay_pause
                 ))
-                miniPlayerViewModel.job = CoroutineScope(Dispatchers.Main).launch {
-                    while (it && binding.songProgressSb.progress < binding.songProgressSb.max){
-                        delay(1000)
-                        miniPlayerViewModel.setMusicTime(miniPlayerViewModel.musicTime.value?.plus(1) ?: 0)
-                    }
-                }
+                MusicPlayServiceUtil.startService(this@SongActivity)
+
             }else{
                 binding.songMiniplayerIv.setImageDrawable(AppCompatResources.getDrawable(this@SongActivity,
                     R.drawable.btn_miniplayer_play
                 ))
-                miniPlayerViewModel.job?.cancel()
+                MusicPlayServiceUtil.pauseService(this@SongActivity)
             }
         }
     }

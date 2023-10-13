@@ -4,29 +4,24 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.comst.flocloneapp.R
 import com.comst.flocloneapp.databinding.ActivityMainBinding
 import com.comst.flocloneapp.model.AlbumIncludeMusic
+import com.comst.flocloneapp.util.MusicPlayServiceUtil
 import com.comst.flocloneapp.viewmodel.MiniPlayerViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-    lateinit var miniPlayerViewModel : MiniPlayerViewModel
+    private val miniPlayerViewModel : MiniPlayerViewModel by viewModels()
 
     private val registerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){ result ->
@@ -50,9 +45,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        miniPlayerViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
-            .get(MiniPlayerViewModel::class.java)
-
 
         setContentView(binding.root)
 
@@ -124,29 +116,26 @@ class MainActivity : AppCompatActivity() {
             if (it == 60){
                 miniPlayerViewModel.job?.cancel()
                 miniPlayerViewModel.musicPlay.value = false
+                MusicPlayServiceUtil.stopService(this@MainActivity)
             }
-            //miniPlayerViewModel.setMusicTime(it)
+            binding.songProgressSb.progress = it
+
         }
 
-
-        miniPlayerViewModel.musicPlay.observe(this){
-            if (it){
-                binding.playMusicStart.setImageDrawable(
-                    AppCompatResources.getDrawable(this@MainActivity,
+        miniPlayerViewModel.musicPlay.observe(this) {
+            if (it) {
+                binding.playMusicStart.setImageDrawable(AppCompatResources.getDrawable(
+                    this@MainActivity,
                     R.drawable.btn_miniplay_pause
                 ))
-                miniPlayerViewModel.job = CoroutineScope(Dispatchers.Main).launch {
-                    while (it && binding.songProgressSb.progress < binding.songProgressSb.max){
-                        delay(1000)
-                        miniPlayerViewModel.setMusicTime(miniPlayerViewModel.musicTime.value?.plus(1) ?: 0)
-                    }
-                }
-            }else{
-                binding.playMusicStart.setImageDrawable(
-                    AppCompatResources.getDrawable(this@MainActivity,
+                MusicPlayServiceUtil.startService(this@MainActivity)
+
+            } else {
+                binding.playMusicStart.setImageDrawable(AppCompatResources.getDrawable(
+                    this@MainActivity,
                     R.drawable.btn_miniplayer_play
                 ))
-                miniPlayerViewModel.job?.cancel()
+                MusicPlayServiceUtil.pauseService(this@MainActivity)
             }
         }
 
@@ -160,6 +149,7 @@ class MainActivity : AppCompatActivity() {
 
             playMusicStart.setOnClickListener {
                 miniPlayerViewModel.musicPlay.value = !miniPlayerViewModel.musicPlay.value!!
+                miniPlayerViewModel.musicPlayOrPause()
             }
 
             songProgressSb.setOnSeekBarChangeListener(object  : SeekBar.OnSeekBarChangeListener{
