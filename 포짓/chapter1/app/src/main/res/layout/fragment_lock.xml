@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.LockFragment">
+    tools:context=".view.LockFragment"
+    android:paddingTop="24dp">
 
     <TextView
         android:id="@+id/lock_title"

@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.comst.flocloneapp.adapter.AlbumIncludedMusicAdapter
+import com.comst.flocloneapp.ui.adapter.AlbumIncludedMusicAdapter
 import com.comst.flocloneapp.databinding.FragmentAlbumIncludedSongsBinding
 import com.comst.flocloneapp.listener.PlayMusicListener
 import com.comst.flocloneapp.model.AlbumIncludeMusic
-import com.comst.flocloneapp.viewmodel.MainViewModel
+import com.comst.flocloneapp.service.MusicPlayService
+import com.comst.flocloneapp.util.MusicPlayServiceUtil
+import com.comst.flocloneapp.viewmodel.MiniPlayerViewModel
 
 
 class AlbumIncludedSongsFragment : Fragment(), PlayMusicListener {
@@ -20,7 +22,7 @@ class AlbumIncludedSongsFragment : Fragment(), PlayMusicListener {
 
     private val albumIncludedMusicAdapter = AlbumIncludedMusicAdapter(this)
     private val albumIncludeMusicList = mutableListOf<AlbumIncludeMusic>()
-    private val mainViewModel : MainViewModel by activityViewModels()
+    private val miniPlayerViewModel : MiniPlayerViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +69,11 @@ class AlbumIncludedSongsFragment : Fragment(), PlayMusicListener {
         _binding = null
     }
     override fun albumIncludedSongsPlay(albumIncludeMusic: AlbumIncludeMusic) {
-        mainViewModel.updateMiniPlayerUI(albumIncludeMusic)
+        MusicPlayServiceUtil.stopService(requireContext())
+        miniPlayerViewModel.resetViewModel()
+        miniPlayerViewModel.updateMiniPlayerUI(albumIncludeMusic)
+        miniPlayerViewModel.musicPlay.value = true
+        miniPlayerViewModel.isMusicTimeOver.value = false
+        miniPlayerViewModel.musicPlayOrPause()
     }
 }

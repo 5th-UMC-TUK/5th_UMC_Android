@@ -5,8 +5,13 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -27,6 +32,7 @@ import com.example.chapter1.databinding.ActivityMainBinding
 import com.example.chapter1.model.SongModel
 import com.example.chapter1.model.TitleModel
 import com.example.chapter1.model.TodaySongModel
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -53,6 +59,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        val content: View = findViewById(android.R.id.content)
+        // SplashScreen이 생성되고 그려질 때 계속해서 호출된다.
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    // Check if the initial data is ready.
+                    Handler(Looper.getMainLooper()).postDelayed({content.viewTreeObserver.removeOnPreDrawListener(this)}, 5000)
+                    SystemClock.sleep(1500)
+                    return true
+                }
+            }
+        )
+
         mainFrag = MainFragment()
         lockFrag = LockFragment()
 
@@ -136,22 +157,15 @@ class MainActivity : AppCompatActivity() {
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val currentFragment = supportFragmentManager.findFragmentByTag("main")
 
-            if (currentFragment != null) {
-                binding.mainNav.selectedItemId = R.id.bottom_main
-                supportFragmentManager.beginTransaction()
-                    .show(mainFrag)
-                    .hide(lockFrag)
-                    .commit()
-                return
+            if (mainFrag.isVisible) {
+                finishAffinity()
             } else {
                 binding.mainNav.selectedItemId = R.id.bottom_main
                 supportFragmentManager.beginTransaction()
                     .show(mainFrag)
                     .hide(lockFrag)
                     .commit()
-
                 return
             }
 

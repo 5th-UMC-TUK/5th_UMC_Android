@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import umc.mission.floclone.adapter.HomeViewPagerAdapter
 import umc.mission.floclone.adapter.NewMusicDailyAdapter
+import umc.mission.floclone.data.Music
 import umc.mission.floclone.databinding.FragmentLookBinding
 
 class LookFragment : Fragment() {
     private var binding: FragmentLookBinding? = null
-    private lateinit var floChartList: MutableList<NewMusicDaily>
+    private lateinit var floChartList: MutableList<Music>
     private lateinit var floChartAdapter: NewMusicDailyAdapter
     private lateinit var floChartViewPagerAdapter: HomeViewPagerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {

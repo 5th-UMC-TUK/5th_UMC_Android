@@ -3,35 +3,43 @@ package umc.mission.floclone
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import umc.mission.floclone.data.*
 import umc.mission.floclone.databinding.ActivityMainBinding
+import umc.mission.floclone.locker.LockerFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var selectedMusicImgResId: Int? = null
+    private lateinit var selectedMusic: Music
     private val playerMusic = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){
         result ->
-        val musicTitle = result.data?.getStringExtra("music_title")
-        val musicSinger = result.data?.getStringExtra("music_singer")
+        val musicTitle = result.data?.getStringExtra(MUSIC_TITLE)
+        val musicSinger = result.data?.getStringExtra(MUSIC_SINGER)
         if(musicTitle!=null && musicSinger != null && result.resultCode == RESULT_OK){
             binding.tvMainPlayingMusicTitle.text = musicTitle
             binding.tvMainPlayingMusicSinger.text = musicSinger
+            Toast.makeText(this, "앨범 제목: $musicTitle", Toast.LENGTH_SHORT).show()
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_FloClone)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initBottomNavigation()
         updateMusicPlayer()
         binding.activityMainPlayer.setOnClickListener {
             val intent = Intent(this, SongActivity::class.java)
-            intent.putExtra("music_title", "${binding.tvMainPlayingMusicTitle.text}")
-            intent.putExtra("music_singer", "${binding.tvMainPlayingMusicSinger.text}")
-            intent.putExtra("lyrics", "I'm on the Next Level Yeah\n절대적 룰을 지켜")
-            intent.putExtra("musicImageResId", selectedMusicImgResId)
+            intent.putExtra(MUSIC_TITLE, selectedMusic.title)
+            intent.putExtra(MUSIC_SINGER, selectedMusic.singer)
+            intent.putExtra(LYRICS, selectedMusic.lyrics)
+            intent.putExtra(MUSIC_IMG_RES_ID, selectedMusic.musicImageResId)
+            intent.putExtra(SECOND, selectedMusic.second)
+            intent.putExtra(PLAY_TIME, selectedMusic.playTime)
+            intent.putExtra(IS_PLAYING, selectedMusic.isPlaying)
             playerMusic.launch(intent)
         }
     }
@@ -84,11 +92,15 @@ class MainActivity : AppCompatActivity() {
             binding.activityMainBtnPlay.isVisible = true
             binding.activityMainBtnPause.isVisible = false
         }
-        supportFragmentManager.setFragmentResultListener("music", this){
+        supportFragmentManager.setFragmentResultListener(MUSIC, this){
                 _, bundle ->
-            binding.tvMainPlayingMusicTitle.text = bundle.getString("music_title")
-            binding.tvMainPlayingMusicSinger.text = bundle.getString("music_singer")
-            selectedMusicImgResId = bundle.getInt("musicImageResId")
+            selectedMusic = Music(bundle.getString(MUSIC_TITLE), bundle.getString(MUSIC_SINGER),
+                bundle.getInt(MUSIC_IMG_RES_ID), bundle.getString(LYRICS), null, bundle.getInt(SECOND),
+                bundle.getInt(PLAY_TIME), true)
+            binding.tvMainPlayingMusicTitle.text = selectedMusic.title
+            binding.tvMainPlayingMusicSinger.text = selectedMusic.singer
+            binding.activityMainBtnPlay.isVisible = false
+            binding.activityMainBtnPause.isVisible = true
         }
     }
 }
