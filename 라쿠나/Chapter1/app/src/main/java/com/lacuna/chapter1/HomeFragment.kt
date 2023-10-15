@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.viewpager2.widget.ViewPager2
+import com.lacuna.chapter1.adapter.BannerVPAdapter
+import com.lacuna.chapter1.adapter.HomePannelVPAdapter
+import com.lacuna.chapter1.album.AlbumFragment
 import com.lacuna.chapter1.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
