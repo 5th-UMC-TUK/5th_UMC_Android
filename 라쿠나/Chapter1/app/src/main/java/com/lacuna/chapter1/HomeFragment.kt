@@ -11,7 +11,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.viewpager2.widget.ViewPager2
 import com.lacuna.chapter1.adapter.BannerVPAdapter
 import com.lacuna.chapter1.adapter.HomePannelVPAdapter
+import com.lacuna.chapter1.adapter.TodayMusicAdapter
 import com.lacuna.chapter1.album.AlbumFragment
+import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -19,7 +21,12 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private val sliderImageHandler: Handler = Handler()
     private val sliderImageRunnable = Runnable { binding.homePannelViewPager.currentItem = binding.homePannelViewPager.currentItem + 1 }
-
+    private val todayMusic = listOf(
+        TodayMusic(1, "라일락", "아이유(IU)"),
+        TodayMusic(2, "라일락", "아이유(IU)"),
+        TodayMusic(3, "라일락", "아이유(IU)"),
+        TodayMusic(4, "라일락", "아이유(IU)"),
+        )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -31,15 +38,16 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-//        binding.homeAlbumImgIv1.setOnClickListener {
-//            (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, AlbumFragment()).commitAllowingStateLoss()
-//        }
+        // 리사이클러뷰 어댑터 연결
+//        binding.homeTodayMusicRecyclerView.adapter = TodayMusicAdapter(todayMusic)
+
         binding.homeAlbumImgIv1.setOnClickListener {
 
             setFragmentResult("TitleInfo", bundleOf("title" to binding.titleLilac.text.toString()))
             setFragmentResult("SingerInfo", bundleOf("singer" to binding.singerIu.text.toString()))
-            (context as MainActivity)
-                .supportFragmentManager.beginTransaction()
+//            (context as MainActivity)
+//                .supportFragmentManager
+                parentFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, AlbumFragment()).commitAllowingStateLoss()
         }
         // 홈 패널 뷰페이저 어댑터 연결
@@ -74,7 +82,6 @@ class HomeFragment : Fragment() {
 
         binding.homeBannerVp.adapter = bannaerAdapter
         binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
 
         return binding.root
 

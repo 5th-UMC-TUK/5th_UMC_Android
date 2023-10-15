@@ -40,7 +40,10 @@ class AlbumFragment : Fragment() {
         // binding.albumSingerNameTv.text = arguments?.getString("singer")
 
         binding.albumBackIv.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
+//            (context as MainActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.main_frm, HomeFragment())
+//                .commitAllowingStateLoss()
+            parentFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, HomeFragment())
                 .commitAllowingStateLoss()
         }
