@@ -112,29 +112,20 @@ class MainActivity : AppCompatActivity() {
             binding.musicPlayTitle.text = it
         }
 
-        miniPlayerViewModel.musicTime.observe(this){
-            if (it == 60){
-                miniPlayerViewModel.job?.cancel()
-                miniPlayerViewModel.musicPlay.value = false
-                MusicPlayServiceUtil.stopService(this@MainActivity)
+        miniPlayerViewModel.isMusicTimeOver.observe(this) { isOver ->
+            if(isOver) {
+                MusicPlayServiceUtil.stopService(this)
             }
-            binding.songProgressSb.progress = it
+        }
 
+        miniPlayerViewModel.musicTime.observe(this){
+            miniPlayerViewModel.checkMusicTimeAndStop()
         }
 
         miniPlayerViewModel.musicPlay.observe(this) {
             if (it) {
-                binding.playMusicStart.setImageDrawable(AppCompatResources.getDrawable(
-                    this@MainActivity,
-                    R.drawable.btn_miniplay_pause
-                ))
                 MusicPlayServiceUtil.startService(this@MainActivity)
-
             } else {
-                binding.playMusicStart.setImageDrawable(AppCompatResources.getDrawable(
-                    this@MainActivity,
-                    R.drawable.btn_miniplayer_play
-                ))
                 MusicPlayServiceUtil.pauseService(this@MainActivity)
             }
         }
