@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.ImageView
+import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import com.example.chapter1.R
@@ -37,16 +38,34 @@ class SongActivity : AppCompatActivity() {
             val intent = Intent(this@SongActivity, MainActivity::class.java)
             intent.putExtra("song", binding.musicTitle.text.toString())
             intent.putExtra("singer", binding.signerName.text.toString())
+            intent.putExtra("progress", binding.songProgressbar.progress)
             setResult(0, intent)
             finish()
         }
+        binding.songProgressbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            }
 
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if(!this@SongActivity.isFinishing) {
+                    seekBar?.let {
+                        mediaPlayer.seekTo(it.progress)
+                        binding.currentPlayTime.text = timeFormat.format(mediaPlayer.currentPosition)
+                    }
+                }
+            }
+
+        })
         binding.songMiniplayer.setOnClickListener {
             if(comparePlayPauseDrawable(binding.songMiniplayer, R.drawable.btn_miniplayer_play)) {
                 binding.songMiniplayer.setImageResource(R.drawable.btn_miniplay_pause)
                 mediaPlayer.start()
                 CoroutineScope(Dispatchers.IO).launch {
-                    while (mediaPlayer.isPlaying) {
+                    while (!this@SongActivity.isFinishing && mediaPlayer.isPlaying) {
                         withContext(Dispatchers.Main) {
                             binding.songProgressbar.progress = mediaPlayer.currentPosition  // seekBar에 현재 진행 상활 표현
                             binding.currentPlayTime.text = timeFormat.format(mediaPlayer.currentPosition)
@@ -97,9 +116,15 @@ class SongActivity : AppCompatActivity() {
             val intent = Intent(this@SongActivity, MainActivity::class.java)
             intent.putExtra("song", binding.musicTitle.text.toString())
             intent.putExtra("singer", binding.signerName.text.toString())
+            intent.putExtra("progress", binding.songProgressbar.progress)
             setResult(0, intent)
             finish()
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 }
