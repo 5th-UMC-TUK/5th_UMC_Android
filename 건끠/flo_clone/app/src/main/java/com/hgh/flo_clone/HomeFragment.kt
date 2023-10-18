@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
             playClickListener = { music ->
                 (requireActivity() as MainActivity).binding.nowPlayTitle.text = music.title
                 (requireActivity() as MainActivity).binding.nowPlaySinger.text = music.singer
+                (requireActivity() as MainActivity).currentPosition = 0
             }
         )
     }
