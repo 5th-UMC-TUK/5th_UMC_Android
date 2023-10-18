@@ -195,7 +195,7 @@
             android:id="@+id/song_start_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:08"
+            android:text="00:00"
             android:textColor="@color/select_color"
             app:layout_constraintStart_toStartOf="@+id/song_progress_sb"
             app:layout_constraintTop_toBottomOf="@+id/song_progress_sb" />
