@@ -75,7 +75,11 @@ class SongActivity : AppCompatActivity() {
             binding.songPlayBtn.setImageResource(R.drawable.baseline_pause_24)
             CoroutineScope(Dispatchers.Main).launch {
                 while (isPlaying) {
-                    if (duration < currentPosition) return@launch
+                    if (duration < currentPosition){
+                      //  binding.songPlayBtn.setImageResource(R.drawable.baseline_play_arrow_24)
+                        isPlaying = false
+                        return@launch
+                    }
                     delay(1000)
                     currentPosition += 1000
                     binding.playerSeekBar.progress = currentPosition
@@ -102,7 +106,11 @@ class SongActivity : AppCompatActivity() {
                 binding.songPlayBtn.setImageResource(R.drawable.baseline_pause_24)
                 CoroutineScope(Dispatchers.Main).launch {
                     while (isPlaying) {
-                        if (duration < currentPosition) return@launch
+                        if (duration < currentPosition) {
+                            binding.songPlayBtn.setImageResource(R.drawable.baseline_play_arrow_24)
+                            isPlaying=false
+                            return@launch
+                        }
                         delay(1000)
                         currentPosition += 1000
                         binding.playerSeekBar.progress = currentPosition
