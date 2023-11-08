@@ -23,6 +23,7 @@ class FloService : Service() {
 
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
+    private var progress = 0
 
     override fun onBind(intent: Intent): IBinder? {
         // TODO: Return the communication channel to the service.
@@ -39,43 +40,12 @@ class FloService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("startcommand", "onStartCommand")
-//        startService()
         return super.onStartCommand(intent, flags, startId)
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun startService() {
-//        val builder = NotificationCompat.Builder(this, "1")
-//            .setSmallIcon(R.drawable.splash_icon)
-//            .setStyle(
-//                NotificationCompat.BigTextStyle().bigText("Flo 알림!!")
-//                    .setBigContentTitle(null)
-//                    .setSummaryText("처음 적용해보는 foreground service에요!")
-//            )
-//            .setContentText(null)
-//            .setContentTitle(null)
-//            .setOngoing(true)
-//            .setWhen(0)
-//            .setShowWhen(false)
-//
-//        val notificationIntent = Intent(this, MainActivity::class.java)
-//        val pendingIntent =
-//            PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
-//        builder.setContentIntent(pendingIntent)
-//
-//        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            manager.createNotificationChannel(
-//                NotificationChannel(
-//                    "1",
-//                    "포그라운드 서비스",
-//                    NotificationManager.IMPORTANCE_NONE
-//                )
-//            )
-//        }
-//        val notification = builder.build()
-//        startForeground(1, notification)
 
         val builder = NotificationCompat.Builder(this, "default")
         with(builder) {
@@ -111,10 +81,12 @@ class FloService : Service() {
         startForeground(10000, notification)
 
         serviceScope.launch {
-            for (i in 1..1000) {
-                builder.setProgress(1000, i, false)
+            while (true) {
+                builder.setProgress(1000, progress, false)
                 notificationManager.notify(10000, builder.build())
-                Log.d("progress", i.toString())
+                Log.d("progress", progress.toString())
+                progress++
+                progress %= 1001
                 delay(100)
             }
 

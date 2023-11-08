@@ -182,34 +182,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-//        setSupportActionBar(binding.toolbar)
-//        supportActionBar?.setDisplayShowTitleEnabled(false)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        supportActionBar?.setHomeAsUpIndicator(R.drawable.btn_main_ticket)
+
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.main_menu, menu)
-//        return true
-//    }
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            android.R.id.home -> {
-//
-//            }
-//            R.id.main_mic -> {
-//
-//            }
-//            R.id.main_notice -> {
-//
-//            }
-//            R.id.main_settings -> {
-//
-
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     private fun comparePlayPauseDrawable(image: ImageView, resId: Int): Boolean {
         // ImageButton의 현재 이미지를 가져옵니다.

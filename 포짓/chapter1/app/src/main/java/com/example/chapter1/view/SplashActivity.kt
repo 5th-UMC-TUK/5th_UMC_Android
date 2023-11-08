@@ -1,14 +1,12 @@
 package com.example.chapter1.view
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock.sleep
 import android.view.View
 import android.view.ViewTreeObserver
-import com.example.chapter1.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.chapter1.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -24,14 +22,15 @@ class SplashActivity : AppCompatActivity() {
             object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     // Check if the initial data is ready.
-                    Handler(Looper.getMainLooper()).postDelayed({content.viewTreeObserver.removeOnPreDrawListener(this)}, 5000)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        content.viewTreeObserver.removeOnPreDrawListener(
+                            this
+                        )
+                    }, 5000)
                     sleep(3000)
                     return true
                 }
             }
         )
-//
-//        val goMain = Intent(this@SplashActivity, MainActivity::class.java)
-//        Handler(Looper.getMainLooper()).postDelayed({startActivity(goMain)}, 1000)
     }
 }

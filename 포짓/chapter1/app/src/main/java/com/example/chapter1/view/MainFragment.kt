@@ -51,11 +51,6 @@ class MainFragment : Fragment() {
         removeWindowLimit()
         setTitleAdapter()
         setAdAdapter()
-//        val adImages = listOf(R.drawable.img_home_viewpager_exp, R.drawable.img_home_viewpager_exp2)
-//        val adAdapter = AdAdapter()
-//        binding.adViewpager.adapter = adAdapter
-//        adAdapter.submitList(adImages)
-
         setTodaySongAdapter()
 
 

@@ -8,13 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter1.databinding.TodaysongListBinding
 import com.example.chapter1.model.TodaySongModel
 
-class TodaySongAdapter() : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCallBack) {
-    private var listener: OnItemClickListener? = null
+class TodaySongAdapter : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCallBack) {
     private lateinit var onImageClickListener: (TodaySongModel) -> Unit
     private lateinit var onBtnClickListener: (TodaySongModel) -> Unit
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding =
@@ -50,9 +46,6 @@ class TodaySongAdapter() : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-//        holder.itemView.findViewById<ImageView>(R.id.today_song_img).setOnClickListener {
-//            onImageClickListener
-//        }
         when (holder) {
             is ViewHolderShared -> {
                 holder.bind(item)
@@ -79,8 +72,4 @@ class TodaySongAdapter() : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(
 
         }
     }
-}
-
-interface OnItemClickListener {
-    fun onItemClick(position: Int)
 }
