@@ -2,44 +2,25 @@ package com.example.chapter1.view
 
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
-import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewTreeObserver
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.fragment.app.findFragment
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager2.widget.ViewPager2
 import com.example.chapter1.R
-import com.example.chapter1.adapter.TitleAdapter
-import com.example.chapter1.adapter.TodaySongAdapter
-import com.example.chapter1.adapter.VideoAdapter
 import com.example.chapter1.databinding.ActivityMainBinding
-import com.example.chapter1.model.SongModel
-import com.example.chapter1.model.TitleModel
-import com.example.chapter1.model.TodaySongModel
+import com.example.chapter1.service.FloService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -48,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainFrag: MainFragment
     private lateinit var lockFrag: LockFragment
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var serviceIntent: Intent
     private val activityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == 0) {
@@ -58,19 +40,25 @@ class MainActivity : AppCompatActivity() {
                         binding.playSongTitle.text = sName
                     }
                     val singerName = songIntent.getStringExtra("singer")
-                    singerName?.let{ singerN->
+                    singerName?.let { singerN ->
                         binding.playSongSinger.text = singerN
                     }
                     val songProgress = songIntent.getIntExtra("progress", 0)
                     Log.d("progress", songProgress.toString())
-                    if(songProgress != 0) {
+                    if (songProgress != 0) {
                         binding.songProgressbar.progress = songProgress
                         mediaPlayer.seekTo(songProgress)
                     }
-                    Toast.makeText(applicationContext, "제목: $songName, 가수: $singerName", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "제목: $songName, 가수: $singerName",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -98,23 +86,11 @@ class MainActivity : AppCompatActivity() {
 
         setMedia()
 
+        serviceIntent = Intent(this@MainActivity, FloService::class.java)
+        startService(serviceIntent)
+
         binding.imgPlalistStart.setOnClickListener {
-            Log.d("img", comparePlayPauseDrawable(binding.imgPlalistStart, R.drawable.btn_miniplayer_play).toString())
-            if(comparePlayPauseDrawable(binding.imgPlalistStart, R.drawable.btn_miniplay_pause)) {
-                binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
-                mediaPlayer.pause()
-            } else {
-                binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
-                mediaPlayer.start()
-                CoroutineScope(Dispatchers.IO).launch {
-                    while (!this@MainActivity.isFinishing && mediaPlayer.isPlaying) {
-                        withContext(Dispatchers.Main) {
-                            binding.songProgressbar.progress = mediaPlayer.currentPosition  // seekBar에 현재 진행 상활 표현
-                        }
-                        SystemClock.sleep(200)
-                    }
-                }
-            }
+            playSong()
         }
 
         supportFragmentManager.beginTransaction()
@@ -123,10 +99,6 @@ class MainActivity : AppCompatActivity() {
             .hide(lockFrag)
             .show(mainFrag)
             .commit()
-
-//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
-//        val controller = navHostFragment.navController
-//        binding.mainNav.setupWithNavController(controller)
 
         binding.playSongFrame.setOnClickListener {
             val intent = Intent(this@MainActivity, SongActivity::class.java)
@@ -139,13 +111,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.mainNav.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.bottom_main -> {
                     supportFragmentManager.beginTransaction()
                         .show(mainFrag)
                         .hide(lockFrag)
                         .commit()
                 }
+
                 R.id.bottom_locker -> {
                     supportFragmentManager.beginTransaction()
                         .hide(mainFrag)
@@ -157,11 +130,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun playSong() {
+        Log.d(
+            "img",
+            comparePlayPauseDrawable(
+                binding.imgPlalistStart,
+                R.drawable.btn_miniplayer_play
+            ).toString()
+        )
+        if (comparePlayPauseDrawable(binding.imgPlalistStart, R.drawable.btn_miniplay_pause)) {
+            binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
+            mediaPlayer.pause()
+        } else {
+            binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
+            mediaPlayer.start()
+            CoroutineScope(Dispatchers.IO).launch {
+                while (!this@MainActivity.isFinishing && mediaPlayer.isPlaying) {
+                    withContext(Dispatchers.Main) {
+                        binding.songProgressbar.progress =
+                            mediaPlayer.currentPosition  // seekBar에 현재 진행 상활 표현
+                    }
+                    SystemClock.sleep(200)
+                }
+            }
+        }
+    }
+
     private fun setMedia() {
         mediaPlayer = MediaPlayer.create(this, R.raw.music_lilac)     // 미디어 플레이어 객체 생성
         binding.songProgressbar.max = mediaPlayer.duration
 
-        binding.songProgressbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+        binding.songProgressbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             }
 
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if(!this@MainActivity.isFinishing) {
+                if (!this@MainActivity.isFinishing) {
                     seekBar?.let {
                         mediaPlayer.seekTo(it.progress)
                     }
@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 //            }
 //            R.id.main_settings -> {
 //
-    
+
 //            }
 //        }
 //        return super.onOptionsItemSelected(item)
@@ -220,7 +220,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Drawable 리소스에서 비트맵 이미지를 가져옵니다.
-        val drawableBitmap = (ContextCompat.getDrawable(this@MainActivity, resId) as? BitmapDrawable)?.bitmap
+        val drawableBitmap =
+            (ContextCompat.getDrawable(this@MainActivity, resId) as? BitmapDrawable)?.bitmap
 
         // 두 비트맵을 비교합니다.
         return imageDrawable.bitmap == drawableBitmap
@@ -245,6 +246,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopService(serviceIntent)
         mediaPlayer.release()
     }
 }

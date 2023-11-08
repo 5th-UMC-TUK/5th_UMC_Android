@@ -1,12 +1,14 @@
 package com.example.chapter1.view
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.chapter1.adapter.LockViewpagerAdapter
 import com.example.chapter1.databinding.FragmentLockBinding
+import com.example.chapter1.service.FloService
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -27,6 +29,7 @@ class LockFragment : Fragment() {
         TabLayoutMediator(binding.lockTab, binding.lockViewpager) { tab, position ->
             tab.text = tabs[position]
         }.attach()
+        
     }
 
 

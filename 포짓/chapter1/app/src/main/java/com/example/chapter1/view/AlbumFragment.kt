@@ -1,17 +1,16 @@
 package com.example.chapter1.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
 import com.example.chapter1.R
 import com.example.chapter1.adapter.AlbumViewpagerAdapter
 import com.example.chapter1.databinding.FragmentAlbumBinding
@@ -29,10 +28,12 @@ class AlbumFragment : Fragment() {
                 .commit()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,14 +92,17 @@ class AlbumFragment : Fragment() {
             binding.albumDetail.text = it
         }
 
-        Toast.makeText(requireContext(), "album 제목: $songName  가수: $singerName  세부내용: $songDetail", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireContext(),
+            "album 제목: $songName  가수: $singerName  세부내용: $songDetail",
+            Toast.LENGTH_SHORT
+        ).show()
 
         resId?.let {
             binding.albumImg.setImageResource(it)
         }
 
     }
-
 
 
 }

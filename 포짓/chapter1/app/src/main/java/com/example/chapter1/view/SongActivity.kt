@@ -4,12 +4,12 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.chapter1.R
 import com.example.chapter1.databinding.ActivitySongBinding
@@ -35,6 +35,7 @@ class SongActivity : AppCompatActivity() {
 
 
         binding.arrowDown.setOnClickListener {
+            mediaPlayer.release()
             val intent = Intent(this@SongActivity, MainActivity::class.java)
             intent.putExtra("song", binding.musicTitle.text.toString())
             intent.putExtra("singer", binding.signerName.text.toString())
@@ -42,7 +43,8 @@ class SongActivity : AppCompatActivity() {
             setResult(0, intent)
             finish()
         }
-        binding.songProgressbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+        binding.songProgressbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             }
 
@@ -51,24 +53,27 @@ class SongActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if(!this@SongActivity.isFinishing) {
+                if (!this@SongActivity.isFinishing) {
                     seekBar?.let {
                         mediaPlayer.seekTo(it.progress)
-                        binding.currentPlayTime.text = timeFormat.format(mediaPlayer.currentPosition)
+                        binding.currentPlayTime.text =
+                            timeFormat.format(mediaPlayer.currentPosition)
                     }
                 }
             }
 
         })
         binding.songMiniplayer.setOnClickListener {
-            if(comparePlayPauseDrawable(binding.songMiniplayer, R.drawable.btn_miniplayer_play)) {
+            if (comparePlayPauseDrawable(binding.songMiniplayer, R.drawable.btn_miniplayer_play)) {
                 binding.songMiniplayer.setImageResource(R.drawable.btn_miniplay_pause)
                 mediaPlayer.start()
                 CoroutineScope(Dispatchers.IO).launch {
                     while (!this@SongActivity.isFinishing && mediaPlayer.isPlaying) {
                         withContext(Dispatchers.Main) {
-                            binding.songProgressbar.progress = mediaPlayer.currentPosition  // seekBar에 현재 진행 상활 표현
-                            binding.currentPlayTime.text = timeFormat.format(mediaPlayer.currentPosition)
+                            binding.songProgressbar.progress =
+                                mediaPlayer.currentPosition  // seekBar에 현재 진행 상활 표현
+                            binding.currentPlayTime.text =
+                                timeFormat.format(mediaPlayer.currentPosition)
                         }
                         SystemClock.sleep(200)
                     }
@@ -80,7 +85,7 @@ class SongActivity : AppCompatActivity() {
         }
 
         binding.songRandom.setOnClickListener {
-            if(comparePlayPauseDrawable(binding.songRandom, R.drawable.nugu_btn_random_inactive)) {
+            if (comparePlayPauseDrawable(binding.songRandom, R.drawable.nugu_btn_random_inactive)) {
                 binding.songRandom.setImageResource(R.drawable.random_active)
             } else {
                 binding.songRandom.setImageResource(R.drawable.nugu_btn_random_inactive)
@@ -88,7 +93,7 @@ class SongActivity : AppCompatActivity() {
         }
 
         binding.songRepeat.setOnClickListener {
-            if(comparePlayPauseDrawable(binding.songRepeat, R.drawable.nugu_btn_repeat_inactive)) {
+            if (comparePlayPauseDrawable(binding.songRepeat, R.drawable.nugu_btn_repeat_inactive)) {
                 binding.songRepeat.setImageResource(R.drawable.repeat_active)
             } else {
                 binding.songRepeat.setImageResource(R.drawable.nugu_btn_repeat_inactive)
@@ -105,7 +110,8 @@ class SongActivity : AppCompatActivity() {
         }
 
         // Drawable 리소스에서 비트맵 이미지를 가져옵니다.
-        val drawableBitmap = (ContextCompat.getDrawable(this@SongActivity, resId) as? BitmapDrawable)?.bitmap
+        val drawableBitmap =
+            (ContextCompat.getDrawable(this@SongActivity, resId) as? BitmapDrawable)?.bitmap
 
         // 두 비트맵을 비교합니다.
         return imageDrawable.bitmap == drawableBitmap
@@ -113,6 +119,7 @@ class SongActivity : AppCompatActivity() {
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            mediaPlayer.release()
             val intent = Intent(this@SongActivity, MainActivity::class.java)
             intent.putExtra("song", binding.musicTitle.text.toString())
             intent.putExtra("singer", binding.signerName.text.toString())
