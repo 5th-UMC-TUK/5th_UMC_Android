@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.gson.Gson
 import com.lacuna.chapter1.data.Song
+import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.ActivityMainBinding
 import com.lacuna.chapter1.locker.LockerFragment
 
@@ -67,7 +68,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.mainBnv.setOnItemSelectedListener{ item ->
             when (item.itemId) {
-
                 R.id.homeFragment -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.main_frm, HomeFragment())
@@ -103,6 +103,11 @@ class MainActivity : AppCompatActivity() {
         binding.mainMiniplayerSingerTv.text = song.singer
         binding.mainProgressSb.progress = (song.second*100000)/song.playTime
     }
+    fun updateMainPlayerCl(todayMusic: TodayMusic) {
+        binding.mainMiniplayerTitleTv.text = todayMusic.title
+        binding.mainMiniplayerSingerTv.text = todayMusic.singer
+        binding.mainProgressSb.progress = 0
+    }
     override fun onStart() { // SongActivity에서 창을 닫고 MainActivity로 돌아올 때 onStart() 호출
         super.onStart()
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
@@ -116,4 +121,6 @@ class MainActivity : AppCompatActivity() {
 
         setMiniPlayer(song)
     }
+
+
 }

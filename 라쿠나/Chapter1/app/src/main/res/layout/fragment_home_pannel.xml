@@ -86,7 +86,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="30dp"
-        android:src="@drawable/img_album_exp"
+        android:src="@drawable/img_album_exp1"
         app:layout_constraintBottom_toTopOf="@id/home_pannel_album_img_02_iv"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -121,7 +121,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="30dp"
-        android:src="@drawable/img_album_exp"
+        android:src="@drawable/img_album_exp1"
         app:layout_constraintBottom_toBottomOf="@id/home_pannel_background_iv"
         app:layout_constraintStart_toStartOf="parent" />
 

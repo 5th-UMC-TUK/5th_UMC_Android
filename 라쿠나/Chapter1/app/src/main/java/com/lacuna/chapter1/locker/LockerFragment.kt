@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lacuna.chapter1.adapter.LockerVPAdapter
+import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.FragmentLockerBinding
+import com.lacuna.floclone.adapter.TodayMusicAdapter
 
 class LockerFragment : Fragment() {
     lateinit var binding: FragmentLockerBinding
@@ -19,6 +21,7 @@ class LockerFragment : Fragment() {
     ): View? {
         binding = FragmentLockerBinding.inflate(inflater, container, false)
 
+        // 뷰페이저 어댑터 연결
         val lockerAdapter = LockerVPAdapter(this)
         binding.lockerContentVp.adapter = lockerAdapter
         TabLayoutMediator(binding.lockerContentTb, binding.lockerContentVp) {

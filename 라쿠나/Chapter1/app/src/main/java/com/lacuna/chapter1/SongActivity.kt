@@ -169,7 +169,6 @@ class SongActivity : AppCompatActivity() {
                     if(second >= playTime){
                         break
                     }
-
                     if(isPlaying){
                         sleep(50)
                         mills += 50
