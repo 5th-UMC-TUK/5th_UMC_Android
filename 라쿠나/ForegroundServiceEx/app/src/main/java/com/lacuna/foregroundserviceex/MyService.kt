@@ -16,6 +16,7 @@ class MyService : Service() {
 
     private var job: Job? = null
     private var value = 0
+    private var notificationBuilder: NotificationCompat.Builder? = null
 
     override fun onBind(intent: Intent?): IBinder? {
         throw UnsupportedOperationException("Not yet implemented")
@@ -26,6 +27,7 @@ class MyService : Service() {
             while (isActive) {// 반복 작업
                 delay(1000)
                 value++
+                updateNotification(value)
                 println("$value 번째 실행 중")
             }
         }
@@ -34,7 +36,7 @@ class MyService : Service() {
     }
 
     private fun initializeNotification() {
-        val builder = NotificationCompat.Builder(this, "1")
+        notificationBuilder = NotificationCompat.Builder(this, "1")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setStyle(
                 NotificationCompat.BigTextStyle().bigText("설정을 보려면 누르세요.")
@@ -49,7 +51,7 @@ class MyService : Service() {
 
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
-        builder.setContentIntent(pendingIntent)
+        notificationBuilder?.setContentIntent(pendingIntent)
 
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -61,8 +63,16 @@ class MyService : Service() {
                 )
             )
         }
-        val notification = builder.build()
+        val notification = notificationBuilder?.build()
         startForeground(1, notification)
+    }
+    private fun updateNotification(progress: Int) {
+        notificationBuilder?.setProgress(1000, progress, false)
+        val notification = notificationBuilder?.build()
+        notification?.let {
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.notify(1, it)
+        }
     }
 
     override fun onDestroy() {
