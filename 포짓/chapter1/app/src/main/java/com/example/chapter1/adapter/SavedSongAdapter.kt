@@ -10,31 +10,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter1.databinding.PlayListBinding
-import com.example.chapter1.model.SongModel
+import com.example.chapter1.db.Song
 
 
-class SavedSongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCallBack) {
+class SavedSongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack) {
     private val checkboxStatus = SparseBooleanArray()
 
     inner class ViewHolder(private val binding: PlayListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @RequiresApi(Build.VERSION_CODES.P)
-        fun bind(item: SongModel) {
-            binding.songListImg.setImageResource(item.songImgResId)
+        fun bind(item: Song) {
+            binding.songListImg.setImageResource(item.coverImg!!)
             binding.removeSwitch.isChecked = checkboxStatus[adapterPosition]
             binding.removeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
                 checkboxStatus.put(adapterPosition, isChecked)
                 Log.d("boolean", checkboxStatus.toString())
             }
             binding.songListImg.clipToOutline = true
-            binding.songMusicTitle.text = item.songName
-            binding.songSingerName.text = item.singerName
-            binding.songMore.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    removeCurrentItem(position)
-                }
-            }
+            binding.songMusicTitle.text = item.music
+            binding.songSingerName.text = item.singer
         }
     }
 
@@ -77,13 +71,13 @@ class SavedSongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCal
     }
 
     companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<SongModel>() {
-            override fun areItemsTheSame(oldItem: SongModel, newItem: SongModel): Boolean {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<Song>() {
+            override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
 
-                return oldItem.songName == newItem.songName && oldItem.singerName == newItem.singerName
+                return oldItem.music == newItem.music && oldItem.singer == newItem.singer
             }
 
-            override fun areContentsTheSame(oldItem: SongModel, newItem: SongModel): Boolean {
+            override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {
                 return oldItem == newItem
             }
 

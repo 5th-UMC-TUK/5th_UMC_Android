@@ -44,7 +44,10 @@ class SongActivity : AppCompatActivity() {
 
         binding.arrowDown.setOnClickListener {
             songs[nowPos].second = mediaPlayer!!.currentPosition
-            Log.d("songinfofinishsecond", songs[nowPos].second.toString())
+            Log.d(
+                "songinfofinishsecond",
+                songs[nowPos].second.toString() + songs[nowPos].isLike.toString()
+            )
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = songDB.songDao()
                 dao.update(songs[nowPos])
@@ -115,6 +118,14 @@ class SongActivity : AppCompatActivity() {
                 binding.songRepeat.setImageResource(R.drawable.repeat_active)
             } else {
                 binding.songRepeat.setImageResource(R.drawable.nugu_btn_repeat_inactive)
+            }
+        }
+
+        binding.likeBtn.setOnClickListener {
+            songs[nowPos].isLike = songs[nowPos].isLike.not()
+            CoroutineScope(Dispatchers.IO).launch {
+                val dao = songDB.songDao()
+                dao.update(songs[nowPos])
             }
         }
     }
@@ -223,7 +234,10 @@ class SongActivity : AppCompatActivity() {
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             songs[nowPos].second = mediaPlayer!!.currentPosition
-            Log.d("songinfofinishsecond", songs[nowPos].second.toString())
+            Log.d(
+                "songinfofinishsecond",
+                songs[nowPos].second.toString() + songs[nowPos].isLike.toString()
+            )
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = songDB.songDao()
                 dao.update(songs[nowPos])

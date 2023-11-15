@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var serviceIntent: Intent
     private lateinit var job: Job
-    private var song = Song()
+    var song = Song()
     val songs = arrayListOf<Song>()
     lateinit var songDB: SongDB
     private var songId = 0
@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity() {
             resources.getIdentifier(song.music, "raw", this@MainActivity.packageName)
         Log.d(
             "songinfomain",
-            "${song.coverImg}, ${song.music}, $music, ${R.raw.music_lilac} ${song.second}"
+            "${song.coverImg}, ${song.music}, $music, ${R.raw.music_lilac} ${song.second}, ${song.isLike}"
         )
         mediaPlayer = MediaPlayer.create(this@MainActivity, music)
         withContext(Dispatchers.Main) {

@@ -6,14 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.chapter1.R
 import com.example.chapter1.adapter.SavedSongAdapter
 import com.example.chapter1.databinding.FragmentSavedSongBinding
-import com.example.chapter1.model.SongModel
+import com.example.chapter1.db.Song
+import com.example.chapter1.db.SongDB
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SavedSongFragment : Fragment() {
     private lateinit var binding: FragmentSavedSongBinding
+    private lateinit var job: Job
+    val songs = arrayListOf<Song>()
+    lateinit var songDB: SongDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,18 +34,27 @@ class SavedSongFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val songList = listOf(
-            SongModel("사이렌", "marsjay (마스제이)", R.drawable.siren),
-            SongModel("Got Me Started", "Troye Sivan", R.drawable.got_me_started),
-            SongModel("소품집 Vol.1", "장동원", R.drawable.vol1),
-            SongModel("The Wave", "다크비 (DKB)", R.drawable.the_wave)
-        )
-        val savedSongAdapter = SavedSongAdapter()
+        CoroutineScope(Dispatchers.IO).launch {
+            val deferred = CoroutineScope(Dispatchers.IO).async {
+                initPlayList()
+            }
+            deferred.await()
+            withContext(Dispatchers.Main) {
+                val savedSongAdapter = SavedSongAdapter()
+                binding.savedSongRv.layoutManager = LinearLayoutManager(requireContext())
+                binding.savedSongRv.adapter = savedSongAdapter
+                savedSongAdapter.submitList(songs)
+                savedSongAdapter.setCount(songs.size)
+            }
 
-        binding.savedSongRv.layoutManager = LinearLayoutManager(requireContext())
-        binding.savedSongRv.adapter = savedSongAdapter
-        savedSongAdapter.submitList(songList)
-        savedSongAdapter.setCount(songList.size)
+        }
+
+
+    }
+
+    private fun initPlayList() {
+        songDB = SongDB.getDB(requireContext())
+        songs.addAll(songDB.songDao().getLikedSong(true))
     }
 
 }
