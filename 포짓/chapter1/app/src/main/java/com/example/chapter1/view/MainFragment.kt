@@ -18,16 +18,25 @@ import com.example.chapter1.adapter.TitleAdapter
 import com.example.chapter1.adapter.TodaySongAdapter
 import com.example.chapter1.adapter.VideoAdapter
 import com.example.chapter1.databinding.FragmentMainBinding
-import com.example.chapter1.model.SongModel
-import com.example.chapter1.model.TitleModel
+import com.example.chapter1.db.Album
+import com.example.chapter1.db.Song
+import com.example.chapter1.db.SongDB
+import com.example.chapter1.model.TitleAlbumModel
 import com.example.chapter1.model.TodaySongModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
+    val songs = arrayListOf<Song>()
+    val albums = arrayListOf<Album>()
+    lateinit var songDB: SongDB
+    val titles = arrayListOf<TitleAlbumModel>()
+
     private val titleHandler = Handler(Looper.getMainLooper()) {
         setTitlePage()
         true
@@ -138,6 +147,54 @@ class MainFragment : Fragment() {
 
     }
 
+    private fun setTitleAdapter() {
+        songDB = SongDB.getDB(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            val albumDao = songDB.albumDao()
+            val songDao = songDB.songDao()
+
+            val albumsDeferred = CoroutineScope(Dispatchers.IO).async {
+                albumDao.getAllAlbum()
+            }
+            val albumsResult = albumsDeferred.await()
+            albums.addAll(albumsResult)
+
+            val songsDeferred = CoroutineScope(Dispatchers.IO).async {
+                songDao.getAllSong()
+            }
+            val songsResult = songsDeferred.await()
+            songs.addAll(songsResult)
+            albums.forEach { album ->
+                val albumSongs = mutableListOf<Song>()
+                songs.forEach { song ->
+                    if (album.id == song.albumIdx) {
+                        albumSongs.add(song)
+                    }
+                }
+                titles.add(TitleAlbumModel(album, albumSongs))
+            }
+            withContext(Dispatchers.Main) {
+                submitTileList()
+            }
+        }
+    }
+
+    private fun submitTileList() {
+        val titleAdapter = TitleAdapter(titles, this@MainFragment)
+        binding.titleViewpager.adapter = titleAdapter
+        binding.titleViewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        binding.titleViewpager.overScrollMode = View.OVER_SCROLL_NEVER
+        binding.titleIndicator.setViewPager(binding.titleViewpager)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                Thread.sleep(5000)
+                titleHandler.sendEmptyMessage(0)
+            }
+        }
+    }
+
+
     private fun setTodaySongAdapter() {
         val todaySongAdapter = TodaySongAdapter()
         todaySongAdapter.setClickListener(
@@ -193,39 +250,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setTitleAdapter() {
-        val titleList = listOf(
-            TitleModel(
-                "포근하게 덮어주는 꿈의\n목소리", "총 15곡 2019.11.11", R.drawable.img_first_album_default,
-                listOf(SongModel("잠이 안온다", "젠(Zen)", R.drawable.img_album_exp))
-            ),
-            TitleModel(
-                "포근하게 덮어주는 꿈의\n목소리", "총 15곡 2019.11.11", R.drawable.img_first_album_default,
-                listOf(SongModel("잠이 안온다", "젠(Zen)", R.drawable.img_album_exp))
-            ),
-            TitleModel(
-                "포근하게 덮어주는 꿈의\n목소리", "총 15곡 2019.11.11", R.drawable.img_first_album_default,
-                listOf(SongModel("잠이 안온다", "젠(Zen)", R.drawable.img_album_exp))
-            )
-        )
-
-        submitTileList(titleList)
-    }
-
-    private fun submitTileList(titleList: List<TitleModel>) {
-        val titleAdapter = TitleAdapter(titleList, this@MainFragment)
-        binding.titleViewpager.adapter = titleAdapter
-        binding.titleViewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        binding.titleViewpager.overScrollMode = View.OVER_SCROLL_NEVER
-        binding.titleIndicator.setViewPager(binding.titleViewpager)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
-                Thread.sleep(5000)
-                titleHandler.sendEmptyMessage(0)
-            }
-        }
-    }
 
     private fun removeWindowLimit() {
         requireActivity().window.apply {

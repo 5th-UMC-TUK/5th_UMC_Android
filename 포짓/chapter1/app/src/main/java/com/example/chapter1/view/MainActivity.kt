@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.chapter1.R
 import com.example.chapter1.databinding.ActivityMainBinding
+import com.example.chapter1.db.Album
 import com.example.chapter1.db.Song
 import com.example.chapter1.db.SongDB
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         CoroutineScope(Dispatchers.IO).launch {
+            inputDummyAlbum()
             inputDummySongs()
             initPlayList()
         }
@@ -303,6 +305,7 @@ class MainActivity : AppCompatActivity() {
                 "music_lilac",
                 R.drawable.img_album_exp2,
                 false,
+                1
             )
         )
 
@@ -316,6 +319,7 @@ class MainActivity : AppCompatActivity() {
                 "music_flu",
                 R.drawable.img_album_exp2,
                 false,
+                1
             )
         )
 
@@ -329,6 +333,7 @@ class MainActivity : AppCompatActivity() {
                 "music_butter",
                 R.drawable.img_album_exp,
                 false,
+                2
             )
         )
 
@@ -342,6 +347,7 @@ class MainActivity : AppCompatActivity() {
                 "music_next",
                 R.drawable.img_album_exp3,
                 false,
+                3
             )
         )
 
@@ -356,6 +362,7 @@ class MainActivity : AppCompatActivity() {
                 "music_boy",
                 R.drawable.img_album_exp4,
                 false,
+                4
             )
         )
 
@@ -370,11 +377,59 @@ class MainActivity : AppCompatActivity() {
                 "music_bboom",
                 R.drawable.img_album_exp5,
                 false,
+                5
             )
         )
 
         val _songs = songDB.songDao().getAllSong()
         Log.d("DB_data", _songs.toString())
+    }
+
+    private fun inputDummyAlbum() {
+        val songDB = SongDB.getDB(this)
+        val songs = songDB.albumDao().getAllAlbum()
+        Log.d("DB_data", songs.toString())
+        if (songs.isNotEmpty()) return
+
+        songDB.albumDao().insert(
+            Album(
+                "IU 5th Album Lilac",
+                "아이유(IU)",
+                R.drawable.img_album_exp2
+            )
+        )
+
+        songDB.albumDao().insert(
+            Album(
+                "Butter",
+                "방탄소년단",
+                R.drawable.img_album_exp
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                "Next Level Remixes",
+                "에스파 (AESPA)",
+                R.drawable.img_album_exp3,
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                "MAP OF THE SOUL : PERSONA",
+                "방탄소년단 (BTS)",
+                R.drawable.img_album_exp4,
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                "GREAT!",
+                "모모랜드",
+                R.drawable.img_album_exp5,
+            )
+        )
+
+        val _albums = songDB.albumDao().getAllAlbum()
+        Log.d("DB_data", _albums.toString())
     }
 
     override fun onDestroy() {

@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter1.databinding.SongListBinding
-import com.example.chapter1.model.SongModel
+import com.example.chapter1.db.Song
 
-class SongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCallBack) {
+class SongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = SongListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -17,17 +17,17 @@ class SongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCallBack
 
     inner class ViewHolderShared(private val binding: SongListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SongModel) {
-            binding.imgSong.setImageResource(item.songImgResId)
-            binding.songTitle.text = item.songName
-            binding.songSinger.text = item.singerName
+        fun bind(item: Song) {
+            binding.imgSong.setImageResource(item.coverImg!!)
+            binding.songTitle.text = item.title
+            binding.songSinger.text = item.singer
         }
 
 
     }
 
     override fun getItemViewType(position: Int): Int = position
-    
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (holder) {
@@ -38,13 +38,13 @@ class SongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCallBack
     }
 
     companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<SongModel>() {
-            override fun areItemsTheSame(oldItem: SongModel, newItem: SongModel): Boolean {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<Song>() {
+            override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
 
-                return oldItem.songName == newItem.songName && oldItem.singerName == newItem.singerName
+                return oldItem.title == newItem.title && oldItem.singer == newItem.singer
             }
 
-            override fun areContentsTheSame(oldItem: SongModel, newItem: SongModel): Boolean {
+            override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {
                 return oldItem == newItem
             }
 
