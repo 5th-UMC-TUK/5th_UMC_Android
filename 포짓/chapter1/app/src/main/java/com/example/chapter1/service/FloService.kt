@@ -84,7 +84,7 @@ class FloService : Service() {
             while (true) {
                 builder.setProgress(1000, progress, false)
                 notificationManager.notify(10000, builder.build())
-                Log.d("progress", progress.toString())
+//                Log.d("progress", progress.toString())
                 progress++
                 progress %= 1001
                 delay(100)

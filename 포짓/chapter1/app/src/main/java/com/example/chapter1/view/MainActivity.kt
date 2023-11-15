@@ -11,16 +11,16 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.chapter1.R
 import com.example.chapter1.databinding.ActivityMainBinding
-import com.example.chapter1.service.FloService
+import com.example.chapter1.db.Song
+import com.example.chapter1.db.SongDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -28,35 +28,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainFrag: MainFragment
     private lateinit var lockFrag: LockFragment
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
     private lateinit var serviceIntent: Intent
-    private val activityResultLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == 0) {
-                val songIntent = it.data
-                songIntent?.let { sIntent ->
-                    val songName = sIntent.getStringExtra("song")
-                    songName?.let { sName ->
-                        binding.playSongTitle.text = sName
-                    }
-                    val singerName = songIntent.getStringExtra("singer")
-                    singerName?.let { singerN ->
-                        binding.playSongSinger.text = singerN
-                    }
-                    val songProgress = songIntent.getIntExtra("progress", 0)
-                    Log.d("progress", songProgress.toString())
-                    if (songProgress != 0) {
-                        binding.songProgressbar.progress = songProgress
-                        mediaPlayer.seekTo(songProgress)
-                    }
-                    Toast.makeText(
-                        applicationContext,
-                        "제목: $songName, 가수: $singerName",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
+    private lateinit var job: Job
+    private var song = Song()
+    val songs = arrayListOf<Song>()
+    lateinit var songDB: SongDB
+    private var songId = 0
+    private var nowPos = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,33 +43,29 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-//        val content: View = findViewById(android.R.id.content)
-//        // SplashScreen이 생성되고 그려질 때 계속해서 호출된다.
-//        content.viewTreeObserver.addOnPreDrawListener(
-//            object : ViewTreeObserver.OnPreDrawListener {
-//                override fun onPreDraw(): Boolean {
-//                    // Check if the initial data is ready.
-//                    Handler(Looper.getMainLooper()).postDelayed({content.viewTreeObserver.removeOnPreDrawListener(this)}, 2000)
-//                    SystemClock.sleep(1500)
-//                    return true
-//                }
-//            }
-//        )
-
+        CoroutineScope(Dispatchers.IO).launch {
+            inputDummySongs()
+            initPlayList()
+        }
         mainFrag = MainFragment()
         lockFrag = LockFragment()
 
         this.onBackPressedDispatcher.addCallback(this, callback)
         binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
 
-        setMedia()
 
-        serviceIntent = Intent(this@MainActivity, FloService::class.java)
-        startService(serviceIntent)
+//        serviceIntent = Intent(this@MainActivity, FloService::class.java)
+//        startService(serviceIntent)
 
         binding.imgPlalistStart.setOnClickListener {
             playSong()
+        }
+
+        binding.imgPlalistPrevious.setOnClickListener {
+            moveSong(-1)
+        }
+        binding.imgPlaylistNext.setOnClickListener {
+            moveSong(+1)
         }
 
         supportFragmentManager.beginTransaction()
@@ -101,13 +76,45 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         binding.playSongFrame.setOnClickListener {
+            if (job.isActive) {
+                job.cancel()
+                mediaPlayer!!.pause()
+            }
+            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
+            editor.putInt("songId", song.id)
+            editor.apply()
+            song.second = mediaPlayer!!.currentPosition
+            Log.d("songinfomainsecond", song.second.toString())
+            mediaPlayer!!.pause()
+            job.cancel()
+            CoroutineScope(Dispatchers.IO).launch {
+                val dao = songDB.songDao()
+                dao.update(song)
+            }
+            binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
             val intent = Intent(this@MainActivity, SongActivity::class.java)
-            activityResultLauncher.launch(intent)
+            startActivity(intent)
         }
 
         binding.imgGoPlaylist.setOnClickListener {
+            if (job.isActive) {
+                job.cancel()
+                mediaPlayer!!.pause()
+            }
+            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
+            editor.putInt("songId", song.id)
+            editor.apply()
+            song.second = mediaPlayer!!.currentPosition
+            Log.d("songinfomainsecond", song.second.toString())
+            mediaPlayer!!.pause()
+            job.cancel()
+            CoroutineScope(Dispatchers.IO).launch {
+                val dao = songDB.songDao()
+                dao.update(song)
+            }
+            binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
             val intent = Intent(this@MainActivity, SongActivity::class.java)
-            activityResultLauncher.launch(intent)
+            startActivity(intent)
         }
 
         binding.mainNav.setOnItemSelectedListener {
@@ -130,6 +137,65 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initPlayList() {
+        songDB = SongDB.getDB(this)
+        songs.addAll(songDB.songDao().getAllSong())
+    }
+
+    private fun moveSong(direct: Int) {
+        if (nowPos + direct < 0) {
+            Toast.makeText(this, "first song", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (nowPos + direct >= songs.size) {
+            Toast.makeText(this, "last song", Toast.LENGTH_SHORT).show()
+            return
+        }
+        nowPos += direct
+        mediaPlayer!!.release()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            song = songs[nowPos]
+            setMedia()
+        }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        val spf = getSharedPreferences("song", MODE_PRIVATE)
+        songId = spf.getInt("songId", 0)
+        nowPos = getPlayingSongPosition(songId)
+        val songDB = SongDB.getDB(this)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            songs.clear()
+            songs.addAll(songDB.songDao().getAllSong())
+            song = if (songId == 0) {
+                songDB.songDao().getSong(1)
+            } else {
+                songDB.songDao().getSong(songId)
+            }
+            Log.d("nameandsinger", "${song.title}, ${song.singer}, $songId, $nowPos")
+            withContext(Dispatchers.Main) {
+                binding.playSongTitle.text = song.title
+                binding.playSongSinger.text = song.singer
+                song
+                setMedia()
+            }
+        }
+    }
+
+    private fun getPlayingSongPosition(songId: Int): Int {
+        for (i in 0 until songs.size) {
+            if (songs[i].id == songId) {
+                return i
+            }
+        }
+        return 0
+    }
+
     fun playSong() {
         Log.d(
             "img",
@@ -140,25 +206,39 @@ class MainActivity : AppCompatActivity() {
         )
         if (comparePlayPauseDrawable(binding.imgPlalistStart, R.drawable.btn_miniplay_pause)) {
             binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
-            mediaPlayer.pause()
+            job.cancel()
+            mediaPlayer!!.pause()
         } else {
             binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
-            mediaPlayer.start()
-            CoroutineScope(Dispatchers.IO).launch {
-                while (!this@MainActivity.isFinishing && mediaPlayer.isPlaying) {
-                    withContext(Dispatchers.Main) {
-                        binding.songProgressbar.progress =
-                            mediaPlayer.currentPosition  // seekBar에 현재 진행 상활 표현
-                    }
-                    SystemClock.sleep(200)
-                }
-            }
+            mediaPlayer!!.start()
+            job.start()
         }
     }
 
-    private fun setMedia() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.music_lilac)     // 미디어 플레이어 객체 생성
-        binding.songProgressbar.max = mediaPlayer.duration
+    private suspend fun setMedia() {
+        val music =
+            resources.getIdentifier(song.music, "raw", this@MainActivity.packageName)
+        Log.d(
+            "songinfomain",
+            "${song.coverImg}, ${song.music}, $music, ${R.raw.music_lilac} ${song.second}"
+        )
+        mediaPlayer = MediaPlayer.create(this@MainActivity, music)
+        withContext(Dispatchers.Main) {
+            binding.songProgressbar.max = mediaPlayer!!.duration
+            mediaPlayer!!.seekTo(song.second)
+            binding.songProgressbar.progress = mediaPlayer!!.currentPosition
+            binding.playSongTitle.text = song.title
+            binding.playSongSinger.text = song.singer
+        }
+        Log.d("song ID", song.id.toString())
+        job = CoroutineScope(Dispatchers.IO).launch {
+            while (!this@MainActivity.isFinishing && mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                withContext(Dispatchers.Main) {
+                    binding.songProgressbar.progress = mediaPlayer!!.currentPosition
+                }
+                SystemClock.sleep(200)
+            }
+        }
 
         binding.songProgressbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
@@ -172,7 +252,7 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 if (!this@MainActivity.isFinishing) {
                     seekBar?.let {
-                        mediaPlayer.seekTo(it.progress)
+                        mediaPlayer!!.seekTo(it.progress)
                     }
                 }
             }
@@ -180,31 +260,19 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
 
     private fun comparePlayPauseDrawable(image: ImageView, resId: Int): Boolean {
-        // ImageButton의 현재 이미지를 가져옵니다.
         val imageDrawable = image.drawable as? BitmapDrawable
         if (imageDrawable == null) {
-            // ImageButton에 비트맵 이미지가 아닌 다른 유형의 이미지가 있는 경우 처리
             return false
         }
-
-        // Drawable 리소스에서 비트맵 이미지를 가져옵니다.
         val drawableBitmap =
             (ContextCompat.getDrawable(this@MainActivity, resId) as? BitmapDrawable)?.bitmap
-
-        // 두 비트맵을 비교합니다.
         return imageDrawable.bitmap == drawableBitmap
     }
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-
             if (mainFrag.isVisible) {
                 finishAffinity()
             } else {
@@ -219,9 +287,100 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun inputDummySongs() {
+        val songDB = SongDB.getDB(this)
+        val songs = songDB.songDao().getAllSong()
+        Log.d("DB_data", songs.toString())
+        if (songs.isNotEmpty()) return
+
+        songDB.songDao().insert(
+            Song(
+                "Lilac",
+                "아이유 (IU)",
+                0,
+                200,
+                false,
+                "music_lilac",
+                R.drawable.img_album_exp2,
+                false,
+            )
+        )
+
+        songDB.songDao().insert(
+            Song(
+                "Flu",
+                "아이유 (IU)",
+                0,
+                200,
+                false,
+                "music_flu",
+                R.drawable.img_album_exp2,
+                false,
+            )
+        )
+
+        songDB.songDao().insert(
+            Song(
+                "Butter",
+                "방탄소년단 (BTS)",
+                0,
+                190,
+                false,
+                "music_butter",
+                R.drawable.img_album_exp,
+                false,
+            )
+        )
+
+        songDB.songDao().insert(
+            Song(
+                "Next Level",
+                "에스파 (AESPA)",
+                0,
+                210,
+                false,
+                "music_next",
+                R.drawable.img_album_exp3,
+                false,
+            )
+        )
+
+
+        songDB.songDao().insert(
+            Song(
+                "Boy with Luv",
+                "music_boy",
+                0,
+                230,
+                false,
+                "music_boy",
+                R.drawable.img_album_exp4,
+                false,
+            )
+        )
+
+
+        songDB.songDao().insert(
+            Song(
+                "BBoom BBoom",
+                "모모랜드 (MOMOLAND)",
+                0,
+                240,
+                false,
+                "music_bboom",
+                R.drawable.img_album_exp5,
+                false,
+            )
+        )
+
+        val _songs = songDB.songDao().getAllSong()
+        Log.d("DB_data", _songs.toString())
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        stopService(serviceIntent)
-        mediaPlayer.release()
+//        stopService(serviceIntent)
+        mediaPlayer!!.release()
+        job.cancel()
     }
 }
