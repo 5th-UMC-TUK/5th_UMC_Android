@@ -1,19 +1,19 @@
 package com.hgh.flo_clone
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.hgh.flo_clone.adapter.MusicRVAdapter
 import com.hgh.flo_clone.data.CurrentMusicModel
 import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.ActivityMainBinding
-import com.hgh.flo_clone.databinding.FragmentHomeBinding
+import com.hgh.flo_clone.locker.SongLikeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             }
             songIntentLauncher.launch(intent)
             isPlaying = false
-        }
+           }
 
         //miniPlayer
         binding.miniPlayerSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -114,6 +114,17 @@ class MainActivity : AppCompatActivity() {
             binding.miniPlayerSeekBar.progress = currentPosition
             binding.playBtn.setImageResource(R.drawable.baseline_play_arrow_24)
         }
+    }
+
+    fun likeSongFragment(count: Int){
+        binding.groupLikeSong.isVisible =true
+        binding.groupLikeSongNot.isInvisible =true
+        binding.count.text = count.toString()
+    }
+
+    fun likeSongFragmentNot(){
+        binding.groupLikeSong.isInvisible =true
+        binding.groupLikeSongNot.isVisible =true
     }
 
 }

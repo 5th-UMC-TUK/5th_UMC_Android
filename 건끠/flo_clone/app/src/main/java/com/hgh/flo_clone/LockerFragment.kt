@@ -30,7 +30,8 @@ class LockerFragment : Fragment() {
 
         val tabTitleArray = arrayOf(
             "저장한 곡",
-            "음악파일"
+            "음악파일",
+            "❤︎좋아요"
         )
 
         TabLayoutMediator(binding.layoutTab, binding.viewPager) { tab, position ->
