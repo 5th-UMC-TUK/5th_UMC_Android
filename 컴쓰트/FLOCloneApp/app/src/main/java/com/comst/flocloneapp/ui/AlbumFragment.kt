@@ -9,18 +9,27 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.comst.flocloneapp.R
+import com.comst.flocloneapp.data.db.SongDatabase
 import com.comst.flocloneapp.ui.adapter.AlbumFragmentViewPagerAdapter
 import com.comst.flocloneapp.databinding.FragmentAlbumBinding
+import com.comst.flocloneapp.viewmodel.MiniPlayerViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AlbumFragment : Fragment(){
 
     private var _binding : FragmentAlbumBinding? = null
     private val binding get() = _binding!!
 
+    lateinit var songDB : SongDatabase
+    private val miniPlayerViewModel : MiniPlayerViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -29,6 +38,7 @@ class AlbumFragment : Fragment(){
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAlbumBinding.inflate(inflater, container, false)
+        songDB = SongDatabase.getInstance(requireContext())!!
 
         initView()
         setupToolbar()
@@ -37,14 +47,22 @@ class AlbumFragment : Fragment(){
 
     private fun initView(){
 
-        val albumName = arguments?.getString("albumName")
-        val artistName = arguments?.getString("artistName")
+        //val albumName = arguments?.getString("albumName")
+        //val artistName = arguments?.getString("artistName")
+        val albumId = miniPlayerViewModel.albumId.value!!
+
+        CoroutineScope(Dispatchers.IO).launch{
+            val album = songDB.AlbumDao().getAlbum(albumId)
+
+            withContext(Dispatchers.Main){
+                binding.albumTitle.text = album.title
+                binding.albumArtist.text = album.singer
+                binding.albumImage.setImageResource(album.coverImg!!)
+            }
+        }
 
         with(binding){
             appbarLayout.setPadding(0,getStatusBarHeight(requireContext()), 0, 0)
-            binding.albumTitle.text = "IU 5th Album '$albumName'"
-            binding.albumArtist.text = artistName
-
 
 
             val tabName = arrayOf<String>("수록곡", "상세정보", "영상")
