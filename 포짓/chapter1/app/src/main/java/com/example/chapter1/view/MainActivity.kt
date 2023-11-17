@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var job: Job
     var song = Song()
     val songs = arrayListOf<Song>()
+    val playingSong = arrayListOf<Song>()
     lateinit var songDB: SongDB
     private var songId = 0
     private var nowPos = 0
@@ -145,7 +146,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initPlayList() {
         songDB = SongDB.getDB(this)
-        songs.addAll(songDB.songDao().getAllSong())
+        val allSongs = songDB.songDao().getAllSong()
+        songs.addAll(allSongs)
+        playingSong.clear()
+        playingSong.addAll(allSongs)
     }
 
     private fun moveSong(direct: Int) {
@@ -154,15 +158,17 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        if (nowPos + direct >= songs.size) {
+        if (nowPos + direct >= playingSong.size) {
             Toast.makeText(this, "last song", Toast.LENGTH_SHORT).show()
             return
         }
         nowPos += direct
+        Log.d("aftersong", playingSong.size.toString())
+        Log.d("aftermove", nowPos.toString())
         mediaPlayer!!.release()
-
+        binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
         CoroutineScope(Dispatchers.IO).launch {
-            song = songs[nowPos]
+            song = playingSong[nowPos]
             setMedia()
         }
     }
@@ -216,10 +222,80 @@ class MainActivity : AppCompatActivity() {
             mediaPlayer!!.pause()
         } else {
             binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
+            job = CoroutineScope(Dispatchers.IO).launch {
+                while (!this@MainActivity.isFinishing && mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                    withContext(Dispatchers.Main) {
+                        binding.songProgressbar.progress = mediaPlayer!!.currentPosition
+                    }
+                    SystemClock.sleep(200)
+                }
+            }
             mediaPlayer!!.start()
             job.start()
         }
     }
+
+    fun playAlbumSong(albumIdx: Int) {
+        val albumSongs = songs.filter { it.albumIdx == albumIdx }
+        Log.d("albumsong", albumSongs.toString())
+        playingSong.clear()
+        playingSong.addAll(albumSongs)
+        if (albumSongs.isNotEmpty()) {
+            val music =
+                resources.getIdentifier(
+                    albumSongs.first().music,
+                    "raw",
+                    this@MainActivity.packageName
+                )
+            var index = 0
+            binding.playSongTitle.text = albumSongs.first().title
+            binding.playSongSinger.text = albumSongs.first().singer
+            mediaPlayer = MediaPlayer.create(this@MainActivity, music)
+            mediaPlayer!!.setOnCompletionListener {
+                playNextSong(albumSongs, index)
+            }
+            if (comparePlayPauseDrawable(
+                    binding.imgPlalistStart,
+                    R.drawable.btn_miniplay_pause
+                )
+            ) {
+                binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
+                job.cancel()
+                mediaPlayer!!.pause()
+            } else {
+                binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
+                job = CoroutineScope(Dispatchers.IO).launch {
+                    while (!this@MainActivity.isFinishing && mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                        withContext(Dispatchers.Main) {
+                            binding.songProgressbar.progress = mediaPlayer!!.currentPosition
+                        }
+                        SystemClock.sleep(200)
+                    }
+                }
+                mediaPlayer!!.start()
+                job.start()
+            }
+        }
+    }
+
+    private fun playNextSong(albumSongs: List<Song>, index: Int) {
+        mediaPlayer!!.stop()
+        mediaPlayer!!.release()
+        if (albumSongs.size >= index) {
+            val music =
+                resources.getIdentifier(
+                    albumSongs.first().music,
+                    "raw",
+                    this@MainActivity.packageName
+                )
+            mediaPlayer = MediaPlayer.create(this@MainActivity, music)
+            mediaPlayer!!.start()
+            binding.playSongTitle.text = albumSongs.first().title
+            binding.playSongSinger.text = albumSongs.first().singer
+            return
+        }
+    }
+
 
     private suspend fun setMedia() {
         val music =

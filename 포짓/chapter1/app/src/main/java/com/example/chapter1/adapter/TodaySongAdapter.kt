@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter1.databinding.TodaysongListBinding
-import com.example.chapter1.model.TodaySongModel
+import com.example.chapter1.db.Album
 
-class TodaySongAdapter : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(DiffCallBack) {
-    private lateinit var onImageClickListener: (TodaySongModel) -> Unit
-    private lateinit var onBtnClickListener: (TodaySongModel) -> Unit
+class TodaySongAdapter : ListAdapter<Album, RecyclerView.ViewHolder>(DiffCallBack) {
+    private lateinit var onImageClickListener: (Album) -> Unit
+    private lateinit var onBtnClickListener: (Album) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding =
@@ -20,10 +20,10 @@ class TodaySongAdapter : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(Di
 
     inner class ViewHolderShared(private val binding: TodaysongListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: TodaySongModel) {
-            binding.todaySongImg.setImageResource(item.songImgResId)
-            binding.songName.text = item.songName
-            binding.singerName.text = item.songSinger
+        fun bind(item: Album) {
+            binding.todaySongImg.setImageResource(item.coverImg!!)
+            binding.songName.text = item.title
+            binding.singerName.text = item.singer
             binding.todaySongImg.setOnClickListener {
                 onImageClickListener(item)
             }
@@ -33,7 +33,7 @@ class TodaySongAdapter : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(Di
         }
     }
 
-    fun setClickListener(img: (TodaySongModel) -> Unit, btn: (TodaySongModel) -> Unit) {
+    fun setClickListener(img: (Album) -> Unit, btn: (Album) -> Unit) {
         onImageClickListener = img
         onBtnClickListener = btn
     }
@@ -42,7 +42,7 @@ class TodaySongAdapter : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(Di
         return position
     }
 
-    public override fun getItem(position: Int): TodaySongModel = super.getItem(position)
+    public override fun getItem(position: Int): Album = super.getItem(position)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
@@ -54,18 +54,18 @@ class TodaySongAdapter : ListAdapter<TodaySongModel, RecyclerView.ViewHolder>(Di
     }
 
     companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<TodaySongModel>() {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<Album>() {
             override fun areItemsTheSame(
-                oldItem: TodaySongModel,
-                newItem: TodaySongModel
+                oldItem: Album,
+                newItem: Album
             ): Boolean {
 
-                return oldItem.songName == newItem.songName && oldItem.songSinger == newItem.songSinger
+                return oldItem.title == newItem.title && oldItem.singer == newItem.singer
             }
 
             override fun areContentsTheSame(
-                oldItem: TodaySongModel,
-                newItem: TodaySongModel
+                oldItem: Album,
+                newItem: Album
             ): Boolean {
                 return oldItem == newItem
             }
