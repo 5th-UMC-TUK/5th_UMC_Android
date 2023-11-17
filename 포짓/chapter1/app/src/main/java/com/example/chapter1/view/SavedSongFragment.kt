@@ -12,7 +12,6 @@ import com.example.chapter1.db.Song
 import com.example.chapter1.db.SongDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +19,6 @@ import kotlinx.coroutines.withContext
 
 class SavedSongFragment : Fragment() {
     private lateinit var binding: FragmentSavedSongBinding
-    private lateinit var job: Job
     val songs = arrayListOf<Song>()
     lateinit var songDB: SongDB
 

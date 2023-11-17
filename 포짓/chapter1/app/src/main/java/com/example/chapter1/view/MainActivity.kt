@@ -130,6 +130,10 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.bottom_locker -> {
                     supportFragmentManager.beginTransaction()
+                        .remove(lockFrag).commit()
+                    lockFrag = LockFragment()
+                    supportFragmentManager.beginTransaction()
+                        .add(binding.fragmentFrame.id, lockFrag, "lock")
                         .hide(mainFrag)
                         .show(lockFrag)
                         .commit()
@@ -387,9 +391,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun inputDummyAlbum() {
         val songDB = SongDB.getDB(this)
-        val songs = songDB.albumDao().getAllAlbum()
-        Log.d("DB_data", songs.toString())
-        if (songs.isNotEmpty()) return
+        val albums = songDB.albumDao().getAllAlbum()
+        Log.d("DB_data", albums.toString())
+        if (albums.isNotEmpty()) return
 
         songDB.albumDao().insert(
             Album(

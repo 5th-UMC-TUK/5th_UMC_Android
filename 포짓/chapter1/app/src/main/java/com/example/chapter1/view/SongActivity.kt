@@ -126,7 +126,16 @@ class SongActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = songDB.songDao()
                 dao.update(songs[nowPos])
+                withContext(Dispatchers.Main) {
+                    if (songs[nowPos].isLike) {
+                        CustomSnackBar.createSnackBar(it, "좋아요 한 곡에 담았습니다.").show()
+                    } else {
+                        CustomSnackBar.createSnackBar(it, "좋아요 한 곡이 취소되었습니다.").show()
+                    }
+                    
+                }
             }
+
         }
     }
 
