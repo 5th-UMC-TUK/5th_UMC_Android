@@ -250,31 +250,23 @@ class MainActivity : AppCompatActivity() {
             var index = 0
             binding.playSongTitle.text = albumSongs.first().title
             binding.playSongSinger.text = albumSongs.first().singer
+            job.cancel()
+            mediaPlayer!!.release()
             mediaPlayer = MediaPlayer.create(this@MainActivity, music)
             mediaPlayer!!.setOnCompletionListener {
                 playNextSong(albumSongs, index)
             }
-            if (comparePlayPauseDrawable(
-                    binding.imgPlalistStart,
-                    R.drawable.btn_miniplay_pause
-                )
-            ) {
-                binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
-                job.cancel()
-                mediaPlayer!!.pause()
-            } else {
-                binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
-                job = CoroutineScope(Dispatchers.IO).launch {
-                    while (!this@MainActivity.isFinishing && mediaPlayer != null && mediaPlayer!!.isPlaying) {
-                        withContext(Dispatchers.Main) {
-                            binding.songProgressbar.progress = mediaPlayer!!.currentPosition
-                        }
-                        SystemClock.sleep(200)
+            binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplay_pause)
+            job = CoroutineScope(Dispatchers.IO).launch {
+                while (!this@MainActivity.isFinishing && mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                    withContext(Dispatchers.Main) {
+                        binding.songProgressbar.progress = mediaPlayer!!.currentPosition
                     }
+                    SystemClock.sleep(200)
                 }
-                mediaPlayer!!.start()
-                job.start()
             }
+            mediaPlayer!!.start()
+            job.start()
         }
     }
 
@@ -512,10 +504,14 @@ class MainActivity : AppCompatActivity() {
         Log.d("DB_data", _albums.toString())
     }
 
+    fun setNavVisibility(visibility: Int) {
+        binding.mainNav.visibility = visibility
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 //        stopService(serviceIntent)
-        mediaPlayer!!.release()
         job.cancel()
+        mediaPlayer!!.release()
     }
 }

@@ -59,6 +59,7 @@ class MainFragment : Fragment() {
 
         removeWindowLimit()
         setTitleAdapter()
+        setTodaySongAdapter()
         setAdAdapter()
 
 
@@ -174,7 +175,6 @@ class MainFragment : Fragment() {
         binding.titleViewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         binding.titleViewpager.overScrollMode = View.OVER_SCROLL_NEVER
         binding.titleIndicator.setViewPager(binding.titleViewpager)
-        setTodaySongAdapter()
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
                 Thread.sleep(5000)
@@ -214,9 +214,6 @@ class MainFragment : Fragment() {
     }
 
     private fun submitTodaySongList(todaySongAdapter: TodaySongAdapter) {
-        CoroutineScope(Dispatchers.IO).launch {
-
-        }
         val everydaySongAdapter = TodaySongAdapter()
         binding.everydaySongRv.adapter = everydaySongAdapter
         everydaySongAdapter.submitList(albums.toList())

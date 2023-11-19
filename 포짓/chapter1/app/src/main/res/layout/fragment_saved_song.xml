@@ -23,6 +23,7 @@
             android:src="@drawable/check" />
 
         <TextView
+            android:id="@+id/select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -48,8 +49,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        tools:listitem="@layout/play_list"
-        app:layout_constraintTop_toBottomOf="@id/song_total_frame" />
+        app:layout_constraintTop_toBottomOf="@id/song_total_frame"
+        tools:listitem="@layout/play_list" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/lock_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/flo_blue"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        android:visibility="gone"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/lock_bottom" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
