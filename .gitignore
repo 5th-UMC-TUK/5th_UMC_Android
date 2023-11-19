@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/*
+포짓/memo/.idea/
+
+포짓/TimerExample/.idea/

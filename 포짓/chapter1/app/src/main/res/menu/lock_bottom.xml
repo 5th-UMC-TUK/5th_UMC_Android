@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/lock_play"
+        android:icon="@drawable/btn_editbar_play"
+        android:title="듣기"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/lock_playlist"
+        android:icon="@drawable/btn_editbar_addplaylist"
+        android:title="재생목록"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/lock_mylist"
+        android:icon="@drawable/btn_editbar_mylist"
+        android:title="내 리스트"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/lock_delete"
+        android:icon="@drawable/btn_editbar_delete"
+        android:title="삭제"
+        app:showAsAction="ifRoom" />
+
+</menu>

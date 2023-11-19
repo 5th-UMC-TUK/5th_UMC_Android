@@ -19,6 +19,7 @@ class SongActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySongBinding
     var isPlaying: Boolean = false
+    var isLike :Boolean = false
     var isRepeat: Boolean = false
     var isShuffle: Boolean = false
     val duration: Int = 200000
@@ -28,7 +29,7 @@ class SongActivity : AppCompatActivity() {
         binding = com.hgh.flo_clone.databinding.ActivitySongBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val music = intent.getParcelableExtra<CurrentMusicModel>("song")
+         val music = intent.getParcelableExtra<CurrentMusicModel>("song")
         binding.songTitleText.text = music?.title ?: "null"
         binding.songSingerText.text = music?.singer ?: "null"
         isPlaying = music?.isPlaying ?: false
@@ -147,5 +148,6 @@ class SongActivity : AppCompatActivity() {
                     ColorStateList.valueOf(Color.parseColor("#ff959595"))
             }
         }
+
     }
 }

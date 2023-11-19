@@ -12,7 +12,9 @@
         <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationViewMain</item>
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="33">@drawable/splash_icon</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="33">
+            @drawable/splash_icon
+        </item>
     </style>
 
     <style name="BottomNavigationViewMain" parent="Widget.Material3.BottomNavigationView">
@@ -20,5 +22,11 @@
         <item name="itemActiveIndicatorStyle">@null</item>
     </style>
 
-    <style name="Theme.Chapter1" parent="Base.Theme.Chapter1" />
+    <style name="Theme.Chapter1" parent="Base.Theme.Chapter1">
+        <item name="snackbarStyle">@style/Widget.MyApp.SnackBar</item>
+    </style>
+
+    <style name="Widget.MyApp.SnackBar" parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="android:paddingVertical" tools:targetApi="o">4sp</item>
+    </style>
 </resources>

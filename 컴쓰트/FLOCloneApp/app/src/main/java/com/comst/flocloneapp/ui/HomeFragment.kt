@@ -23,11 +23,17 @@ import com.comst.flocloneapp.model.HomeBanner
 import com.comst.flocloneapp.model.TodayMusic
 import com.comst.flocloneapp.model.VideoMusic
 import com.comst.flocloneapp.R
+import com.comst.flocloneapp.data.db.SongDatabase
+import com.comst.flocloneapp.model.AlbumEntity
+import com.comst.flocloneapp.ui.adapter.TodayAlbumAdapter
 import com.comst.flocloneapp.util.MusicPlayServiceUtil
 import com.comst.flocloneapp.viewmodel.MiniPlayerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class HomeFragment : Fragment(), ItemTodayMusicListener {
@@ -39,13 +45,16 @@ class HomeFragment : Fragment(), ItemTodayMusicListener {
     private val everydayMusicAdapter = EverydayMusicAdapter()
     private val videoMusicAdapter = VideoMusicAdapter()
     private val bannerAdapter = HomeBannerViewPagerAdapter()
+    private val todayAlbumAdapter = TodayAlbumAdapter(this)
 
     private val todayMusicList = mutableListOf<TodayMusic>()
     private val everyMusicList = mutableListOf<EverydayMusic>()
     private val videoMusicList = mutableListOf<VideoMusic>()
     private val homeBannerList = mutableListOf<HomeBanner>()
+    private val todayAlbumList = mutableListOf<AlbumEntity>()
 
     private val miniPlayerViewModel : MiniPlayerViewModel by activityViewModels()
+    lateinit var songDB : SongDatabase
 
 
     override fun onCreateView(
@@ -54,23 +63,24 @@ class HomeFragment : Fragment(), ItemTodayMusicListener {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        songDB = SongDatabase.getInstance(requireContext())!!
         initView()
-
         return binding.root
     }
 
     private fun initView(){
         with(binding){
 
-            todayMusicDummy()
+            //todayMusicDummy()
             everydayMusicDummy()
             videoMusicDummy()
             homeBannerDummy()
+            getSavedSongList()
 
             todayMusicRecyclerView.addItemDecoration(TodayMusicAdapterDecoration())
-            todayMusicRecyclerView.adapter = todayMusicAdapter
-            todayMusicAdapter.submitList(todayMusicList)
+            //todayMusicRecyclerView.adapter = todayMusicAdapter
+            //todayMusicAdapter.submitList(todayMusicList)
+            todayMusicRecyclerView.adapter = todayAlbumAdapter
 
             everydayMusicRecyclerView.addItemDecoration(TodayMusicAdapterDecoration())
             everydayMusicRecyclerView.adapter = everydayMusicAdapter
@@ -99,6 +109,14 @@ class HomeFragment : Fragment(), ItemTodayMusicListener {
         }
     }
 
+    private fun getSavedSongList(){
+        CoroutineScope(Dispatchers.IO).launch {
+            todayAlbumList.addAll(songDB.AlbumDao().getAlbums())
+            withContext(Dispatchers.Main){
+                todayAlbumAdapter.submitList(todayAlbumList)
+            }
+        }
+    }
     // extention.kt
     fun getStatusBarHeight(context: Context): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -155,22 +173,32 @@ class HomeFragment : Fragment(), ItemTodayMusicListener {
 
     override fun goAlbumFragment(position: Int) {
 
+        miniPlayerViewModel.setAlbumId(position)
+
         val bundle = Bundle().apply {
-            putString("albumName", todayMusicList[position].musicName)
-            putString("artistName", todayMusicList[position].artist)
+            //putString("albumName", todayMusicList[position].musicName)
+            //putString("artistName", todayMusicList[position].artist)
         }
 
         findNavController().navigate(R.id.albumFragment,bundle)
 
     }
 
-    override fun playMusic(todayMusic: TodayMusic) {
-        MusicPlayServiceUtil.stopService(requireContext())
-        miniPlayerViewModel.resetViewModel()
-        miniPlayerViewModel.updateMiniPlayerUI(todayMusic.musicName,todayMusic.artist)
-        miniPlayerViewModel.musicPlay.value = true
-        miniPlayerViewModel.isMusicTimeOver.value = false
-        miniPlayerViewModel.musicPlayOrPause()
+    // 바꿀게 너무 많아서 적당히 함
+    override fun playMusic(albumId : Int) {
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val albumInclude = songDB.SongDao().getIncludeSong(albumId)
+
+            withContext(Dispatchers.Main){
+                MusicPlayServiceUtil.stopService(requireContext())
+                miniPlayerViewModel.resetViewModel()
+                miniPlayerViewModel.updateMiniPlayerUI(albumInclude[0].title,albumInclude[0].singer)
+                miniPlayerViewModel.musicPlay.value = true
+                miniPlayerViewModel.isMusicTimeOver.value = false
+                miniPlayerViewModel.musicPlayOrPause()
+            }
+        }
     }
 
 }

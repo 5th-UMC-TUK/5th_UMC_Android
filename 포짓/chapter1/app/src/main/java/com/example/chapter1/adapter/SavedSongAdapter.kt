@@ -1,41 +1,82 @@
 package com.example.chapter1.adapter
 
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter1.databinding.PlayListBinding
-import com.example.chapter1.model.SongModel
+import com.example.chapter1.db.Song
 
 
-class SavedSongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCallBack) {
+class SavedSongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack) {
     private val checkboxStatus = SparseBooleanArray()
+    private lateinit var onSelectClickListener: (Song) -> Unit
+    private val selectedItems = mutableListOf<Int>()
 
     inner class ViewHolder(private val binding: PlayListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @RequiresApi(Build.VERSION_CODES.P)
-        fun bind(item: SongModel) {
-            binding.songListImg.setImageResource(item.songImgResId)
+        fun bind(item: Song) {
+            if (selectedItems.contains(adapterPosition)) {
+                binding.root.setBackgroundColor(Color.parseColor("#eeeeee"))
+            } else {
+                binding.root.setBackgroundColor(Color.TRANSPARENT)
+            }
+            binding.songListImg.setImageResource(item.coverImg!!)
             binding.removeSwitch.isChecked = checkboxStatus[adapterPosition]
             binding.removeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
                 checkboxStatus.put(adapterPosition, isChecked)
                 Log.d("boolean", checkboxStatus.toString())
             }
             binding.songListImg.clipToOutline = true
-            binding.songMusicTitle.text = item.songName
-            binding.songSingerName.text = item.singerName
-            binding.songMore.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    removeCurrentItem(position)
-                }
+            binding.songMusicTitle.text = item.music
+            binding.songSingerName.text = item.singer
+            binding.root.setOnLongClickListener {
+                setSelected(it, adapterPosition)
+                true
             }
         }
+    }
+
+    private fun setSelected(view: View, position: Int) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position)
+            view.setBackgroundColor(Color.TRANSPARENT)
+            return
+        }
+        selectedItems.add(position)
+        view.setBackgroundColor(Color.parseColor("#eeeeee"))
+    }
+
+    fun selectAll() {
+        val updatedList = currentList.toMutableList()
+        selectedItems.clear()
+        for (i in 0 until updatedList.size) {
+            selectedItems.add(i)
+        }
+        submitList(updatedList)
+        notifyDataSetChanged()
+        Log.d("selected", selectedItems.toString())
+    }
+
+    fun unselectAll() {
+        val updatedList = currentList.toMutableList()
+        selectedItems.clear()
+        submitList(updatedList)
+        notifyDataSetChanged()
+        Log.d("selected", selectedItems.toString())
+    }
+
+    fun setSelectListener(select: (Song) -> Unit) {
+        onSelectClickListener = select
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedSongAdapter.ViewHolder {
@@ -76,14 +117,22 @@ class SavedSongAdapter : ListAdapter<SongModel, RecyclerView.ViewHolder>(DiffCal
         submitList(updatedList)
     }
 
-    companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<SongModel>() {
-            override fun areItemsTheSame(oldItem: SongModel, newItem: SongModel): Boolean {
+    fun removeSelectedItem() {
+        val updatedList = currentList.toMutableList()
+        for (i in 0 until selectedItems.size) {
+            updatedList.removeAt(selectedItems[i] - i)
+        }
+        submitList(updatedList)
+    }
 
-                return oldItem.songName == newItem.songName && oldItem.singerName == newItem.singerName
+    companion object {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<Song>() {
+            override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
+
+                return oldItem.music == newItem.music && oldItem.singer == newItem.singer
             }
 
-            override fun areContentsTheSame(oldItem: SongModel, newItem: SongModel): Boolean {
+            override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {
                 return oldItem == newItem
             }
 

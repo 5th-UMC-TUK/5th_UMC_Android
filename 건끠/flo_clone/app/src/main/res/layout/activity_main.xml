@@ -121,15 +121,135 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        app:itemActiveIndicatorStyle="@style/Widget.MaterialComponents.BottomNavigationView"
         app:itemBackground="@color/white"
-        app:itemRippleColor="@color/white"
         app:itemIconTint="@drawable/menu_select_color"
+        app:itemRippleColor="@color/white"
         app:itemTextColor="@drawable/menu_select_color"
         app:labelVisibilityMode="labeled"
-        app:itemActiveIndicatorStyle="@style/Widget.MaterialComponents.BottomNavigationView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        tools:visibility="invisible" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/likeBottomCount"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="18dp"
+        app:layout_constraintBottom_toTopOf="@id/likeSongBottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/likeSongBottom">
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/round_8"
+            android:backgroundTint="@color/white"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/likeSongBottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/likeSongBottom" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/likeSongBottom"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@color/primery"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/likePlayBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/baseline_play_arrow_24"
+            android:drawableTint="@color/white"
+            android:gravity="center"
+            android:text="듣기"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/likeMyPlayListBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/baseline_playlist_play_24"
+            android:drawableTint="@color/white"
+            android:gravity="center"
+            android:text="재생목록"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/likeMyBoxBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/baseline_facebook_24"
+            android:drawableTint="@color/white"
+            android:gravity="center"
+            android:text="내 리스트"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/likeDestoryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/baseline_delete_24"
+            android:drawableTint="@color/white"
+            android:gravity="center"
+            android:text="삭제"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+    
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupLikeSongNot"
+        android:layout_width="wrap_content"
+        app:constraint_referenced_ids="miniPlayerSeekBar,nowPlayListLayout, mainBottomNav"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupLikeSong"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:layout_width="wrap_content"
+        app:constraint_referenced_ids="likeSongBottom,likeBottomCount"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
