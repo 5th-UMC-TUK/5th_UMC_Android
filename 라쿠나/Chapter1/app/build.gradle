@@ -1,11 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+
 }
 
 android {
     namespace 'com.lacuna.chapter1'
-    compileSdk 33
+    compileSdk 34
     buildFeatures {
         viewBinding true
     }
@@ -46,6 +48,13 @@ dependencies {
     implementation "androidx.fragment:fragment:1.3.0"
     implementation 'me.relex:circleindicator:2.1.6' // circleindicator
     implementation 'com.google.code.gson:gson:2.10.1'// gson
+
+    // RoomDb
+    def room_version = "2.5.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // To use Kotlin annotation processing tool (kapt)
+    kapt "androidx.room:room-compiler:$room_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

@@ -1,19 +1,22 @@
 package com.lacuna.chapter1.adapter
 
+import android.annotation.SuppressLint
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lacuna.chapter1.data.SavedSong
+import com.lacuna.chapter1.data.Song
 import com.lacuna.chapter1.databinding.ItemLockerSavdSongBinding
 import com.lacuna.floclone.adapter.TodayMusicAdapter
 
-class LockerSavedSongAdapter(private val savedSongList: ArrayList<SavedSong>): RecyclerView.Adapter<LockerSavedSongAdapter.SavedSongViewHolder>() {
+class LockerSavedSongAdapter(): RecyclerView.Adapter<LockerSavedSongAdapter.SavedSongViewHolder>() {
     private val switchStatus = SparseBooleanArray()
+    private val songs = ArrayList<Song>()
 
     interface OnItemClickListener {
-        fun onItemClick(savedSong: SavedSong)
-        fun onRemoveSavedSong(position: Int)
+        fun onItemClick(song: Song)
+        fun onRemoveSavedSong(songId: Int)
     }
 
     // 리스너 객체를 전달받는 함수랑 리스너 객체를 저장할 변수
@@ -22,10 +25,10 @@ class LockerSavedSongAdapter(private val savedSongList: ArrayList<SavedSong>): R
         itemClickListener = onItemClickListener
     }
 
-    fun removeItem(position: Int){
-        savedSongList.removeAt(position)
-        notifyDataSetChanged()
-    }
+//    fun removeItem(position: Int){
+//        savedSongList.removeAt(position)
+//        notifyDataSetChanged()
+//    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -43,8 +46,13 @@ class LockerSavedSongAdapter(private val savedSongList: ArrayList<SavedSong>): R
         holder: LockerSavedSongAdapter.SavedSongViewHolder,
         position: Int
     ) {
-        holder.bind(savedSongList[position])
-        holder.binding.itemLockerAlbumMoreIv.setOnClickListener { itemClickListener.onRemoveSavedSong(position) }
+        holder.bind(songs[position])
+        holder.binding.itemLockerAlbumMoreIv.setOnClickListener {
+            itemClickListener.onRemoveSavedSong(songs[position].id)
+            removeSong(position)
+        }
+
+//        holder.binding.itemLockerAlbumMoreIv.setOnClickListener { itemClickListener.onRemoveSavedSong(position) }
 
         val switch = holder.binding.itemLockerAlbumSwitch
         switch.isChecked = switchStatus[position]
@@ -60,14 +68,28 @@ class LockerSavedSongAdapter(private val savedSongList: ArrayList<SavedSong>): R
     }
 
     override fun getItemCount(): Int {
-        return savedSongList.size
+        return songs.size
+    }
+    @SuppressLint("NotifyDataSetChanged") // 경고 무시 어노테이션
+    fun addSongs(songs: ArrayList<Song>) {
+        this.songs.clear()
+        this.songs.addAll(songs)
+
+        notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun removeSong(position: Int){
+        songs.removeAt(position)
+        notifyDataSetChanged()
+    }
     inner class SavedSongViewHolder(val binding: ItemLockerSavdSongBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(savedSong: SavedSong) {
-            binding.itemLockerAlbumCoverImgIv.setImageResource(savedSong.imgRes)
-            binding.itemLockerAlbumTitleTv.text = savedSong.title.toString()
-            binding.itemLockerAlbumSingerTv.text = savedSong.singer.toString()
+        fun bind(song: Song) {
+            binding.itemLockerAlbumCoverImgIv.setImageResource(song.coverImg!!)
+            binding.itemLockerAlbumTitleTv.text = song.title.toString()
+            binding.itemLockerAlbumSingerTv.text = song.singer.toString()
         }
     }
+
+
 }
