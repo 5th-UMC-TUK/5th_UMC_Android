@@ -23,7 +23,7 @@ class LockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lockViewpager.adapter = LockViewpagerAdapter(this@LockFragment)
-        val tabs = arrayOf("저장한 곡", "음악파일")
+        val tabs = arrayOf("저장한 곡", "음악파일", "저장앨범")
         TabLayoutMediator(binding.lockTab, binding.lockViewpager) { tab, position ->
             tab.text = tabs[position]
         }.attach()

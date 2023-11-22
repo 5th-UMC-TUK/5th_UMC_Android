@@ -2,23 +2,26 @@ package com.example.chapter1.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import com.example.chapter1.R
 import com.example.chapter1.adapter.AlbumViewpagerAdapter
 import com.example.chapter1.databinding.FragmentAlbumBinding
+import com.example.chapter1.db.Album
+import com.example.chapter1.db.SongDB
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class AlbumFragment : Fragment() {
     private lateinit var binding: FragmentAlbumBinding
+    private lateinit var songDB: SongDB
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val mainFragment = parentFragmentManager.findFragmentByTag("main")
@@ -28,10 +31,12 @@ class AlbumFragment : Fragment() {
                 .commit()
         }
     }
+    private lateinit var album: Album
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        songDB = SongDB.getDB(requireContext())
     }
 
     override fun onCreateView(
@@ -45,29 +50,33 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as MainActivity
-        activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        binding.toolbar.menu.clear()
-        binding.toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_new_24)
-        val menuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                binding.toolbar.menu.clear()
-                menuInflater.inflate(R.menu.album_menu, menu)
-            }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return true
-            }
-
-        })
-        binding.toolbar.setNavigationOnClickListener {
+        binding.backBtn.setOnClickListener {
             val mainFragment = parentFragmentManager.findFragmentByTag("main")
             parentFragmentManager.beginTransaction()
                 .show(mainFragment!!)
                 .remove(this)
                 .commit()
+        }
+
+        binding.albumLikeBtn.setOnClickListener {
+            if (album.isLike) {
+                binding.albumLikeBtn.setImageResource(R.drawable.ic_my_like_off)
+                album.isLike = false
+                CustomSnackBar.createSnackBar(it, "좋아요 한 엘범이 취소되었습니다.").show()
+                CoroutineScope(Dispatchers.IO).launch {
+                    songDB.albumDao().update(album)
+                }
+            } else {
+                album.isLike = true
+                binding.albumLikeBtn.setImageResource(R.drawable.ic_my_like_on)
+                CustomSnackBar.createSnackBar(it, "좋아요 한 앨범에 추가되었습니다..").show()
+                CoroutineScope(Dispatchers.IO).launch {
+                    songDB.albumDao().update(album)
+                }
+            }
         }
 
 
@@ -77,31 +86,22 @@ class AlbumFragment : Fragment() {
             tab.text = tabs[position]
         }.attach()
 
-        val songName = arguments?.getString("song")
-        val singerName = arguments?.getString("singer")
-        val songDetail = arguments?.getString("detail")
-        val resId = arguments?.getInt("resId")
-
-        songName?.let {
-            binding.albumTitle.text = it
+        val albumId = arguments?.getInt("id")!!
+        CoroutineScope(Dispatchers.IO).launch {
+            val deferred = CoroutineScope(Dispatchers.IO).async {
+                songDB.albumDao().getAlbum(albumId)
+            }
+            album = deferred.await()
+            withContext(Dispatchers.Main) {
+                binding.albumTitle.text = album.title
+                binding.singerName.text = album.singer
+                binding.albumDetail.text = album.title
+                binding.albumImg.setImageResource(album.coverImg!!)
+                if (album.isLike) {
+                    binding.albumLikeBtn.setImageResource(R.drawable.ic_my_like_off)
+                }
+            }
         }
-        singerName?.let {
-            binding.singerName.text = it
-        }
-        songDetail?.let {
-            binding.albumDetail.text = it
-        }
-
-        Toast.makeText(
-            requireContext(),
-            "album 제목: $songName  가수: $singerName  세부내용: $songDetail",
-            Toast.LENGTH_SHORT
-        ).show()
-
-        resId?.let {
-            binding.albumImg.setImageResource(it)
-        }
-
     }
 
 

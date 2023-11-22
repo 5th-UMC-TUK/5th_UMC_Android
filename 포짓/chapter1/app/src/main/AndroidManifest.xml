@@ -20,21 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chapter1"
         tools:targetApi="33">
-        <service
-            android:name=".service.FloService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
-            android:name=".view.SplashActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".view.SongActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.MainActivity"
+            android:name=".view.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -43,6 +30,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.SignUpActivity"
+            android:exported="false">
+
+        </activity>
+
+        <service
+            android:name=".service.FloService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".view.SplashActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.SongActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

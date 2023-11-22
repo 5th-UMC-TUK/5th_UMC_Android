@@ -137,6 +137,7 @@ class MainFragment : Fragment() {
 
     }
 
+
     private fun setTitleAdapter() {
         songDB = SongDB.getDB(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -191,10 +192,7 @@ class MainFragment : Fragment() {
                 val albumFragment = AlbumFragment()
                 val bundle = Bundle()
                 val data = it
-                bundle.putString("song", data.title)
-                bundle.putString("singer", data.singer)
-                bundle.putString("detail", data.title)
-                bundle.putInt("resId", data.coverImg!!)
+                bundle.putInt("id", data.id)
                 albumFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
 
                 parentFragmentManager.beginTransaction()

@@ -3,4 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="flo_blue">#3D40FD</color>
+    <color name="gray_eeeeee">#eeeeee</color>
+    <color name="gray_aaaaaa">#aaaaaa</color>
 </resources>

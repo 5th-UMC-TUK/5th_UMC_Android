@@ -22,4 +22,7 @@ interface AlbumDao {
 
     @Query("SELECT * FROM AlbumTable where id = :id")
     fun getAlbum(id: Int): Album
+
+    @Query("SELECT * FROM AlbumTable where isLike =:like")
+    fun getLikeAlbums(like: Boolean): List<Album>
 }

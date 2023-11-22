@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 data class Album(
     var title: String = "",
     var singer: String = "",
-    var coverImg: Int? = null
+    var coverImg: Int? = null,
+    var isLike: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

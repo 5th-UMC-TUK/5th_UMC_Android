@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chapter1.R
-import com.example.chapter1.adapter.SavedSongAdapter
-import com.example.chapter1.databinding.FragmentSavedSongBinding
-import com.example.chapter1.db.Song
+import com.example.chapter1.adapter.SavedAlbumAdapter
+import com.example.chapter1.databinding.FragmentSavedAlbumBinding
+import com.example.chapter1.db.Album
 import com.example.chapter1.db.SongDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,20 +17,21 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
-class SavedSongFragment : Fragment() {
-    private lateinit var binding: FragmentSavedSongBinding
-    val songs = arrayListOf<Song>()
+class SavedAlbumFragment : Fragment() {
+    private lateinit var binding: FragmentSavedAlbumBinding
+    val albums = arrayListOf<Album>()
     lateinit var songDB: SongDB
-    val savedSongAdapter = SavedSongAdapter()
+    val savedAlbumAdapter = SavedAlbumAdapter()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSavedSongBinding.inflate(layoutInflater, container, false)
+    ): View {
+        binding = FragmentSavedAlbumBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,13 +41,10 @@ class SavedSongFragment : Fragment() {
             }
             deferred.await()
             withContext(Dispatchers.Main) {
-                binding.savedSongRv.layoutManager = LinearLayoutManager(requireContext())
-                binding.savedSongRv.adapter = savedSongAdapter
-                savedSongAdapter.setSelectListener {
-
-                }
-                savedSongAdapter.submitList(songs)
-                savedSongAdapter.setCount(songs.size)
+                binding.savedAlbumRv.layoutManager = LinearLayoutManager(requireContext())
+                binding.savedAlbumRv.adapter = savedAlbumAdapter
+                savedAlbumAdapter.submitList(albums)
+                savedAlbumAdapter.setCount(albums.size)
             }
 
         }
@@ -56,13 +54,13 @@ class SavedSongFragment : Fragment() {
             when (binding.lockNav.visibility) {
                 View.VISIBLE -> {
                     parent.setNavVisibility(View.VISIBLE)
-                    savedSongAdapter.unselectAll()
+                    savedAlbumAdapter.unselectAll()
                     binding.lockNav.visibility = View.GONE
                 }
 
                 View.GONE -> {
                     parent.setNavVisibility(View.GONE)
-                    savedSongAdapter.selectAll()
+                    savedAlbumAdapter.selectAll()
                     binding.lockNav.visibility = View.VISIBLE
                 }
             }
@@ -82,28 +80,22 @@ class SavedSongFragment : Fragment() {
     private fun updateLikeToDB() {
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.IO).async {
-                val dao = songDB.songDao()
-                songs.forEach {
-                    dao.updateIsLike(it.id, false)
+                val dao = songDB.albumDao()
+                albums.forEach {
+                    dao.update(it)
                 }
             }.await()
-            songs.clear()
-            songs.addAll(songDB.songDao().getLikedSong(true))
+            albums.clear()
+            albums.addAll(songDB.albumDao().getLikeAlbums(true))
             withContext(Dispatchers.Main) {
-                savedSongAdapter.submitList(songs)
-                val activitys = requireActivity() as MainActivity
-                val song = activitys.getCurrentSong()
-                val same = songs.find { it.title == song.title }
-                same?.let {
-                    activitys.setCurrentSong(it)
-                }
+                savedAlbumAdapter.submitList(albums)
             }
         }
     }
 
     private fun initPlayList() {
         songDB = SongDB.getDB(requireContext())
-        songs.addAll(songDB.songDao().getLikedSong(true))
+        albums.addAll(songDB.albumDao().getLikeAlbums(true))
     }
 
 }

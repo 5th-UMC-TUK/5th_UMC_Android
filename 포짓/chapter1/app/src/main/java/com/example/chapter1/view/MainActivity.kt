@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainFrag: MainFragment
     private lateinit var lockFrag: LockFragment
+    private lateinit var lookFrag: LookAroundFragment
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var serviceIntent: Intent
     private lateinit var job: Job
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
         mainFrag = MainFragment()
         lockFrag = LockFragment()
+        lookFrag = LookAroundFragment()
 
         this.onBackPressedDispatcher.addCallback(this, callback)
         binding.imgPlalistStart.setImageResource(R.drawable.btn_miniplayer_play)
@@ -74,7 +76,9 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(binding.fragmentFrame.id, mainFrag, "main")
             .add(binding.fragmentFrame.id, lockFrag, "lock")
+            .add(binding.fragmentFrame.id, lookFrag, "look")
             .hide(lockFrag)
+            .hide(lookFrag)
             .show(mainFrag)
             .commit()
 
@@ -126,6 +130,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .show(mainFrag)
                         .hide(lockFrag)
+                        .hide(lookFrag)
                         .commit()
                 }
 
@@ -136,7 +141,20 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .add(binding.fragmentFrame.id, lockFrag, "lock")
                         .hide(mainFrag)
+                        .hide(lookFrag)
                         .show(lockFrag)
+                        .commit()
+                }
+
+                R.id.bottom_lookaround -> {
+                    supportFragmentManager.beginTransaction()
+                        .remove(lookFrag).commit()
+                    lookFrag = LookAroundFragment()
+                    supportFragmentManager.beginTransaction()
+                        .add(binding.fragmentFrame.id, lookFrag, "look")
+                        .hide(mainFrag)
+                        .hide(lockFrag)
+                        .show(lookFrag)
                         .commit()
                 }
             }
@@ -199,6 +217,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun setCurrentSong(song: Song) {
+        this.song = song
+    }
+
+    fun getCurrentSong() = song
     private fun getPlayingSongPosition(songId: Int): Int {
         for (i in 0 until songs.size) {
             if (songs[i].id == songId) {
@@ -354,6 +377,7 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction()
                     .show(mainFrag)
                     .hide(lockFrag)
+                    .hide(lookFrag)
                     .commit()
                 return
             }
