@@ -12,7 +12,7 @@ class TabLockerAdapter(fragmentActivity: LockerFragment): FragmentStateAdapter(f
     override fun createFragment(position: Int): Fragment {
         return when (position){
             0 -> SaveSongFragment()
-            1 -> SongDetailFragment()
+            1 -> SongFileFragment()
             2 -> SongLikeFragment()
             else -> SaveSongFragment()
         }

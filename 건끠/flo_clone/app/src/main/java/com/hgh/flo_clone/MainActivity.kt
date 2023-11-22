@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     var isPlaying = false
     var currentPosition = 0
     val duration = 200000
+    var likeAlbum = mutableListOf<Int>()
 
     private val songIntentLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

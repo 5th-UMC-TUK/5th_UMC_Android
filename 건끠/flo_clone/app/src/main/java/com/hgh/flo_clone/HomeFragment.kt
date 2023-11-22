@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hgh.flo_clone.adapter.HomeBannerRVAdapter
 import com.hgh.flo_clone.adapter.MusicRVAdapter
@@ -20,13 +18,16 @@ import com.hgh.flo_clone.data.AlbumModel
 import com.hgh.flo_clone.data.HomeBannerModel
 import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.FragmentHomeBinding
+import com.hgh.flo_clone.server.repository.ApiRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class HomeFragment : Fragment() {
 
+    //배너 전환 중복 막기
     override fun onAttach(context: Context) {
         super.onAttach(context)
         CoroutineScope(Dispatchers.Main).launch {
@@ -47,14 +48,16 @@ class HomeFragment : Fragment() {
         }
     }
 
+    val apiService by inject<ApiRepository>()
+
     lateinit var binding: FragmentHomeBinding
     private val musicAdapter by lazy {
         MusicRVAdapter(
             //Alum Fragmetn 전환
-            MusicClickListener = { album ->
+            MusicClickListener = { albumId ->
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeFragmentToAlbumFragment(
-                        argAlbum = album
+                        argAlbum = albumId
                     )
                 )
             },
@@ -92,7 +95,9 @@ class HomeFragment : Fragment() {
         binding.musicVideoRecyclerView.adapter = videoAdapter
 
         dummyData()
-
+        lifecycleScope.launch {
+            musicAdapter.setList(apiService.getSongList() ?: listOf())
+        }
 
         //Banner 자동 전환 (Banner 는 fragment 재사용)
         bannerAdapter = HomeBannerRVAdapter(
@@ -200,7 +205,7 @@ class HomeFragment : Fragment() {
             )
         )
 
-        musicAdapter.setList(musicDummy, albumDummy)
+        //musicAdapter.setList(musicDummy, albumDummy)
         videoAdapter.setList(musicDummy)
     }
 }

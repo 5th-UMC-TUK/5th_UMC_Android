@@ -5,23 +5,22 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.ItemIncludeSongBinding
-import java.text.Format
+import com.hgh.flo_clone.server.response.albumin.Result
 
 class IncludeSongRVAdapter() :
     RecyclerView.Adapter<IncludeSongRVAdapter.VideoItemHolder>() {
 
-    private var musicList: List<MusicModel> = listOf()
+    private var musicList: List<Result> = listOf()
 
     inner class VideoItemHolder(
         private val binding: ItemIncludeSongBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: MusicModel, position: Int) {
+        fun bind(data: Result, position: Int) {
             binding.includeNumT.text = String.format("%02d",position+1)
             binding.includeTitleT.text = data.title
             binding.includeSingerT.text = data.singer
-            if (data.isTitle) {
+            if (data.isTitleSong == "T") {
                 binding.includeTitleImage.isVisible =true
             } else {
                 binding.includeTitleImage.isGone = true
@@ -44,7 +43,7 @@ class IncludeSongRVAdapter() :
         holder.bind(musicList[position], position)
     }
 
-    fun setList(list: List<MusicModel>) {
+    fun setList(list: List<Result>) {
         musicList = list
         notifyDataSetChanged()
     }

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.hgh.flo_clone.adapter.IncludeSongRVAdapter
 import com.hgh.flo_clone.adapter.VideoRVAdapter
 import com.hgh.flo_clone.databinding.FragmentIncludesongBinding
+import kotlinx.coroutines.launch
 
 class IncludesongFragment: Fragment() {
     lateinit var binding: FragmentIncludesongBinding
@@ -25,9 +27,14 @@ class IncludesongFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.includeSongRV.adapter = includeSongAdapter
-        includeSongAdapter.setList(
-            (requireParentFragment() as AlbumFragment).args.argAlbum.musicList
-        )
+//        includeSongAdapter.setList(
+//            (requireParentFragment() as AlbumFragment).args.argAlbum.musicList
+//        )
+        lifecycleScope.launch {
+            includeSongAdapter.setList(
+                (requireParentFragment() as AlbumFragment).apiService.getAlbumInList((requireParentFragment() as AlbumFragment).args.argAlbum)?: listOf()
+            )
+        }
         binding.includeSwitch.setOnClickListener {
         }
     }

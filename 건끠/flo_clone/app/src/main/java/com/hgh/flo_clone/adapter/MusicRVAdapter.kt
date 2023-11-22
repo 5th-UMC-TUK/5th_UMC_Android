@@ -4,27 +4,34 @@ import android.content.DialogInterface.OnClickListener
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.hgh.flo_clone.R
 import com.hgh.flo_clone.data.AlbumModel
 import com.hgh.flo_clone.data.MusicModel
 import com.hgh.flo_clone.databinding.ItemMusicSmallBinding
+import com.hgh.flo_clone.server.response.song.Song
 
 class MusicRVAdapter(
-    val MusicClickListener : (AlbumModel)->Unit,
-    val playClickListener: (MusicModel)->Unit,
+    val MusicClickListener : (Int)->Unit,
+    val playClickListener: (Song)->Unit,
 ) : RecyclerView.Adapter<MusicRVAdapter.MusicItemHolder>() {
 
-    private var musicList: List<MusicModel> = listOf()
-    lateinit var album: AlbumModel
+    private var musicList: List<Song> = listOf()
 
     inner class MusicItemHolder(
         private val binding: ItemMusicSmallBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: MusicModel) {
+        fun bind(data: Song) {
             binding.itemMusicTitle.text = data.title
             binding.itemMusicSinger.text = data.singer
+            Glide.with(itemView)
+                .load(data.coverImgUrl)
+                .error(R.drawable.appicon_image)
+                .fallback(R.drawable.appicon_image)
+                .into(binding.itemMusicSumNail)
 
             binding.itemMusicSumNail.setOnClickListener{
-                MusicClickListener(album)
+                MusicClickListener(data.albumIdx)
             }
             binding.playMusic.setOnClickListener {
                 playClickListener(data)
@@ -47,9 +54,8 @@ class MusicRVAdapter(
         holder.bind(musicList[position])
     }
 
-    fun setList(list: List<MusicModel>, albumList: AlbumModel) {
+    fun setList(list: List<Song>) {
         musicList = list
-        album = albumList
         notifyDataSetChanged()
     }
 }
