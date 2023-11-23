@@ -8,12 +8,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import kotlinx.coroutines.*
 import umc.mission.floclone.data.*
 import umc.mission.floclone.databinding.ActivityMainBinding
 import umc.mission.floclone.locker.LockerFragment
-import java.util.Collections.addAll
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -213,7 +211,7 @@ class MainActivity : AppCompatActivity() {
         val songId = sharedPreferences.getInt(SONG_ID, 0)
 
         selectedSong = if (songId == 0) {
-            songDB.songDao().getSong(8)
+            songDB.songDao().getSong(1)
         } else {
             songDB.songDao().getSong(songId)
         }
@@ -252,17 +250,17 @@ class MainActivity : AppCompatActivity() {
             Album(4, "Weekend", "태연", R.drawable.img_album_exp6, "2021.07.06 싱글 댄스팝"),
         )
 
-        val albums = songDB.AlbumDao().getAlbums()
+        val albums = songDB.albumDao().getAlbums()
         if (albums.isNotEmpty()) return
         albumList.forEach {
-            songDB.AlbumDao().insert(it)
+            songDB.albumDao().insert(it)
         }
     }
 
     private fun inputDummySongs() {
         val songList = listOf(
             Song(
-                "Next Leve", "aespa", 0, 222, false, "music_nextlevel",
+                "Next Level", "aespa", 0, 222, false, "music_nextlevel",
                 R.drawable.img_album_exp3, false, "I'm on the Next Level Yeah\n절대적 룰을 지켜", 1
             ),
             Song(

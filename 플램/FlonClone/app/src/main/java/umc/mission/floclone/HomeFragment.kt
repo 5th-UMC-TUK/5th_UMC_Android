@@ -73,16 +73,17 @@ class HomeFragment : Fragment(), NewMusicDailyAdapter.ItemClickListener {
                 R.drawable.img_album_exp6, false, "가장 가까운 바다\n혼자만의 영화관", 4)
         )
         podcastList = mutableListOf(
-            Song("제목", "가수", R.drawable.img_potcast_exp),
-            Song("제목", "가수", R.drawable.img_potcast_exp),
-            Song("제목", "가수", R.drawable.img_potcast_exp),
-            Song("제목", "가수", R.drawable.img_potcast_exp)
+            Song("제목", "가수", 0, 0, false, "", R.drawable.img_potcast_exp),
+            Song("제목", "가수", 0, 0, false, "", R.drawable.img_potcast_exp),
+            Song("제목", "가수", 0, 0, false, "", R.drawable.img_potcast_exp),
+            Song("제목", "가수", 0, 0, false, "", R.drawable.img_potcast_exp)
+
         )
         videoCollectionList = mutableListOf(
-            Song("제목", "가수", R.drawable.img_video_exp),
-            Song("제목", "가수", R.drawable.img_video_exp),
-            Song("제목", "가수", R.drawable.img_video_exp),
-            Song("제목", "가수", R.drawable.img_video_exp)
+            Song("제목", "가수",0, 0, false, "", R.drawable.img_video_exp),
+            Song("제목", "가수",0, 0, false, "", R.drawable.img_video_exp),
+            Song("제목", "가수",0, 0, false, "", R.drawable.img_video_exp),
+            Song("제목", "가수",0, 0, false, "", R.drawable.img_video_exp)
         )
         homeViewPager1List = mutableListOf(
             R.drawable.img_home_viewpager_exp,
@@ -227,7 +228,7 @@ class HomeFragment : Fragment(), NewMusicDailyAdapter.ItemClickListener {
                 //bundle.putInt(MUSIC_IMG_RES_ID, song.coverImg ?: 0)
                 //bundle.putString(ALBUM_INFO, song.albumInfo)
                 val songDB = SongDatabase.getInstance(requireContext())!!
-                val album = songDB.AlbumDao().getAlbum(song.albumIdx)
+                val album = songDB.albumDao().getAlbum(song.albumIdx)
                 bundle.putInt(SONG_ALBUM_INDEX, album.id)
                 tempFragment.arguments = bundle
                 parentFragmentManager.beginTransaction()
