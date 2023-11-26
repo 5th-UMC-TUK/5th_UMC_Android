@@ -5,28 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.lacuna.chapter1.R
 import com.lacuna.chapter1.adapter.LockerSavedSongAdapter
-import com.lacuna.chapter1.data.SavedSong
+//import com.lacuna.chapter1.data.SavedSong
 import com.lacuna.chapter1.data.Song
 import com.lacuna.chapter1.data.SongDatabase
 import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.FragmentSavedSongBinding
-import com.lacuna.floclone.adapter.TodayMusicAdapter
 
 class LockerSavedSongFragment: Fragment() {
 
     lateinit var binding: FragmentSavedSongBinding
     lateinit var songDB: SongDatabase
 
-    private val savedSong: ArrayList<SavedSong> = arrayListOf()
+//    private val savedSong: ArrayList<SavedSong> = arrayListOf()
+    private val savedSong: ArrayList<TodayMusic> = arrayListOf()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSavedSongBinding.inflate(inflater, container, false)
-        songDB = SongDatabase.getInstance(requireContext())!!
+        songDB = SongDatabase.getInstance(requireActivity())!!
 //        addData() // 더미데이터 추가
 
         //리사이클러뷰 어댑터 연결

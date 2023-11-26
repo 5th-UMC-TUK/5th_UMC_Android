@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
+//import com.lacuna.chapter1.data.SavedSong
 import androidx.recyclerview.widget.RecyclerView
-import com.lacuna.chapter1.data.SavedSong
 import com.lacuna.chapter1.data.Song
-import com.lacuna.chapter1.databinding.ItemLockerSavdSongBinding
+import com.lacuna.chapter1.databinding.ItemLockerSavedSongBinding
 import com.lacuna.floclone.adapter.TodayMusicAdapter
 
 class LockerSavedSongAdapter(): RecyclerView.Adapter<LockerSavedSongAdapter.SavedSongViewHolder>() {
@@ -34,7 +34,7 @@ class LockerSavedSongAdapter(): RecyclerView.Adapter<LockerSavedSongAdapter.Save
         parent: ViewGroup,
         viewType: Int
     ): LockerSavedSongAdapter.SavedSongViewHolder {
-        val binding =  ItemLockerSavdSongBinding.inflate(
+        val binding =  ItemLockerSavedSongBinding.inflate(
             LayoutInflater.from(parent.context), // layoutInflater 를 넘기기위해 함수 사용, ViewGroup 는 View 를 상속하고 View 는 이미 Context 를 가지고 있음
             parent, // 부모(리싸이클러뷰 = 뷰그룹)
             false   // 리싸이클러뷰가 attach 하도록 해야함 (우리가 하면 안됨)
@@ -83,7 +83,7 @@ class LockerSavedSongAdapter(): RecyclerView.Adapter<LockerSavedSongAdapter.Save
         songs.removeAt(position)
         notifyDataSetChanged()
     }
-    inner class SavedSongViewHolder(val binding: ItemLockerSavdSongBinding): RecyclerView.ViewHolder(binding.root){
+    inner class SavedSongViewHolder(val binding: ItemLockerSavedSongBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(song: Song) {
             binding.itemLockerAlbumCoverImgIv.setImageResource(song.coverImg!!)
             binding.itemLockerAlbumTitleTv.text = song.title.toString()

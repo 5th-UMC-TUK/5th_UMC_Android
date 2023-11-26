@@ -1,14 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LookFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/look_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="둘러보기"
+        android:textSize="28sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-</FrameLayout>
+    <HorizontalScrollView
+        android:id="@+id/chip_hz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/look_title_tv"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:scrollbars="none" >
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/look_chip_groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="차트"
+                android:textSize="16sp"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="영상"
+                android:textSize="16sp"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="장르"
+                android:textSize="16sp"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_situation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상황"
+                android:textSize="16sp"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_atmosphere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분위기"
+                android:textSize="16sp"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오디오"
+                android:textSize="16sp"/>
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/look_vp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/chip_hz"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

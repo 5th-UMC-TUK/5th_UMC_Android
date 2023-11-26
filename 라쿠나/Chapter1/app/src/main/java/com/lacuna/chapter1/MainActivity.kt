@@ -20,11 +20,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var song: Song = Song()
     private var gson: Gson = Gson()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Chapter1)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 //            setPla
 //        }
         inputDummySongs()
+        inputDummyAlbums() // 앨범 더미데이터 db에 추가
         Log.d("abc", "dhodkseo")
         initBottomNavigation()
 
@@ -122,6 +125,7 @@ class MainActivity : AppCompatActivity() {
                 "music_lilac",
                 R.drawable.img_album_exp2,
                 false,
+                1
             )
         )
 
@@ -135,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                 "music_flu",
                 R.drawable.img_album_exp2,
                 false,
+                1
             )
         )
 
@@ -148,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                 "music_butter",
                 R.drawable.img_album_exp1,
                 false,
+                2
             )
         )
 
@@ -161,6 +167,7 @@ class MainActivity : AppCompatActivity() {
                 "music_next",
                 R.drawable.img_album_exp3,
                 false,
+                3
             )
         )
 
@@ -175,6 +182,7 @@ class MainActivity : AppCompatActivity() {
                 "music_boy",
                 R.drawable.img_album_exp4,
                 false,
+                4
             )
         )
 
@@ -189,6 +197,7 @@ class MainActivity : AppCompatActivity() {
                 "music_bboom",
                 R.drawable.img_album_exp5,
                 false,
+                5
             )
         )
 
@@ -196,6 +205,62 @@ class MainActivity : AppCompatActivity() {
         val songDBData = songDB.songDao().getSongs()
         Log.d("DB data", songDBData.toString())
     }
+
+    private fun inputDummyAlbums(){
+        val songDB = SongDatabase.getInstance(this)!!
+        val albums = songDB.albumDao().getAlbums()
+
+        if(albums.isNotEmpty()) return
+        songDB.albumDao().insert(
+            TodayMusic(
+                1,
+                "IU 5th Album 'LILAC'",
+                "아이유 (IU)",
+                R.drawable.img_album_exp2
+            )
+        )
+
+        songDB.albumDao().insert(
+            TodayMusic(
+                2,
+                "Butter",
+                "방탄소년단 (BTS)",
+                R.drawable.img_album_exp1
+            )
+        )
+
+        songDB.albumDao().insert(
+            TodayMusic(
+                3,
+                "Next Level",
+                "에스파 (AESPA)",
+                R.drawable.img_album_exp3
+            )
+        )
+
+        songDB.albumDao().insert(
+            TodayMusic(
+                4,
+                "Map of the Soul Persona",
+                "방탄소년단",
+                R.drawable.img_album_exp4,
+            )
+        )
+
+
+        songDB.albumDao().insert(
+            TodayMusic(
+                5,
+                "Great!",
+                "모모랜드 (MOMOLAND)",
+                R.drawable.img_album_exp5
+            )
+        )
+
+        val songDBData = songDB.albumDao().getAlbums()
+        Log.d("DB data", songDBData.toString())
+    }
+
     override fun onStart() { // SongActivity에서 창을 닫고 MainActivity로 돌아올 때 onStart() 호출
         super.onStart()
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)

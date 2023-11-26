@@ -7,14 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.gson.Gson
 import com.lacuna.chapter1.adapter.BannerVPAdapter
 import com.lacuna.chapter1.adapter.HomePannelVPAdapter
 import com.lacuna.chapter1.album.AlbumFragment
-import com.lacuna.chapter1.data.SavedSong
+import com.lacuna.chapter1.data.SongDatabase
 import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.FragmentHomeBinding
 import com.lacuna.floclone.adapter.TodayMusicAdapter
@@ -25,6 +24,7 @@ class HomeFragment : Fragment() {
     private val sliderImageHandler: Handler = Handler()
     private val sliderImageRunnable = Runnable { binding.homePannelViewPager.currentItem = binding.homePannelViewPager.currentItem + 1 }
     private val todayMusic: ArrayList<TodayMusic> = arrayListOf()
+    private lateinit var songDB: SongDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,9 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        addData() // 더미데이터 추가
+        songDB = SongDatabase.getInstance(requireContext() as FragmentActivity)!!
+        todayMusic.addAll(songDB.albumDao().getAlbums()) // 앨범 더미데이터를 todayMusic에 초기화
+        Log.d("albumlist", todayMusic.toString())
 
         // 리사이클러뷰 어댑터 연결
         val todayMusicAdapter = TodayMusicAdapter(todayMusic)
@@ -103,20 +105,10 @@ class HomeFragment : Fragment() {
                 }
             }).commitAllowingStateLoss()
     }
-    private fun addData() {
-        todayMusic.add(TodayMusic(R.drawable.img_album_exp1, "Butter", "방탄소년단"))
-        todayMusic.add(TodayMusic(R.drawable.img_album_exp2, "Lilac", "아이유(IU)"))
-        todayMusic.add(TodayMusic(R.drawable.img_album_exp3, "Next Level", "에스파"))
-        todayMusic.add(TodayMusic(R.drawable.img_album_exp4, "Boy with Luv", "방탄소년단"))
-        todayMusic.add(TodayMusic(R.drawable.img_album_exp5, "BBoom BBoom", "모모랜드"))
-        todayMusic.add(TodayMusic(R.drawable.img_album_exp6, "Weekend", "태연"))
-    }
-
     private fun sendData(todayMusic: TodayMusic){
         if (activity is MainActivity) {
             val activity = activity as MainActivity
             activity.updateMainPlayerCl(todayMusic)
         }
     }
-
 }

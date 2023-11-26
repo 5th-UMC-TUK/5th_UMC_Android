@@ -69,7 +69,7 @@ class TodayMusicAdapter(private val todayMusicList: ArrayList<TodayMusic>): Recy
 //            }
 //        }
         fun bind(todayMusic: TodayMusic) {
-            binding.itemTodayMusicAlbumIv.setImageResource(todayMusic.imgRes)
+            binding.itemTodayMusicAlbumIv.setImageResource(todayMusic.coverImg!!)
             binding.itemTodayMusicTitleTv.text = todayMusic.title
             binding.itemTodayMusicSingerTv.text = todayMusic.singer
         }
