@@ -3,11 +3,9 @@ package com.comst.flocloneapp.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -15,9 +13,8 @@ import androidx.navigation.ui.NavigationUI
 import com.comst.flocloneapp.R
 import com.comst.flocloneapp.data.db.SongDatabase
 import com.comst.flocloneapp.databinding.ActivityMainBinding
-import com.comst.flocloneapp.model.AlbumEntity
-import com.comst.flocloneapp.model.AlbumIncludeMusic
-import com.comst.flocloneapp.model.SongEntity
+import com.comst.flocloneapp.model.local.AlbumEntity
+import com.comst.flocloneapp.model.local.SongEntity
 import com.comst.flocloneapp.util.MusicPlayServiceUtil
 import com.comst.flocloneapp.viewmodel.MiniPlayerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setContentView(binding.root)
+
+        songDB = SongDatabase.getInstance(this)!!
 
         val navController = findNavController(R.id.nav_host)
 
@@ -225,20 +224,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initPlayList(){
-        songDB = SongDatabase.getInstance(this)!!
         CoroutineScope(Dispatchers.IO).launch {
             songs.addAll(songDB.SongDao().getSongs())
-            withContext(Dispatchers.Main){
-                val spf = getSharedPreferences("song", MODE_PRIVATE)
-                nowPos = spf.getInt("songId",0)
-                miniPlayerViewModel.updateMiniPlayerUI(songs[nowPos].title, songs[nowPos].singer)
+            if (songs.isNotEmpty()) {
+                withContext(Dispatchers.Main){
+                    updateUIBasedOnSongs()
+                }
             }
         }
     }
 
-    private fun inputDummySongs(){
-        val songDB = SongDatabase.getInstance(this)!!
+    private fun updateUIBasedOnSongs() {
+        val spf = getSharedPreferences("song", MODE_PRIVATE)
+        nowPos = spf.getInt("songId",0).coerceIn(0, songs.size - 1)
+        miniPlayerViewModel.updateMiniPlayerUI(songs[nowPos].title, songs[nowPos].singer)
+    }
 
+    private fun inputDummySongs(){
         CoroutineScope(Dispatchers.IO).launch {
             val songs = songDB.SongDao().getSongs()
 
@@ -337,8 +339,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun inputDummyAlbums() {
-        val songDB = SongDatabase.getInstance(this)!!
-
         CoroutineScope(Dispatchers.IO).launch{
             val albums = songDB.AlbumDao().getAlbums()
 
