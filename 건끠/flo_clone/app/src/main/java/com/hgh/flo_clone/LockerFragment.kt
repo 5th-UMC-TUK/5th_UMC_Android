@@ -45,7 +45,7 @@ class LockerFragment : Fragment() {
 
         val tabTitleArray = arrayOf(
             "저장한 곡",
-            "음악파일",
+            "저장한 앨범",
             "❤︎좋아요"
         )
 
