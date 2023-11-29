@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.chapter1.databinding.SongListBinding
-import com.example.chapter1.db.Song
+import com.example.chapter1.model.Song
 
 class SongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack) {
 
@@ -18,7 +19,7 @@ class SongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack) {
     inner class ViewHolderShared(private val binding: SongListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Song) {
-            binding.imgSong.setImageResource(item.coverImg!!)
+            Glide.with(binding.imgSong).load(item.coverImgUrl).into(binding.imgSong)
             binding.songTitle.text = item.title
             binding.songSinger.text = item.singer
         }

@@ -14,6 +14,4 @@ class TitleAdapter(private val list: List<TitleAlbumModel>, baseFragment: Fragme
     override fun createFragment(position: Int): Fragment {
         return TitleFragment(list[position])
     }
-
-
 }

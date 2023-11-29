@@ -1,6 +1,5 @@
 package com.example.chapter1.view
 
-import android.content.res.Resources
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
@@ -32,6 +31,4 @@ object CustomSnackBar {
             snackBarText.textAlignment = View.TEXT_ALIGNMENT_CENTER // 안내 텍스트 위치 조정
         }
     }
-
-    private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 }

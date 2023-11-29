@@ -18,11 +18,11 @@ import com.example.chapter1.adapter.TitleAdapter
 import com.example.chapter1.adapter.TodaySongAdapter
 import com.example.chapter1.adapter.VideoAdapter
 import com.example.chapter1.databinding.FragmentMainBinding
-import com.example.chapter1.db.Album
-import com.example.chapter1.db.Song
-import com.example.chapter1.db.SongDB
+import com.example.chapter1.model.Album
+import com.example.chapter1.model.Song
 import com.example.chapter1.model.TitleAlbumModel
 import com.example.chapter1.model.TodaySongModel
+import com.example.chapter1.network.SongRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -32,9 +32,13 @@ import kotlinx.coroutines.withContext
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    val songs = arrayListOf<Song>()
-    val albums = arrayListOf<Album>()
-    lateinit var songDB: SongDB
+    private val repository = SongRepository()
+
+    //    val songs = arrayListOf<Song>()
+//    val albums = arrayListOf<Album>()
+    private val titleAlbums = arrayListOf<Album>()
+
+    //    lateinit var songDB: SongDB
     val titles = arrayListOf<TitleAlbumModel>()
 
     private val titleHandler = Handler(Looper.getMainLooper()) {
@@ -59,8 +63,7 @@ class MainFragment : Fragment() {
 
         removeWindowLimit()
         setTitleAdapter()
-        setTodaySongAdapter()
-        setAdAdapter()
+//        setAdAdapter()
 
 
         binding.todaySongTotal.setOnClickListener {
@@ -139,33 +142,59 @@ class MainFragment : Fragment() {
 
 
     private fun setTitleAdapter() {
-        songDB = SongDB.getDB(requireContext())
+//        songDB = SongDB.getDB(requireContext())
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val albumDao = songDB.albumDao()
+//            val songDao = songDB.songDao()
+//
+//            val albumsDeferred = CoroutineScope(Dispatchers.IO).async {
+//                albumDao.getAllAlbum()
+//            }
+//            val albumsResult = albumsDeferred.await()
+//            albums.addAll(albumsResult)
+//
+//            val songsDeferred = CoroutineScope(Dispatchers.IO).async {
+//                songDao.getAllSong()
+//            }
+//            val songsResult = songsDeferred.await()
+//            songs.addAll(songsResult)
+//            albums.forEach { album ->
+//                val albumSongs = mutableListOf<Song>()
+//                songs.forEach { song ->
+//                    if (album.id == song.albumIdx) {
+//                        albumSongs.add(song)
+//                    }
+//                }
+//                titles.add(TitleAlbumModel(album, albumSongs))
+//            }
+//            withContext(Dispatchers.Main) {
+//                submitTileList()
+//            }
+//        }
         CoroutineScope(Dispatchers.IO).launch {
-            val albumDao = songDB.albumDao()
-            val songDao = songDB.songDao()
-
-            val albumsDeferred = CoroutineScope(Dispatchers.IO).async {
-                albumDao.getAllAlbum()
-            }
-            val albumsResult = albumsDeferred.await()
-            albums.addAll(albumsResult)
-
-            val songsDeferred = CoroutineScope(Dispatchers.IO).async {
-                songDao.getAllSong()
-            }
-            val songsResult = songsDeferred.await()
-            songs.addAll(songsResult)
-            albums.forEach { album ->
-                val albumSongs = mutableListOf<Song>()
-                songs.forEach { song ->
-                    if (album.id == song.albumIdx) {
-                        albumSongs.add(song)
+            val albums = CoroutineScope(Dispatchers.IO).async {
+                repository.getAllAlbums()
+            }.await()
+            val songs = CoroutineScope(Dispatchers.IO).async {
+                repository.getAllSongs()
+            }.await()
+            if (albums != null && songs != null) {
+                if (albums.code == 1000 && songs.code == 1000) {
+                    titleAlbums.addAll(albums.result.albums)
+                    titleAlbums.forEach { album ->
+                        val albumSongs = mutableListOf<Song>()
+                        songs.result.songs.forEach { song ->
+                            if (album.albumIdx == song.albumIdx) {
+                                albumSongs.add(song)
+                            }
+                        }
+                        titles.add(TitleAlbumModel(album, albumSongs))
+                    }
+                    withContext(Dispatchers.Main) {
+                        submitTileList()
+                        setTodaySongAdapter()
                     }
                 }
-                titles.add(TitleAlbumModel(album, albumSongs))
-            }
-            withContext(Dispatchers.Main) {
-                submitTileList()
             }
         }
     }
@@ -192,7 +221,7 @@ class MainFragment : Fragment() {
                 val albumFragment = AlbumFragment()
                 val bundle = Bundle()
                 val data = it
-                bundle.putInt("id", data.id)
+                bundle.putInt("id", data.albumIdx)
                 albumFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
 
                 parentFragmentManager.beginTransaction()
@@ -203,24 +232,19 @@ class MainFragment : Fragment() {
                     .commit()
             },
             btn = {
-                val activity = requireActivity() as MainActivity
-                with(activity) {
-                    playAlbumSong(it.id)
-                }
+
             })
         submitTodaySongList(todaySongAdapter)
     }
 
     private fun submitTodaySongList(todaySongAdapter: TodaySongAdapter) {
-        val everydaySongAdapter = TodaySongAdapter()
-        binding.everydaySongRv.adapter = everydaySongAdapter
-        everydaySongAdapter.submitList(albums.toList())
-
-
+        binding.everydaySongRv.adapter = todaySongAdapter
         binding.todaySongRv.adapter = todaySongAdapter
-        todaySongAdapter.submitList(albums.toList())
+        
+        todaySongAdapter.submitList(titleAlbums.toList())
     }
 
+    //
     private fun setAdAdapter() {
         binding.adViewpager.adapter = AdAdapter(
             listOf(R.drawable.img_home_viewpager_exp, R.drawable.img_home_viewpager_exp2),
