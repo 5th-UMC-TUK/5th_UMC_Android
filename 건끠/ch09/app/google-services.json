@@ -1,0 +1,143 @@
+{
+  "project_info": {
+    "project_number": "594098864463",
+    "firebase_url": "https://tinder-2bcd3-default-rtdb.firebaseio.com",
+    "project_id": "tinder-2bcd3",
+    "storage_bucket": "tinder-2bcd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594098864463:android:471fef8241adb6e807c53a",
+        "android_client_info": {
+          "package_name": "com.example.ch09"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594098864463-kpodsbq2bl9dep9qhd3bt5dsl9m7tlhe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ch09",
+            "certificate_hash": "1e4a63c9edf12afac8c5dd9428cfe0df593df23b"
+          }
+        },
+        {
+          "client_id": "594098864463-rm14ib3l23ehaimsj31krm1992q593ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDAKZiIjq6AqvfI2b8whJdRGRSF5ZbBu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594098864463-g0htvaantkhvngfm9p4ltplf8uboufc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594098864463:android:0500a8ca5edd704e07c53a",
+        "android_client_info": {
+          "package_name": "hgh.project.sns_service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594098864463-09f6ba3fggsg5srlsm3fjv9g8d52jsbd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hgh.project.sns_service",
+            "certificate_hash": "3ca93fc5f7e9148d47d720a28dc71e2852bc202f"
+          }
+        },
+        {
+          "client_id": "594098864463-rm14ib3l23ehaimsj31krm1992q593ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDAKZiIjq6AqvfI2b8whJdRGRSF5ZbBu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594098864463-g0htvaantkhvngfm9p4ltplf8uboufc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594098864463:android:9c1d30f525953bf807c53a",
+        "android_client_info": {
+          "package_name": "org.techtown.secondhand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594098864463-rm14ib3l23ehaimsj31krm1992q593ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDAKZiIjq6AqvfI2b8whJdRGRSF5ZbBu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594098864463-g0htvaantkhvngfm9p4ltplf8uboufc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594098864463:android:3570f27fa6a0ec9607c53a",
+        "android_client_info": {
+          "package_name": "org.techtown.tinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594098864463-rm14ib3l23ehaimsj31krm1992q593ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDAKZiIjq6AqvfI2b8whJdRGRSF5ZbBu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594098864463-g0htvaantkhvngfm9p4ltplf8uboufc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
