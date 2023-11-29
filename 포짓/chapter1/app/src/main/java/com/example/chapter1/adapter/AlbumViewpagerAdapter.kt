@@ -6,8 +6,10 @@ import com.example.chapter1.view.IncludedSongFragment
 import com.example.chapter1.view.MoreInfoFragment
 import com.example.chapter1.view.VideoFragment
 
-class AlbumViewpagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
-    private val fragments = listOf(IncludedSongFragment(), MoreInfoFragment(), VideoFragment())
+class AlbumViewpagerAdapter(fragment: Fragment, albumIdx: Int) : FragmentStateAdapter(fragment) {
+    private val fragments =
+        listOf(IncludedSongFragment(albumIdx), MoreInfoFragment(), VideoFragment())
+
     override fun getItemCount(): Int = fragments.size
     override fun createFragment(position: Int): Fragment {
         return fragments[position]

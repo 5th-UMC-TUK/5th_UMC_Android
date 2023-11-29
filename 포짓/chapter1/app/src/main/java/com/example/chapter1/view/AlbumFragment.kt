@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.chapter1.adapter.AlbumViewpagerAdapter
 import com.example.chapter1.databinding.FragmentAlbumBinding
-import com.example.chapter1.model.Album
 import com.example.chapter1.network.SongRepository
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +32,7 @@ class AlbumFragment : Fragment() {
                 .commit()
         }
     }
-    private lateinit var album: Album
+//    private lateinit var album: Album
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,13 +81,13 @@ class AlbumFragment : Fragment() {
         }
 
 
-        binding.albumViewpager.adapter = AlbumViewpagerAdapter(this@AlbumFragment)
+        val albumId = arguments?.getInt("id")!!
+
+        binding.albumViewpager.adapter = AlbumViewpagerAdapter(this@AlbumFragment, albumId)
         val tabs = arrayOf("수록곡", "상세정보", "영상")
         TabLayoutMediator(binding.albumTab, binding.albumViewpager) { tab, position ->
             tab.text = tabs[position]
         }.attach()
-
-        val albumId = arguments?.getInt("id")!!
 //        CoroutineScope(Dispatchers.IO).launch {
 //            val deferred = CoroutineScope(Dispatchers.IO).async {
 //                songDB.albumDao().getAlbum(albumId)

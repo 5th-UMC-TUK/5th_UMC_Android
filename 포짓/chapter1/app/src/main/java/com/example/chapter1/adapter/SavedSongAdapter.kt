@@ -11,8 +11,9 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.chapter1.databinding.PlayListBinding
-import com.example.chapter1.db.Song
+import com.example.chapter1.model.Song
 
 
 class SavedSongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack) {
@@ -29,14 +30,14 @@ class SavedSongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack
             } else {
                 binding.root.setBackgroundColor(Color.TRANSPARENT)
             }
-            binding.songListImg.setImageResource(item.coverImg!!)
+            Glide.with(binding.songListImg).load(item.coverImgUrl).into(binding.songListImg)
             binding.removeSwitch.isChecked = checkboxStatus[adapterPosition]
             binding.removeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
                 checkboxStatus.put(adapterPosition, isChecked)
                 Log.d("boolean", checkboxStatus.toString())
             }
             binding.songListImg.clipToOutline = true
-            binding.songMusicTitle.text = item.music
+            binding.songMusicTitle.text = item.title
             binding.songSingerName.text = item.singer
             binding.root.setOnLongClickListener {
                 setSelected(it, adapterPosition)
@@ -129,7 +130,7 @@ class SavedSongAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(DiffCallBack
         private val DiffCallBack = object : DiffUtil.ItemCallback<Song>() {
             override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
 
-                return oldItem.music == newItem.music && oldItem.singer == newItem.singer
+                return oldItem.title == newItem.title && oldItem.singer == newItem.singer
             }
 
             override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {

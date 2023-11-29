@@ -5,8 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chapter1.adapter.SavedSongAdapter
 import com.example.chapter1.databinding.FragmentSavedSongBinding
+import com.example.chapter1.network.SongRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SavedSongFragment : Fragment() {
@@ -15,6 +22,7 @@ class SavedSongFragment : Fragment() {
     //    val songs = arrayListOf<Song>()
 //    lateinit var songDB: SongDB
     val savedSongAdapter = SavedSongAdapter()
+    private val repository = SongRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +50,20 @@ class SavedSongFragment : Fragment() {
 //            }
 //
 //        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val songs = CoroutineScope(Dispatchers.IO).async {
+                repository.getAllSongs()
+            }.await()
+            songs?.let {
+                withContext(Dispatchers.Main) {
+                    binding.savedSongRv.layoutManager = LinearLayoutManager(requireContext())
+                    binding.savedSongRv.adapter = savedSongAdapter
+                    savedSongAdapter.submitList(it.result.songs)
+                    savedSongAdapter.setCount(it.result.songs.size)
+                }
+            }
+        }
 
         binding.selectAll.setOnClickListener {
             val parent = requireActivity() as MainActivity

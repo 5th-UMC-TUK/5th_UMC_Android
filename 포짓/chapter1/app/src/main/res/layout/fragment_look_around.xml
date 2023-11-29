@@ -28,73 +28,112 @@
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/look_around_title">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/look_around_chips"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <com.google.android.material.chip.Chip
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chip_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gray_eeeeee"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_ripple"
+                android:enabled="true"
                 android:text="차트"
-                android:textColor="@color/gray_aaaaaa"
+                android:textColor="@drawable/txt_color"
                 app:chipStrokeWidth="0dp" />
 
-            <com.google.android.material.chip.Chip
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chip_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gray_eeeeee"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_ripple"
+                android:enabled="false"
                 android:text="영상"
-                android:textColor="@color/gray_aaaaaa"
+                android:textColor="@drawable/txt_color"
                 app:chipStrokeWidth="0dp" />
 
-            <com.google.android.material.chip.Chip
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chip_genre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gray_eeeeee"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_ripple"
+                android:enabled="false"
                 android:text="장르"
-                android:textColor="@color/gray_aaaaaa"
+                android:textColor="@drawable/txt_color"
                 app:chipStrokeWidth="0dp" />
 
-            <com.google.android.material.chip.Chip
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chip_situation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gray_eeeeee"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_ripple"
+                android:enabled="false"
                 android:text="상황"
-                android:textColor="@color/gray_aaaaaa"
+                android:textColor="@drawable/txt_color"
                 app:chipStrokeWidth="0dp" />
 
-            <com.google.android.material.chip.Chip
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chip_atmosphere"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gray_eeeeee"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_ripple"
+                android:enabled="false"
                 android:text="분위기"
-                android:textColor="@color/gray_aaaaaa"
+                android:textColor="@drawable/txt_color"
                 app:chipStrokeWidth="0dp" />
 
-            <com.google.android.material.chip.Chip
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chip_audio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/gray_eeeeee"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/btn_ripple"
+                android:enabled="false"
                 android:text="오디오"
-                android:textColor="@color/gray_aaaaaa"
+                android:textColor="@drawable/txt_color"
                 app:chipStrokeWidth="0dp" />
+        </LinearLayout>
 
 
-        </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/look_around_viewpager"
+    <TextView
+        android:id="@+id/chart_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="차트"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chip_frame" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/next"
+        app:layout_constraintBottom_toBottomOf="@+id/chart_tv"
+        app:layout_constraintStart_toEndOf="@+id/chart_tv"
+        app:layout_constraintTop_toTopOf="@+id/chart_tv" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/chip_frame"
-        android:layout_marginTop="10dp" />
+        app:layout_constraintTop_toBottomOf="@id/chart_tv"
+        android:layout_marginTop="10dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/look_around_chart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
