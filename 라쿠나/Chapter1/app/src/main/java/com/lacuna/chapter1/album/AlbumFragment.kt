@@ -10,13 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
-import com.lacuna.chapter1.HomeFragment
-import com.lacuna.chapter1.MainActivity
-import com.lacuna.chapter1.R
+import com.lacuna.chapter1.*
+import com.lacuna.chapter1.adapter.AlbumRVAdapter
 import com.lacuna.chapter1.adapter.AlbumVPAdapter
-import com.lacuna.chapter1.data.Like
-import com.lacuna.chapter1.data.SongDatabase
-import com.lacuna.chapter1.data.TodayMusic
+import com.lacuna.chapter1.data.*
 import com.lacuna.chapter1.databinding.FragmentAlbumBinding
 
 
@@ -43,8 +40,9 @@ class AlbumFragment : Fragment() {
 
         // Home에서 넘어온 데이터를 반영
         isLiked = isLikedAlbum(todayMusic.id)
-        setInit(todayMusic)
+//        setInit(todayMusic)
         setOnClickListeners(todayMusic)
+
 //        setFragmentResultListener("TitleInfo") { requestKey, bundle ->
 //            binding.albumMusicTitleTv.text = bundle.getString("title")
 //        }
@@ -70,10 +68,10 @@ class AlbumFragment : Fragment() {
 
         return binding.root
     }
-    private fun setInit(todayMusic: TodayMusic){
-        binding.albumAlbumIv.setImageResource(todayMusic.coverImg!!)
-        binding.albumMusicTitleTv.text = todayMusic.title.toString()
-        binding.albumSingerNameTv.text = todayMusic.singer.toString()
+    private fun setInit(album: Album){
+        binding.albumAlbumIv.setImageResource(album.coverImgUrl.toInt())
+        binding.albumMusicTitleTv.text = album.title.toString()
+        binding.albumSingerNameTv.text = album.singer.toString()
         if (isLiked){
             binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
         } else {
@@ -81,12 +79,15 @@ class AlbumFragment : Fragment() {
         }
     }
 
-    private fun getJwt(): Int{
-        val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
-        return spf!!.getInt("jwt", 0) // default값 0
+    private fun getJwt(): String{
+//        val spf = activity?.getSharedPreferences("auth2", AppCompatActivity.MODE_PRIVATE)
+//        return spf!!.getInt("jwt", 0) // default값 0
+        val spf = activity?.getSharedPreferences("auth2", AppCompatActivity.MODE_PRIVATE)
+        val jwt = spf?.getString("jwt", "")!!
+        return jwt
     }
 
-    private fun likeAlbum(userId: Int, albumId: Int){
+    private fun likeAlbum(userId: String, albumId: Int){
         val songDB = SongDatabase.getInstance(requireContext())!!
         val like = Like(userId, albumId)
 
@@ -122,6 +123,5 @@ class AlbumFragment : Fragment() {
             }
         }
     }
-
 
 }

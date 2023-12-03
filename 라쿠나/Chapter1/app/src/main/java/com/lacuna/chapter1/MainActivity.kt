@@ -8,11 +8,13 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.gson.Gson
+import com.lacuna.chapter1.data.Result
 import com.lacuna.chapter1.data.Song
 import com.lacuna.chapter1.data.SongDatabase
 import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.ActivityMainBinding
 import com.lacuna.chapter1.locker.LockerFragment
+import com.lacuna.chapter1.look.LookFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,15 +50,10 @@ class MainActivity : AppCompatActivity() {
             activityResultLauncher.launch(intent)
         }
 
-//        binding.mainMiniplayerBtn.setOnClickListener {
-//            setPla
-//        }
         inputDummySongs()
         inputDummyAlbums() // 앨범 더미데이터 db에 추가
-        Log.d("abc", "dhodkseo")
+        Log.d("MAIN/JWT_TO_SERVER", getJwt().toString())
         initBottomNavigation()
-
-
     }
 
     private fun initBottomNavigation(){
@@ -101,11 +98,11 @@ class MainActivity : AppCompatActivity() {
         binding.mainMiniplayerSingerTv.text = song.singer
         binding.mainProgressSb.progress = (song.second*100000)/song.playTime
     }
-    fun updateMainPlayerCl(todayMusic: TodayMusic) {
-        binding.mainMiniplayerTitleTv.text = todayMusic.title
-        binding.mainMiniplayerSingerTv.text = todayMusic.singer
-        binding.mainProgressSb.progress = 0
-    }
+//    fun updateMainPlayerCl(todayMusic: TodayMusic) {
+//        binding.mainMiniplayerTitleTv.text = todayMusic.title
+//        binding.mainMiniplayerSingerTv.text = todayMusic.singer
+//        binding.mainProgressSb.progress = 0
+//    }
 
     private fun inputDummySongs() {
         val songDB = SongDatabase.getInstance(this)!! // 인스턴스를 받아옴
@@ -260,7 +257,11 @@ class MainActivity : AppCompatActivity() {
         val songDBData = songDB.albumDao().getAlbums()
         Log.d("DB data", songDBData.toString())
     }
+    private fun getJwt(): String? {
+        val spf = this.getSharedPreferences("auth2" , AppCompatActivity.MODE_PRIVATE)
 
+        return spf!!.getString("jwt", "")
+    }
     override fun onStart() { // SongActivity에서 창을 닫고 MainActivity로 돌아올 때 onStart() 호출
         super.onStart()
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)

@@ -3,12 +3,16 @@ package com.lacuna.chapter1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import com.lacuna.chapter1.data.AuthResponse
 import com.lacuna.chapter1.data.SongDatabase
 import com.lacuna.chapter1.data.User
 import com.lacuna.chapter1.databinding.ActivitySignUpBinding
+import retrofit2.Call
+import retrofit2.Response
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity(), SignUpView {
     lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,16 +22,31 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.signUpSignUpBtn.setOnClickListener {
             signUp()
-            finish()
         }
     }
 
     private fun getUser() : User {
         val email: String = binding.signUpIdEt.text.toString() + "@" + binding.signUpDirectInputEt.text.toString()
         val pwd: String = binding.signUpPasswordEt.text.toString()
-
-        return User(email, pwd)
+        val name: String = binding.signUpNameEt.text.toString()
+        return User(email, pwd, name)
     }
+
+//    private fun signUp() {
+//        if (binding.signUpIdEt.text.toString().isEmpty() || binding.signUpDirectInputEt.text.toString().isEmpty()) {
+//            Toast.makeText(this, "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//        if (binding.signUpPasswordEt.text.toString() != binding.signUpPasswordCheckEt.text.toString()) {
+//            Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//        val userDB = SongDatabase.getInstance(this)!!
+//        userDB.userDao().insert(getUser())
+//
+//        val user = userDB.userDao().getUsers()
+//        Log.d("SIGNUPACT", user.toString())
+//    }
 
     private fun signUp() {
         if (binding.signUpIdEt.text.toString().isEmpty() || binding.signUpDirectInputEt.text.toString().isEmpty()) {
@@ -38,10 +57,22 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
             return
         }
-        val userDB = SongDatabase.getInstance(this)!!
-        userDB.userDao().insert(getUser())
+        if(binding.signUpNameEt.text.toString().isEmpty()) {
+            Toast.makeText(this, "이름 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        val user = userDB.userDao().getUsers()
-        Log.d("SIGNUPACT", user.toString())
+        val authService = AuthService()
+        authService.setSignUpView(this)
+        authService.signUp(getUser())
+    }
+
+    override fun onSignUpSuccess() {
+        finish()
+    }
+
+    override fun onSignUpFailure(message: String) {
+        binding.signUpEmailErrorTv.visibility = View.VISIBLE
+        binding.signUpEmailErrorTv.text = message
     }
 }

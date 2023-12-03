@@ -36,4 +36,36 @@ class AlbumIncludedSongsFragment : Fragment() {
             binding.songMixoffTg.visibility = View.VISIBLE
         }
     }
+
+    //    private fun initRecyclerView(result: ResultAlbum) {
+//        albumAdapter = AlbumRVAdapter(requireContext(), result)
+//        binding.homeTodayMusicRecyclerView.adapter = albumAdapter
+//        albumAdapter.setMyItemClickListener(object: AlbumRVAdapter.MyItemClickListener{
+//            override fun onItemClick(album: Album) {
+//                changeAlbumFragment(album)
+//            }
+//
+//            override fun onPlayAlbum(album: Album) {
+//                sendData(album)
+//            }
+//
+//        })
+//    }
+
+//    private fun getAlbumsIn() {
+//        val albumService = SongService()
+//        albumService.setAlbumInView(this)
+//        albumService.getAlbumsIn()
+//
+//    }
+//    override fun onGetAlbumInSuccess(code: Int, result: ResultAlbumIn) {
+////        initRecyclerView(result)
+//
+//        Log.d("ALBUM-FRAG/SUCCESS", result.toString())
+//    }
+//
+//    override fun onGetAlbumInFailure(code: Int, message: String) {
+//        Log.d("ALBUM-FRAG/FAILURE", message)
+//    }
+
 }

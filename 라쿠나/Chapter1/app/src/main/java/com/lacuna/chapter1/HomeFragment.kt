@@ -7,24 +7,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.gson.Gson
+import com.lacuna.chapter1.adapter.AlbumRVAdapter
 import com.lacuna.chapter1.adapter.BannerVPAdapter
 import com.lacuna.chapter1.adapter.HomePannelVPAdapter
 import com.lacuna.chapter1.album.AlbumFragment
-import com.lacuna.chapter1.data.SongDatabase
-import com.lacuna.chapter1.data.TodayMusic
+import com.lacuna.chapter1.data.*
 import com.lacuna.chapter1.databinding.FragmentHomeBinding
-import com.lacuna.floclone.adapter.TodayMusicAdapter
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), AlbumView {
 
     lateinit var binding: FragmentHomeBinding
     private val sliderImageHandler: Handler = Handler()
     private val sliderImageRunnable = Runnable { binding.homePannelViewPager.currentItem = binding.homePannelViewPager.currentItem + 1 }
     private val todayMusic: ArrayList<TodayMusic> = arrayListOf()
     private lateinit var songDB: SongDatabase
+    private lateinit var albumAdapter: AlbumRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,25 +35,24 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        songDB = SongDatabase.getInstance(requireContext() as FragmentActivity)!!
-        todayMusic.addAll(songDB.albumDao().getAlbums()) // 앨범 더미데이터를 todayMusic에 초기화
-        Log.d("albumlist", todayMusic.toString())
+//        songDB = SongDatabase.getInstance(requireContext() as FragmentActivity)!!
+//        todayMusic.addAll(songDB.albumDao().getAlbums()) // 앨범 더미데이터를 todayMusic에 초기화
+//        Log.d("albumlist", todayMusic.toString())
 
         // 리사이클러뷰 어댑터 연결
-        val todayMusicAdapter = TodayMusicAdapter(todayMusic)
-        binding.homeTodayMusicRecyclerView.adapter = todayMusicAdapter
+//        val todayMusicAdapter = TodayMusicAdapter(todayMusic)
 
         // 라사이클러뷰 클릭 이벤트
-        todayMusicAdapter.setMyItemClickListener(object: TodayMusicAdapter.OnItemClickListener{
-            override fun onItemClick(todayMusic: TodayMusic) {
-                changeAlbumFragment(todayMusic)
-            }
-
-            override fun onPlayAlbum(todayMusic: TodayMusic) {
-                sendData(todayMusic)
-            }
-
-        })
+//        albumAdapter.setMyItemClickListener(object: albumAdapter.ItemClickListener{
+////            override fun onItemClick(album: ResultAlbum) {
+////                changeAlbumFragment(album)
+////            }
+////
+////            override fun onPlayAlbum(album: ResultAlbum) {
+////                sendData(album)
+////            }
+////
+////        })
 
         // 홈 패널 뷰페이저 어댑터 연결
         val pannelAdapter = HomePannelVPAdapter(this)
@@ -92,23 +90,76 @@ class HomeFragment : Fragment() {
         return binding.root
 
     }
-    private fun changeAlbumFragment(todayMusic: TodayMusic) {
+    override fun onStart() {
+        super.onStart()
+        getAlbums()
+    }
+//    private fun changeAlbumFragment(todayMusic: TodayMusic) {
+////        setFragmentResult("TitleInfo", bundleOf("title" to binding..text.toString()))
+////        setFragmentResult("SingerInfo", bundleOf("singer" to binding..text.toString()))
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.main_frm, AlbumFragment().apply {
+//                arguments = Bundle().apply {
+//                    val gson = Gson()
+//                    val todayMusicJson = gson.toJson(todayMusic)
+//                    Log.d("bundle", todayMusicJson)
+//                    putString("titleInfo", todayMusicJson)
+//                }
+//            }).commitAllowingStateLoss()
+//    }
+//    private fun sendData(todayMusic: TodayMusic){
+//        if (activity is MainActivity) {
+//            val activity = activity as MainActivity
+//            activity.updateMainPlayerCl(todayMusic)
+//        }
+//    }
+    private fun changeAlbumFragment(album: Album) {
 //        setFragmentResult("TitleInfo", bundleOf("title" to binding..text.toString()))
 //        setFragmentResult("SingerInfo", bundleOf("singer" to binding..text.toString()))
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_frm, AlbumFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
-                    val todayMusicJson = gson.toJson(todayMusic)
-                    Log.d("bundle", todayMusicJson)
-                    putString("titleInfo", todayMusicJson)
+                    val albumJson = gson.toJson(album)
+                    Log.d("bundle", albumJson)
+                    putString("titleInfo", albumJson)
                 }
             }).commitAllowingStateLoss()
     }
-    private fun sendData(todayMusic: TodayMusic){
+    private fun sendData(album: Album){
         if (activity is MainActivity) {
             val activity = activity as MainActivity
-            activity.updateMainPlayerCl(todayMusic)
+//            activity.updateMainPlayerCl(album)
         }
+    }
+    private fun initRecyclerView(result: ResultAlbum) {
+        albumAdapter = AlbumRVAdapter(requireContext(), result)
+        binding.homeTodayMusicRecyclerView.adapter = albumAdapter
+        albumAdapter.setMyItemClickListener(object: AlbumRVAdapter.MyItemClickListener{
+            override fun onItemClick(album: Album) {
+                changeAlbumFragment(album)
+            }
+
+            override fun onPlayAlbum(album: Album) {
+//                sendData(album)
+            }
+
+        })
+    }
+
+    private fun getAlbums() {
+        val albumService = SongService()
+        albumService.setAlbumView(this)
+        albumService.getAlbums()
+
+    }
+
+    override fun onGetAlbumSuccess(code: Int, result: ResultAlbum) {
+        initRecyclerView(result)
+        Log.d("HOME-FRAG/SONG-RESPONSE", result.albums.toString())
+    }
+
+    override fun onGetAlbumFailure(code: Int, message: String) {
+        Log.d("HOME-FRAG/SONG-RESPONSE", message)
     }
 }

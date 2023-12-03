@@ -13,7 +13,6 @@ import com.lacuna.chapter1.MainActivity
 import com.lacuna.chapter1.adapter.LockerVPAdapter
 import com.lacuna.chapter1.data.TodayMusic
 import com.lacuna.chapter1.databinding.FragmentLockerBinding
-import com.lacuna.floclone.adapter.TodayMusicAdapter
 
 class LockerFragment : Fragment() {
     lateinit var binding: FragmentLockerBinding

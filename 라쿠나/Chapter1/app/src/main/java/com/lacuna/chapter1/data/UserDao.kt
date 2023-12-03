@@ -3,7 +3,6 @@ package com.lacuna.chapter1.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.lacuna.chapter1.data.User
 
 @Dao
 interface UserDao {

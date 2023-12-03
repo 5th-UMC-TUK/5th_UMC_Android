@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lacuna.chapter1.data.Song
 import com.lacuna.chapter1.databinding.ItemLockerSavedSongBinding
-import com.lacuna.floclone.adapter.TodayMusicAdapter
 
 class LockerSavedSongAdapter(): RecyclerView.Adapter<LockerSavedSongAdapter.SavedSongViewHolder>() {
     private val switchStatus = SparseBooleanArray()

@@ -4,4 +4,5 @@
     <item>
         <bitmap android:src="@drawable/ic_flo_logo" android:gravity="center"/>
     </item>
+
 </layer-list>
