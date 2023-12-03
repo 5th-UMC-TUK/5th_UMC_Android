@@ -66,8 +66,13 @@ class MainActivity : AppCompatActivity() {
         R.drawable.img_album_exp3, false, "I'm addicted\n끊임없이", 1
         ))
         songDB.songDao().removeSong(7)*/
+        Log.d("MAIN/JWT_TO_SERVER", getJwt().toString())
     }
 
+    private fun getJwt(): String? {
+        val spf = getSharedPreferences(AUTH, AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString(JWT, null)
+    }
     private fun initBottomNavigation() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.activity_main_fragment_container, HomeFragment())

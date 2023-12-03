@@ -73,12 +73,12 @@ class AlbumFragment: Fragment() {
             else R.drawable.ic_my_like_off)
     }
 
-    private fun getJwt():Int{
+    private fun getJwt():String{
         val spf = activity?.getSharedPreferences(AUTH, AppCompatActivity.MODE_PRIVATE)
-        return spf!!.getInt(JWT, 0)
+        return spf!!.getString(JWT, null)!!
     }
 
-    private fun likeAlbum(userId: Int, albumId: Int){
+    private fun likeAlbum(userId: String, albumId: Int){
         val songDB = SongDatabase.getInstance(requireContext())!!
         val like = Like(userId, albumId)
 

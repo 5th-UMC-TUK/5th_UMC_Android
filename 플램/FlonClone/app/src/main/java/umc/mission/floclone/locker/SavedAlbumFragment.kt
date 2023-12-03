@@ -55,7 +55,7 @@ class SavedAlbumFragment: Fragment() {
 
     private fun addSongs() {
         val spf = activity?.getSharedPreferences(AUTH, AppCompatActivity.MODE_PRIVATE)
-        val userId = spf!!.getInt(JWT, 0)
+        val userId = spf!!.getString(JWT, null)!!
         albumList = songDB.albumDao().getLikedAlbums(userId)
     }
     private fun initBottomSheetDialog() {

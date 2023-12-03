@@ -7,14 +7,19 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import umc.mission.floclone.data.AUTH
 import umc.mission.floclone.data.JWT
+import umc.mission.floclone.network.Result
 import umc.mission.floclone.data.SongDatabase
+import umc.mission.floclone.data.User
 import umc.mission.floclone.databinding.ActivityLoginBinding
+import umc.mission.floclone.databinding.ToastLikeBinding
+import umc.mission.floclone.network.AuthService
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), LoginView {
     private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.activityLoginEmailInputEt.text.toString()
         val password: String = binding.activityLoginPwEt.text.toString()
 
-        val userDB = SongDatabase.getInstance(this)!!
+        /*val userDB = SongDatabase.getInstance(this)!!
         val user = userDB.userDao().getUser(email, password)
         user?.let {
             Log.d("LOGIN_ACT/GET_USER", user.toString())
@@ -57,13 +62,17 @@ class LoginActivity : AppCompatActivity() {
         }
         val users = userDB.userDao().getUsers()
         if(!users.contains(user))
-            Toast.makeText(this, "회원정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "회원정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()*/
+        val authService = AuthService()
+        authService.setLoginView(this)
+
+        authService.login(User(email, password, ""))
     }
 
-    private fun saveJWT(jwt: Int){
+    private fun saveJWT(jwt: String){
         val spf = getSharedPreferences(AUTH, MODE_PRIVATE)
         val editor = spf.edit()
-        editor.putInt(JWT, jwt)
+        editor.putString(JWT, jwt)
         editor.apply()
     }
 
@@ -95,5 +104,29 @@ class LoginActivity : AppCompatActivity() {
         binding.activityLoginPwEt.addTextChangedListener(textWatcher)
         binding.activityLoginIdEt.addTextChangedListener(textWatcher)
         binding.activityLoginEmailInputEt.addTextChangedListener(textWatcher)
+    }
+
+    override fun onLoginSuccess(code: Int, result: Result) {
+        when(code){
+            1000 -> {
+                saveJWT(result.jwt)
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+        }
+    }
+
+    override fun onLoginFailure(code: Int) {
+        val toastLikeBinding = ToastLikeBinding.inflate(layoutInflater)
+        toastLikeBinding.run {
+            toastLikeBinding.toastTv.text = when (code) {
+                2015 -> "이메일을 입력해주세요."
+                2019 -> "존재하지 않는 계정입니다."
+                else -> "존재하지 않는 아이디이거나 비밀번호가 틀렸습니다."
+            }
+            val toast = Toast(this@LoginActivity)
+            toast.view = toastLikeBinding.root
+            toast.duration = Toast.LENGTH_SHORT
+            toast.show()
+        }
     }
 }
