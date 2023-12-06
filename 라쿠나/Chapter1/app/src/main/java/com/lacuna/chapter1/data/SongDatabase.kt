@@ -1,10 +1,12 @@
 package com.lacuna.chapter1.data
 
 import android.content.Context
-import androidx.fragment.app.FragmentActivity
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.lacuna.chapter1.data.entity.Like
+import com.lacuna.chapter1.data.entity.Song
+import com.lacuna.chapter1.data.entity.User
 
 @Database(entities = [Song::class, TodayMusic::class, User::class, Like::class], version = 1)
 abstract class SongDatabase: RoomDatabase() {

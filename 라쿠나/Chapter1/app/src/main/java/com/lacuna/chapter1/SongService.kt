@@ -1,11 +1,11 @@
 package com.lacuna.chapter1
 
 import android.util.Log
-import com.lacuna.chapter1.data.Album
 import com.lacuna.chapter1.data.AlbumInResponse
 import com.lacuna.chapter1.data.AlbumResponse
 import com.lacuna.chapter1.data.SongResponse
-import com.lacuna.chapter1.look.LookView
+import com.lacuna.chapter1.data.remote.SongRetrofitInterface
+import com.lacuna.chapter1.view.look.LookView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

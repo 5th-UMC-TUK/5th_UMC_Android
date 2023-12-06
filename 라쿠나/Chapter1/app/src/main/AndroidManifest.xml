@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+\   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -17,19 +16,19 @@
         android:theme="@style/Theme.Chapter1"
         tools:targetApi="31">
         <activity
-            android:name=".SignUpActivity"
+            android:name=".view.signup.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.Login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SongActivity"
+            android:name=".view.SongActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="false"/>
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.SplashActivity"
             android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>

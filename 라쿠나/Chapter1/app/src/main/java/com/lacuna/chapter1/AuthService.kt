@@ -2,7 +2,8 @@ package com.lacuna.chapter1
 
 import android.util.Log
 import com.lacuna.chapter1.data.AuthResponse
-import com.lacuna.chapter1.data.User
+import com.lacuna.chapter1.data.entity.User
+import com.lacuna.chapter1.data.remote.AuthRetrofitInterface
 import retrofit2.Call
 import retrofit2.Response
 

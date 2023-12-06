@@ -2,9 +2,9 @@ package com.lacuna.chapter1.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.lacuna.chapter1.album.AlbumDetailFragment
-import com.lacuna.chapter1.album.AlbumIncludedSongsFragment
-import com.lacuna.chapter1.album.AlbumVideoFragment
+import com.lacuna.chapter1.view.album.AlbumDetailFragment
+import com.lacuna.chapter1.view.album.AlbumIncludedSongsFragment
+import com.lacuna.chapter1.view.album.AlbumVideoFragment
 
 class AlbumVPAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 

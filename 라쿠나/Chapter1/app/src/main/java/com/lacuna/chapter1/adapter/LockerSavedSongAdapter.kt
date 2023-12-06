@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 //import com.lacuna.chapter1.data.SavedSong
 import androidx.recyclerview.widget.RecyclerView
-import com.lacuna.chapter1.data.Song
+import com.lacuna.chapter1.data.entity.Song
 import com.lacuna.chapter1.databinding.ItemLockerSavedSongBinding
 
 class LockerSavedSongAdapter(): RecyclerView.Adapter<LockerSavedSongAdapter.SavedSongViewHolder>() {

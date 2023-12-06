@@ -1,6 +1,7 @@
 package com.lacuna.chapter1.data
 
 import androidx.room.*
+import com.lacuna.chapter1.data.entity.Like
 
 @Dao
 interface AlbumDao {
