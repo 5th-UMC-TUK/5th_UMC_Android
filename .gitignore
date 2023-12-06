@@ -8,12 +8,10 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
-/captures
+build
+captures
 .externalNativeBuild
 .cxx
 local.properties
-/.idea/*
-포짓/memo/.idea/
-
-포짓/TimerExample/.idea/
+.idea
+strings.xml
