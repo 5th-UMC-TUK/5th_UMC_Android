@@ -10,6 +10,5 @@ class KakaoApplication : Application() {
 
         // Kakao SDK 초기화
         KakaoSdk.init(this, BuildConfig.KAKAO_API_KEY)
-//        KakaoSdk.init(this,"53e0515d7ce9754c12b99c3666bfc9c9")
     }
 }
